@@ -16,17 +16,18 @@ namespace tagberry::widgets {
 
 TagLabel::TagLabel(QWidget* parent)
     : QWidget(parent)
+    , m_closeIndicator(false)
     , m_fgRegular(0x3c, 0x3c, 0x3c)
     , m_fgFocused(0xb0, 0xb0, 0xb0)
     , m_bg(0xff, 0xff, 0xff)
     , m_font("monospace", 8)
+    , m_hMargin(0)
+    , m_vMargin(0)
     , m_hPad(4)
     , m_vPad(2)
-    , m_textShift(1)
+    , m_textVertShift(1)
     , m_rounding(1)
-    , m_cntSize(0)
-    , m_w(0)
-    , m_h(0)
+    , m_indicatorWidth(0)
     , m_isFocused(false)
     , m_isChecked(false)
 {
@@ -47,13 +48,12 @@ void TagLabel::setText(QString text)
     repaint();
 }
 
-void TagLabel::setCounter(int counter)
+void TagLabel::setCustomIndicator(QString indicator)
 {
-    QString newCounter = QString("%1").arg(counter);
-    if (m_counter == newCounter) {
+    if (m_customIndicator == indicator) {
         return;
     }
-    m_counter = newCounter;
+    m_customIndicator = indicator;
     updateSize();
     repaint();
 }
@@ -78,7 +78,8 @@ void TagLabel::setChecked(bool checked)
 
 void TagLabel::setColors(QColor background, QColor regular, QColor focused)
 {
-    if (m_bg == background && m_fgRegular == regular && m_fgFocused == focused) {
+    if (m_bg == background && m_fgRegular == regular
+        && m_fgFocused == focused) {
         return;
     }
     m_bg = background;
@@ -121,18 +122,24 @@ void TagLabel::updateSize()
 {
     QFontMetrics metrics(m_font);
 
-    m_cntSize = metrics.width(m_counter);
+    m_indicatorWidth = metrics.width(m_customIndicator);
 
-    m_w = metrics.width(m_text) + m_cntSize + m_hPad * 4;
-    m_h = metrics.height() + m_vPad * 2;
+    int w = metrics.width(m_text) + m_indicatorWidth + m_hPad * 4;
+    int h = metrics.height() + m_vPad * 2;
 
-    setFixedWidth(m_w + 1);
-    setFixedHeight(m_h + 1);
+    m_rect.setWidth(w);
+    m_rect.setHeight(h);
+
+    setFixedWidth(w + 1);
+    setFixedHeight(h + 1);
 }
 
 void TagLabel::paintEvent(QPaintEvent*)
 {
     QPainter pt(this);
+
+    const QRect mRect = QRect(m_rect.left() + m_hMargin, m_rect.top() + m_vMargin,
+        m_rect.width() - 2 * m_hMargin, m_rect.height() - 2 * m_hMargin);
 
     pt.setRenderHint(QPainter::Qt4CompatiblePainting, true);
 
@@ -144,24 +151,25 @@ void TagLabel::paintEvent(QPaintEvent*)
         pt.setBrush(QBrush(m_bg));
     }
 
-    pt.drawRoundedRect(QRect(0, 0, m_w, m_h), m_rounding, m_rounding);
+    pt.drawRoundedRect(mRect, m_rounding, m_rounding);
 
     if (m_isChecked && !m_isFocused) {
         pt.setPen(QPen(m_fgRegular, 1));
         pt.setBrush(QBrush(m_fgRegular));
 
         pt.drawRoundedRect(
-            QRect(m_w - m_cntSize - m_hPad * 2, 0, m_cntSize + m_hPad * 2, m_h),
+            QRect(mRect.right() - m_indicatorWidth - m_hPad * 2, mRect.top(),
+                m_indicatorWidth + m_hPad * 2, mRect.height()),
             m_rounding, m_rounding);
     } else {
         pt.setPen(QPen(m_fgRegular, 1));
-        pt.drawLine(
-            QLine(m_w - m_cntSize - m_hPad * 2, 0, m_w - m_cntSize - m_hPad * 2, m_h));
+        pt.drawLine(QLine(mRect.right() - m_indicatorWidth - m_hPad * 2, mRect.top(),
+            mRect.right() - m_indicatorWidth - m_hPad * 2, mRect.bottom()));
     }
 
     pt.setPen(QPen(m_fgRegular, 1));
     pt.setBrush(QBrush());
-    pt.drawRoundedRect(QRect(0, 0, m_w, m_h), m_rounding, m_rounding);
+    pt.drawRoundedRect(mRect, m_rounding, m_rounding);
 
     pt.setFont(m_font);
 
@@ -171,8 +179,9 @@ void TagLabel::paintEvent(QPaintEvent*)
         pt.setPen(QPen(m_fgRegular, 1));
     }
 
-    pt.drawText(QRect(0, m_textShift, m_w - m_cntSize - m_hPad * 2, m_h), Qt::AlignCenter,
-        m_text);
+    pt.drawText(QRect(mRect.left(), mRect.top() + m_textVertShift,
+                    mRect.width() - m_indicatorWidth - m_hPad * 2, mRect.height()),
+        Qt::AlignCenter, m_text);
 
     if (m_isChecked || m_isFocused) {
         pt.setPen(QPen(m_bg, 1));
@@ -180,9 +189,22 @@ void TagLabel::paintEvent(QPaintEvent*)
         pt.setPen(QPen(m_fgRegular, 1));
     }
 
-    pt.drawText(
-        QRect(m_w - m_cntSize - m_hPad * 2, m_textShift, m_cntSize + m_hPad * 2, m_h),
-        Qt::AlignCenter, m_counter);
+    if (m_closeIndicator) {
+        const auto centerX = mRect.right() - m_indicatorWidth / 2 - m_hPad;
+        const auto centerY = mRect.top() + mRect.height() / 2;
+        const auto half_size = mRect.height() / 3 / 2;
+
+        pt.drawLine(QLine(centerX - half_size, centerY - half_size, centerX + half_size,
+            centerY + half_size));
+
+        pt.drawLine(QLine(centerX + half_size, centerY - half_size, centerX - half_size,
+            centerY + half_size));
+    } else {
+        pt.drawText(QRect(mRect.right() - m_indicatorWidth - m_hPad * 2,
+                        mRect.top() + m_textVertShift, m_indicatorWidth + m_hPad * 2,
+                        mRect.height()),
+            Qt::AlignCenter, m_customIndicator);
+    }
 }
 
 void TagLabel::mousePressEvent(QMouseEvent*)

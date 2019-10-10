@@ -30,7 +30,7 @@ public:
 
 public slots:
     void setText(QString text);
-    void setCounter(int counter);
+    void setCustomIndicator(QString indicator);
 
     void setFocused(bool);
     void setChecked(bool);
@@ -48,20 +48,23 @@ private:
     void updateSize();
 
     QString m_text;
-    QString m_counter;
+    QString m_customIndicator;
+    bool m_closeIndicator;
+
     QColor m_fgRegular;
     QColor m_fgFocused;
     QColor m_bg;
     QFont m_font;
 
+    int m_hMargin;
+    int m_vMargin;
     int m_hPad;
     int m_vPad;
-    int m_textShift;
+    int m_textVertShift;
     int m_rounding;
 
-    int m_cntSize;
-    int m_w;
-    int m_h;
+    QRect m_rect;
+    int m_indicatorWidth;
 
     bool m_isFocused;
     bool m_isChecked;

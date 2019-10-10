@@ -46,6 +46,8 @@
 
 namespace tagberry::widgets {
 
+// based on https://doc.qt.io/qt-5/qtwidgets-layouts-flowlayout-example.html
+
 class FlowLayout : public QLayout {
 public:
     explicit FlowLayout(

@@ -88,7 +88,7 @@ void CalendarArea::rebuildCell(QDate date)
 
         label->setChecked(true);
         label->setText(tag->name());
-        label->setCounter(recSet->numRecordsWithTag(tag));
+        label->setCustomIndicator(QString("%1").arg(recSet->numRecordsWithTag(tag)));
 
         connect(tag.get(), &models::Tag::nameChanged, label, &widgets::TagLabel::setText);
 
