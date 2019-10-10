@@ -37,4 +37,4 @@ See [here](https://github.com/tagberry/tagberry-qt/graphs/contributors).
 
 ## License
 
-[GPLv3](LICENSE)
+[GPLv2+](LICENSE)
