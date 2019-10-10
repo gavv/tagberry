@@ -8,9 +8,7 @@
  */
 #pragma once
 
-#include "models/ColorScheme.hpp"
-#include "models/RecordsDirectory.hpp"
-#include "models/TagsDirectory.hpp"
+#include "models/Root.hpp"
 #include "presenters/CalendarArea.hpp"
 #include "storage/LocalStorage.hpp"
 
@@ -28,10 +26,7 @@ public:
 private:
     storage::LocalStorage& m_storage;
 
-    models::TagsDirectory m_tagDir;
-    models::RecordsDirectory m_recDir;
-
-    models::ColorScheme m_colorScheme;
+    models::Root m_root;
 
     QHBoxLayout* m_layout;
     QWidget* m_widget;

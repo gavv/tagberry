@@ -35,6 +35,7 @@ set(SOURCES
  src/models/Record.cpp
  src/models/RecordSet.cpp
  src/models/RecordsDirectory.cpp
+ src/models/Root.cpp
  src/models/Tag.cpp
  src/models/TagsDirectory.cpp
  src/presenters/CalendarArea.cpp
@@ -53,6 +54,7 @@ set(MOC_HEADERS
  src/models/Record.hpp
  src/models/RecordSet.hpp
  src/models/RecordsDirectory.hpp
+ src/models/Root.hpp
  src/models/Tag.hpp
  src/models/TagsDirectory.hpp
  src/presenters/CalendarArea.hpp

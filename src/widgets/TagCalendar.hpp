@@ -32,8 +32,13 @@ public:
 signals:
     void pageChanged();
 
-    void focusCleared();
-    void focusChanged(TagLabel*);
+    void currentDateChanged(QDate);
+
+    void tagFocusCleared();
+    void tagFocusChanged(TagLabel*);
+
+private slots:
+    void cellChanged(CalendarCell*);
 
 private:
     void removeCellTags(CalendarCell*);

@@ -11,13 +11,11 @@
 
 namespace tagberry::presenters {
 
-CalendarArea::CalendarArea(storage::LocalStorage& storage, models::TagsDirectory& tagDir,
-    models::RecordsDirectory& recDir)
+CalendarArea::CalendarArea(storage::LocalStorage& storage, models::Root& root)
     : m_layout(new QHBoxLayout)
     , m_calendar(new widgets::TagCalendar)
     , m_storage(storage)
-    , m_tagDir(tagDir)
-    , m_recDir(recDir)
+    , m_root(root)
 {
     m_layout->setContentsMargins(QMargins(0, 0, 0, 0));
     m_layout->addWidget(m_calendar);
@@ -27,52 +25,63 @@ CalendarArea::CalendarArea(storage::LocalStorage& storage, models::TagsDirectory
     connect(
         m_calendar, &widgets::TagCalendar::pageChanged, this, &CalendarArea::refreshPage);
 
-    connect(
-        m_calendar, &widgets::TagCalendar::focusCleared, this, &CalendarArea::clearFocus);
+    connect(m_calendar, &widgets::TagCalendar::currentDateChanged, this,
+        &CalendarArea::changeCurrentDate);
 
-    connect(m_calendar, &widgets::TagCalendar::focusChanged, this,
-        &CalendarArea::changeFocus);
+    connect(m_calendar, &widgets::TagCalendar::tagFocusCleared, this,
+        &CalendarArea::clearTagFocus);
+
+    connect(m_calendar, &widgets::TagCalendar::tagFocusChanged, this,
+        &CalendarArea::changeTagFocus);
 
     refreshPage();
 }
 
-void CalendarArea::clearFocus()
+void CalendarArea::changeCurrentDate(QDate date)
 {
-    m_tagDir.focusTag(nullptr);
+    m_root.setCurrentDate(date);
 }
 
-void CalendarArea::changeFocus(widgets::TagLabel* label)
+void CalendarArea::clearTagFocus()
 {
-    auto tag = m_tagDir.getTag(label->text());
+    m_root.tags().focusTag(nullptr);
+}
 
-    m_tagDir.focusTag(tag);
+void CalendarArea::changeTagFocus(widgets::TagLabel* label)
+{
+    if (!label) {
+        return;
+    }
+
+    auto tag = m_root.tags().getTag(label->text());
+
+    m_root.tags().focusTag(tag);
 }
 
 void CalendarArea::refreshPage()
 {
     m_calendar->clearTags();
 
-    m_recDir.clearRecords();
-    m_tagDir.clearTags();
-
     auto range = m_calendar->getVisibleRange();
+
+    m_root.resetCurrentPage(range);
 
     for (auto date = range.first; date != range.second.addDays(1);
          date = date.addDays(1)) {
-        auto recSet = m_recDir.recordsByDate(date);
+        auto recSet = m_root.currentPage().recordsByDate(date);
 
         connect(recSet.get(), &models::RecordSet::recordTagsChanged,
             [=] { rebuildCell(date); });
     }
 
-    m_storage.fillRecordsAndTags(range.first, range.second, m_recDir, m_tagDir);
+    m_storage.readPage(range, m_root.currentPage(), m_root.tags());
 }
 
 void CalendarArea::rebuildCell(QDate date)
 {
     m_calendar->clearTags(date);
 
-    auto recSet = m_recDir.recordsByDate(date);
+    auto recSet = m_root.currentPage().recordsByDate(date);
 
     for (auto tag : recSet->getAllTags()) {
         auto label = new widgets::TagLabel;

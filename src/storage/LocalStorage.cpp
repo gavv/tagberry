@@ -11,7 +11,7 @@
 
 namespace tagberry::storage {
 
-bool LocalStorage::fillRecordsAndTags(const QDate& from, const QDate& to,
+bool LocalStorage::readPage(const QPair<QDate, QDate> range,
     models::RecordsDirectory& recDir, models::TagsDirectory& tagDir)
 {
     // FIXME: implement and use sqlite backend
@@ -23,8 +23,8 @@ bool LocalStorage::fillRecordsAndTags(const QDate& from, const QDate& to,
     auto r1 = recDir.getOrCreateRecord("recID1");
     auto r2 = recDir.getOrCreateRecord("recID2");
 
-    r1->setDate(from);
-    r2->setDate(to);
+    r1->setDate(range.first);
+    r2->setDate(range.second);
 
     r1->addTag(t1);
     r1->addTag(t2);

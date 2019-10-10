@@ -17,8 +17,8 @@ namespace tagberry::storage {
 
 class LocalStorage {
 public:
-    bool fillRecordsAndTags(const QDate& from, const QDate& to,
-        models::RecordsDirectory& recDir, models::TagsDirectory& tagDir);
+    bool readPage(const QPair<QDate, QDate> range, models::RecordsDirectory& recDir,
+        models::TagsDirectory& tagDir);
 };
 
 } // namespace tagberry::storage

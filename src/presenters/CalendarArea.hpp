@@ -8,9 +8,7 @@
  */
 #pragma once
 
-#include "models/ColorScheme.hpp"
-#include "models/RecordsDirectory.hpp"
-#include "models/TagsDirectory.hpp"
+#include "models/Root.hpp"
 #include "storage/LocalStorage.hpp"
 #include "widgets/TagCalendar.hpp"
 
@@ -23,14 +21,15 @@ class CalendarArea : public QWidget {
     Q_OBJECT
 
 public:
-    CalendarArea(storage::LocalStorage& storage, models::TagsDirectory& tagDir,
-        models::RecordsDirectory& recDir);
+    CalendarArea(storage::LocalStorage& storage, models::Root& root);
 
 private slots:
     void refreshPage();
 
-    void clearFocus();
-    void changeFocus(widgets::TagLabel*);
+    void changeCurrentDate(QDate);
+
+    void clearTagFocus();
+    void changeTagFocus(widgets::TagLabel*);
 
 private:
     void rebuildCell(QDate);
@@ -41,8 +40,7 @@ private:
 
     storage::LocalStorage& m_storage;
 
-    models::TagsDirectory& m_tagDir;
-    models::RecordsDirectory& m_recDir;
+    models::Root& m_root;
 };
 
 } // namespace tagberry::presenters
