@@ -11,9 +11,8 @@
 
 namespace tagberry::models {
 
-Record::Record(QString id, QObject* parent)
-    : QObject(parent)
-    , m_id(id)
+Record::Record(QString id)
+    : m_id(id)
 {
 }
 
@@ -32,17 +31,17 @@ QString Record::text() const
     return m_text;
 }
 
-QList<Tag*> Record::tags() const
+QList<TagPtr> Record::tags() const
 {
     return m_tags;
 }
 
-bool Record::hasTag(Tag* tag) const
+bool Record::hasTag(TagPtr tag) const
 {
     return m_tags.indexOf(tag) != -1;
 }
 
-void Record::addTag(Tag* tag)
+void Record::addTag(TagPtr tag)
 {
     if (m_tags.indexOf(tag) != -1) {
         return;
@@ -51,7 +50,7 @@ void Record::addTag(Tag* tag)
     tagsChanged();
 }
 
-void Record::removeTag(Tag* tag)
+void Record::removeTag(TagPtr tag)
 {
     if (m_tags.indexOf(tag) == -1) {
         return;

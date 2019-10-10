@@ -16,8 +16,6 @@ MainWindow::MainWindow(storage::LocalStorage& storage)
     , m_layout(new QHBoxLayout)
     , m_widget(new QWidget(this))
     , m_tagCalendarWidget(new widgets::TagCounterCalendar)
-    , m_tagDir(new models::TagsDirectory(this))
-    , m_recDir(new models::RecordsDirectory(this))
 {
     m_layout->addWidget(m_tagCalendarWidget);
     m_layout->setContentsMargins(QMargins(0, 0, 0, 0));
@@ -39,34 +37,34 @@ MainWindow::MainWindow(storage::LocalStorage& storage)
 
 void MainWindow::setFocusedTag(widgets::TagCounter* tagCounter)
 {
-    models::Tag* tag = nullptr;
+    models::TagPtr tag;
 
     if (tagCounter) {
-        tag = m_tagDir->getTag(tagCounter->text());
+        tag = m_tagDir.getTag(tagCounter->text());
     }
 
-    m_tagDir->focusTag(tag);
+    m_tagDir.focusTag(tag);
 }
 
 void MainWindow::refreshCalendar()
 {
     m_tagCalendarWidget->clearTags();
 
-    m_recDir->clearRecords();
-    m_tagDir->clearTags();
+    m_recDir.clearRecords();
+    m_tagDir.clearTags();
 
     auto range = m_tagCalendarWidget->getVisibleRange();
 
     connectRecordSets(range.first, range.second);
 
-    m_storage.fillRecordsAndTags(range.first, range.second, *m_recDir, *m_tagDir);
+    m_storage.fillRecordsAndTags(range.first, range.second, m_recDir, m_tagDir);
 }
 
 void MainWindow::refreshCalendarCell(QDate date)
 {
     m_tagCalendarWidget->clearTags(date);
 
-    auto recSet = m_recDir->recordsByDate(date);
+    auto recSet = m_recDir.recordsByDate(date);
 
     for (auto tag : recSet->getAllTags()) {
         auto tagCounter = new widgets::TagCounter;
@@ -74,10 +72,10 @@ void MainWindow::refreshCalendarCell(QDate date)
         tagCounter->setText(tag->name());
         tagCounter->setCounter(recSet->numRecordsWithTag(tag));
 
-        connect(
-            tag, &models::Tag::nameChanged, tagCounter, &widgets::TagCounter::setText);
+        connect(tag.get(), &models::Tag::nameChanged, tagCounter,
+            &widgets::TagCounter::setText);
 
-        connect(tag, &models::Tag::focusChanged, tagCounter,
+        connect(tag.get(), &models::Tag::focusChanged, tagCounter,
             &widgets::TagCounter::setFocused);
 
         m_tagCalendarWidget->addTag(date, tagCounter);
@@ -87,9 +85,9 @@ void MainWindow::refreshCalendarCell(QDate date)
 void MainWindow::connectRecordSets(QDate from, QDate to)
 {
     for (auto date = from; date != to.addDays(1); date = date.addDays(1)) {
-        auto recSet = m_recDir->recordsByDate(date);
+        auto recSet = m_recDir.recordsByDate(date);
 
-        connect(recSet, &models::RecordSet::recordTagsChanged,
+        connect(recSet.get(), &models::RecordSet::recordTagsChanged,
             [=] { refreshCalendarCell(date); });
     }
 }

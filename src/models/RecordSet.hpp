@@ -14,31 +14,33 @@
 #include <QObject>
 #include <QString>
 
+#include <memory>
+
 namespace tagberry::models {
 
-class RecordSet : public QObject {
+class RecordSet : public QObject, public std::enable_shared_from_this<RecordSet> {
     Q_OBJECT
 
 public:
-    explicit RecordSet(QObject* parent = nullptr);
+    QList<RecordPtr> getRecords() const;
 
-    QList<Record*> getRecords() const;
-
-    void addRecord(Record*);
-    void removeRecord(Record*);
+    void addRecord(RecordPtr);
+    void removeRecord(RecordPtr);
 
     void clearRecords();
 
-    QList<Tag*> getAllTags() const;
+    QList<TagPtr> getAllTags() const;
 
-    int numRecordsWithTag(Tag*);
+    int numRecordsWithTag(TagPtr);
 
 signals:
     void recordListChanged();
     void recordTagsChanged();
 
 private:
-    QList<Record*> m_records;
+    QList<RecordPtr> m_records;
 };
+
+using RecordSetPtr = std::shared_ptr<RecordSet>;
 
 } // tagberry::models

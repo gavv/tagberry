@@ -11,40 +11,35 @@
 
 namespace tagberry::models {
 
-RecordsDirectory::RecordsDirectory(QObject* parent)
-    : QObject(parent)
-    , m_recordWithoutDate(new RecordSet(this))
-{
-}
-
-RecordSet* RecordsDirectory::recordsByDate(const QDate& date)
+RecordSetPtr RecordsDirectory::recordsByDate(const QDate& date)
 {
     auto recSet = m_recordsByDate[date];
 
     if (!recSet) {
-        recSet = new RecordSet(this);
+        recSet = std::make_shared<RecordSet>();
         m_recordsByDate[date] = recSet;
     }
 
     return recSet;
 }
 
-RecordSet* RecordsDirectory::recordsWithoutDate()
+RecordSetPtr RecordsDirectory::recordsWithoutDate()
 {
     if (!m_recordWithoutDate) {
-        m_recordWithoutDate = new RecordSet(this);
+        m_recordWithoutDate = std::make_shared<RecordSet>();
     }
     return m_recordWithoutDate;
 }
 
-Record* RecordsDirectory::getOrCreateRecord(const QString& id)
+RecordPtr RecordsDirectory::getOrCreateRecord(const QString& id)
 {
     auto rec = m_recordsById[id];
 
     if (!rec) {
-        rec = new Record(id, this);
+        rec = std::make_shared<Record>(id);
 
-        connect(rec, &Record::dateChanged, this, &RecordsDirectory::recordDateChanged);
+        connect(
+            rec.get(), &Record::dateChanged, this, &RecordsDirectory::recordDateChanged);
 
         m_recordsById[id] = rec;
         recordsWithoutDate()->addRecord(rec);
@@ -53,8 +48,10 @@ Record* RecordsDirectory::getOrCreateRecord(const QString& id)
     return rec;
 }
 
-void RecordsDirectory::removeRecord(Record* rec)
+void RecordsDirectory::removeRecord(RecordPtr rec)
 {
+    disconnect(rec.get(), nullptr, this, nullptr);
+
     if (rec->date() == QDate()) {
         recordsWithoutDate()->removeRecord(rec);
     } else {
@@ -66,20 +63,13 @@ void RecordsDirectory::removeRecord(Record* rec)
 
 void RecordsDirectory::clearRecords()
 {
-    m_recordWithoutDate->clearRecords();
-    delete m_recordWithoutDate;
-    m_recordWithoutDate = NULL;
-
-    for (auto it = m_recordsByDate.begin(); it != m_recordsByDate.end();
-         it = m_recordsByDate.erase(it)) {
-        it.value()->clearRecords();
-        delete it.value();
+    for (auto rec : m_recordsById) {
+        disconnect(rec.get(), nullptr, this, nullptr);
     }
 
-    for (auto it = m_recordsById.begin(); it != m_recordsById.end();
-         it = m_recordsById.erase(it)) {
-        delete it.value();
-    }
+    m_recordsById.clear();
+    m_recordsByDate.clear();
+    m_recordWithoutDate.reset();
 }
 
 void RecordsDirectory::recordDateChanged(QDate oldDate, QDate newDate)
@@ -87,12 +77,12 @@ void RecordsDirectory::recordDateChanged(QDate oldDate, QDate newDate)
     auto rec = qobject_cast<Record*>(sender());
 
     if (oldDate == QDate()) {
-        recordsWithoutDate()->removeRecord(rec);
+        recordsWithoutDate()->removeRecord(rec->shared_from_this());
     } else {
-        recordsByDate(oldDate)->removeRecord(rec);
+        recordsByDate(oldDate)->removeRecord(rec->shared_from_this());
     }
 
-    recordsByDate(newDate)->addRecord(rec);
+    recordsByDate(newDate)->addRecord(rec->shared_from_this());
 }
 
 } // tagberry::models

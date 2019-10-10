@@ -11,23 +11,18 @@
 
 namespace tagberry::models {
 
-RecordSet::RecordSet(QObject* parent)
-    : QObject(parent)
-{
-}
-
-QList<Record*> RecordSet::getRecords() const
+QList<RecordPtr> RecordSet::getRecords() const
 {
     return m_records;
 }
 
-void RecordSet::addRecord(Record* rec)
+void RecordSet::addRecord(RecordPtr rec)
 {
     if (m_records.indexOf(rec) != -1) {
         return;
     }
 
-    connect(rec, &Record::tagsChanged, this, &RecordSet::recordTagsChanged);
+    connect(rec.get(), &Record::tagsChanged, this, &RecordSet::recordTagsChanged);
 
     m_records.append(rec);
 
@@ -35,13 +30,13 @@ void RecordSet::addRecord(Record* rec)
     recordTagsChanged();
 }
 
-void RecordSet::removeRecord(Record* rec)
+void RecordSet::removeRecord(RecordPtr rec)
 {
     if (m_records.indexOf(rec) == -1) {
         return;
     }
 
-    disconnect(rec, nullptr, this, nullptr);
+    disconnect(rec.get(), nullptr, this, nullptr);
 
     m_records.removeAll(rec);
 
@@ -52,7 +47,7 @@ void RecordSet::removeRecord(Record* rec)
 void RecordSet::clearRecords()
 {
     for (auto rec : m_records) {
-        disconnect(rec, nullptr, this, nullptr);
+        disconnect(rec.get(), nullptr, this, nullptr);
     }
 
     m_records.clear();
@@ -61,9 +56,9 @@ void RecordSet::clearRecords()
     recordTagsChanged();
 }
 
-QList<Tag*> RecordSet::getAllTags() const
+QList<TagPtr> RecordSet::getAllTags() const
 {
-    QList<Tag*> tags;
+    QList<TagPtr> tags;
     for (auto rec : m_records) {
         for (auto tag : rec->tags()) {
             if (tags.indexOf(tag) == -1) {
@@ -74,7 +69,7 @@ QList<Tag*> RecordSet::getAllTags() const
     return tags;
 }
 
-int RecordSet::numRecordsWithTag(Tag* tag)
+int RecordSet::numRecordsWithTag(TagPtr tag)
 {
     int ret = 0;
     for (auto rec : m_records) {

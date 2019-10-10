@@ -15,13 +15,15 @@
 #include <QObject>
 #include <QString>
 
+#include <memory>
+
 namespace tagberry::models {
 
-class Record : public QObject {
+class Record : public QObject, public std::enable_shared_from_this<Record> {
     Q_OBJECT
 
 public:
-    explicit Record(QString id, QObject* parent = nullptr);
+    explicit Record(QString id);
 
     QString id() const;
 
@@ -29,12 +31,12 @@ public:
 
     QString text() const;
 
-    QList<Tag*> tags() const;
+    QList<TagPtr> tags() const;
 
-    bool hasTag(Tag*) const;
+    bool hasTag(TagPtr) const;
 
-    void addTag(Tag*);
-    void removeTag(Tag*);
+    void addTag(TagPtr);
+    void removeTag(TagPtr);
 
 public slots:
     void setDate(QDate);
@@ -49,7 +51,9 @@ private:
     QString m_id;
     QDate m_date;
     QString m_text;
-    QList<Tag*> m_tags;
+    QList<TagPtr> m_tags;
 };
+
+using RecordPtr = std::shared_ptr<Record>;
 
 } // tagberry::models

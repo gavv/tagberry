@@ -21,17 +21,15 @@ class TagsDirectory : public QObject {
     Q_OBJECT
 
 public:
-    explicit TagsDirectory(QObject* parent = nullptr);
+    QList<TagPtr> getTags() const;
 
-    QList<Tag*> getTags() const;
+    TagPtr getTag(const QString& name) const;
 
-    Tag* getTag(const QString& name) const;
+    TagPtr getOrCreateTag(const QString& name);
 
-    Tag* getOrCreateTag(const QString& name);
+    void removeTag(TagPtr);
 
-    void removeTag(Tag*);
-
-    void focusTag(Tag*);
+    void focusTag(TagPtr);
 
     void clearTags();
 
@@ -40,7 +38,7 @@ private slots:
     virtual void tagFocusChanged(bool);
 
 private:
-    QHash<QString, Tag*> m_tags;
+    QHash<QString, TagPtr> m_tags;
 };
 
 } // tagberry::models

@@ -20,15 +20,13 @@ class RecordsDirectory : public QObject {
     Q_OBJECT
 
 public:
-    explicit RecordsDirectory(QObject* parent = nullptr);
+    RecordSetPtr recordsByDate(const QDate&);
 
-    RecordSet* recordsByDate(const QDate&);
+    RecordSetPtr recordsWithoutDate();
 
-    RecordSet* recordsWithoutDate();
+    RecordPtr getOrCreateRecord(const QString& id);
 
-    Record* getOrCreateRecord(const QString& id);
-
-    void removeRecord(Record*);
+    void removeRecord(RecordPtr);
 
     void clearRecords();
 
@@ -36,11 +34,9 @@ private slots:
     void recordDateChanged(QDate oldDate, QDate newDate);
 
 private:
-    QHash<QString, Record*> m_recordsById;
-
-    QHash<QDate, RecordSet*> m_recordsByDate;
-
-    RecordSet* m_recordWithoutDate;
+    QHash<QString, RecordPtr> m_recordsById;
+    QHash<QDate, RecordSetPtr> m_recordsByDate;
+    RecordSetPtr m_recordWithoutDate;
 };
 
 } // tagberry::models

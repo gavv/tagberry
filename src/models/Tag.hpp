@@ -11,14 +11,14 @@
 #include <QObject>
 #include <QString>
 
+#include <memory>
+
 namespace tagberry::models {
 
-class Tag : public QObject {
+class Tag : public QObject, public std::enable_shared_from_this<Tag> {
     Q_OBJECT
 
 public:
-    explicit Tag(QObject* parent = nullptr);
-
     QString name() const;
     bool focused() const;
 
@@ -34,5 +34,7 @@ private:
     QString m_name;
     bool m_focused { false };
 };
+
+using TagPtr = std::shared_ptr<Tag>;
 
 } // tagberry::models

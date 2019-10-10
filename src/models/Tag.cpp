@@ -11,11 +11,6 @@
 
 namespace tagberry::models {
 
-Tag::Tag(QObject* parent)
-    : QObject(parent)
-{
-}
-
 QString Tag::name() const
 {
     return m_name;

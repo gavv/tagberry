@@ -41,8 +41,8 @@ private:
 
     widgets::TagCounterCalendar* m_tagCalendarWidget;
 
-    models::TagsDirectory* m_tagDir;
-    models::RecordsDirectory* m_recDir;
+    models::TagsDirectory m_tagDir;
+    models::RecordsDirectory m_recDir;
 };
 
 } // tagberry::presenters

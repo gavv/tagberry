@@ -11,47 +11,42 @@
 
 namespace tagberry::models {
 
-TagsDirectory::TagsDirectory(QObject* parent)
-    : QObject(parent)
-{
-}
-
-QList<Tag*> TagsDirectory::getTags() const
+QList<TagPtr> TagsDirectory::getTags() const
 {
     return m_tags.values();
 }
 
-Tag* TagsDirectory::getTag(const QString& name) const
+TagPtr TagsDirectory::getTag(const QString& name) const
 {
     return m_tags[name];
 }
 
-Tag* TagsDirectory::getOrCreateTag(const QString& name)
+TagPtr TagsDirectory::getOrCreateTag(const QString& name)
 {
     if (auto tag = m_tags[name]) {
         return tag;
     }
 
-    auto tag = new Tag(this);
+    auto tag = std::make_shared<Tag>();
 
     tag->setName(name);
 
-    connect(tag, &Tag::nameChanged, this, &TagsDirectory::tagTextChanged);
-    connect(tag, &Tag::focusChanged, this, &TagsDirectory::tagFocusChanged);
+    connect(tag.get(), &Tag::nameChanged, this, &TagsDirectory::tagTextChanged);
+    connect(tag.get(), &Tag::focusChanged, this, &TagsDirectory::tagFocusChanged);
 
-    m_tags[tag->name()] = tag;
+    m_tags[name] = tag;
 
     return tag;
 }
 
-void TagsDirectory::removeTag(Tag* tag)
+void TagsDirectory::removeTag(TagPtr tag)
 {
-    m_tags.remove(tag->name());
+    disconnect(tag.get(), nullptr, this, nullptr);
 
-    delete tag;
+    m_tags.remove(tag->name());
 }
 
-void TagsDirectory::focusTag(Tag* focusedTag)
+void TagsDirectory::focusTag(TagPtr focusedTag)
 {
     for (auto tag : m_tags) {
         tag->setFocused(tag == focusedTag);
@@ -60,9 +55,11 @@ void TagsDirectory::focusTag(Tag* focusedTag)
 
 void TagsDirectory::clearTags()
 {
-    for (auto it = m_tags.begin(); it != m_tags.end(); it = m_tags.erase(it)) {
-        delete it.value();
+    for (auto tag : m_tags) {
+        disconnect(tag.get(), nullptr, this, nullptr);
     }
+
+    m_tags.clear();
 }
 
 void TagsDirectory::tagTextChanged(QString text)
@@ -70,13 +67,13 @@ void TagsDirectory::tagTextChanged(QString text)
     auto tag = qobject_cast<Tag*>(sender());
 
     for (auto it = m_tags.begin(); it != m_tags.end(); ++it) {
-        if (it.value() == tag) {
+        if (it.value().get() == tag) {
             m_tags.erase(it);
             break;
         }
     }
 
-    m_tags[text] = tag;
+    m_tags[text] = tag->shared_from_this();
 }
 
 void TagsDirectory::tagFocusChanged(bool focused)
@@ -84,7 +81,7 @@ void TagsDirectory::tagFocusChanged(bool focused)
     auto tag = qobject_cast<Tag*>(sender());
 
     if (focused) {
-        focusTag(tag);
+        focusTag(tag->shared_from_this());
     } else {
         focusTag(nullptr);
     }
