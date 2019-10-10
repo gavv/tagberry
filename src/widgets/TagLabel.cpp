@@ -22,6 +22,7 @@ TagLabel::TagLabel(QWidget* parent)
     , m_font("monospace", 8)
     , m_hPad(4)
     , m_vPad(2)
+    , m_textShift(1)
     , m_rounding(1)
     , m_cntSize(0)
     , m_w(0)
@@ -178,7 +179,8 @@ void TagLabel::paintEvent(QPaintEvent*)
         pt.setPen(QPen(m_fgRegular, 1));
     }
 
-    pt.drawText(QRect(0, 0, m_w - m_cntSize - m_hPad * 2, m_h), Qt::AlignCenter, m_text);
+    pt.drawText(QRect(0, m_textShift, m_w - m_cntSize - m_hPad * 2, m_h), Qt::AlignCenter,
+        m_text);
 
     if (m_isChecked || m_isFocused) {
         pt.setPen(QPen(m_bg, 1));
@@ -186,7 +188,8 @@ void TagLabel::paintEvent(QPaintEvent*)
         pt.setPen(QPen(m_fgRegular, 1));
     }
 
-    pt.drawText(QRect(m_w - m_cntSize - m_hPad * 2, 0, m_cntSize + m_hPad * 2, m_h),
+    pt.drawText(
+        QRect(m_w - m_cntSize - m_hPad * 2, m_textShift, m_cntSize + m_hPad * 2, m_h),
         Qt::AlignCenter, m_counter);
 }
 

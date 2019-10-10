@@ -77,6 +77,7 @@ void CalendarArea::rebuildCell(QDate date)
     for (auto tag : recSet->getAllTags()) {
         auto label = new widgets::TagLabel;
 
+        label->setChecked(true);
         label->setText(tag->name());
         label->setCounter(recSet->numRecordsWithTag(tag));
 

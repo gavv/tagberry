@@ -56,6 +56,7 @@ private:
 
     int m_hPad;
     int m_vPad;
+    int m_textShift;
     int m_rounding;
 
     int m_cntSize;
