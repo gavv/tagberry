@@ -23,9 +23,6 @@ public:
 
     const QString& text() const;
 
-    void setForegroundColor(const QColor& regular, const QColor& focused);
-    void setBackgroundColor(const QColor&);
-
     void setFont(const QFont& font);
     void setPadding(int h, int v);
     void setRounding(int r);
@@ -36,6 +33,8 @@ public slots:
 
     void setFocused(bool);
     void setChecked(bool);
+
+    void setColors(QColor background, QColor regular, QColor focused);
 
 signals:
     void clicked();

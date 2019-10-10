@@ -28,6 +28,7 @@ void Tag::setName(const QString& text)
     }
     m_name = text;
     nameChanged(text);
+    updateColors();
 }
 
 void Tag::setFocused(bool focused)
@@ -37,6 +38,42 @@ void Tag::setFocused(bool focused)
     }
     m_focused = focused;
     focusChanged(focused);
+}
+
+std::tuple<QColor, QColor, QColor> Tag::getColors() const
+{
+    if (!m_colorScheme) {
+        return {};
+    };
+
+    return std::make_tuple(m_colorScheme->backgroundColor(),
+        m_colorScheme->tagRegularColor(m_name), m_colorScheme->tagFocusedColor(m_name));
+}
+
+void Tag::setColorScheme(ColorScheme* scheme)
+{
+    if (m_colorScheme) {
+        disconnect(m_colorScheme, nullptr, this, nullptr);
+    }
+
+    m_colorScheme = scheme;
+
+    if (m_colorScheme) {
+        connect(m_colorScheme, &ColorScheme::colorsChanged, this, &Tag::updateColors);
+    }
+
+    updateColors();
+}
+
+void Tag::updateColors()
+{
+    if (!m_colorScheme) {
+        return;
+    }
+
+    auto colors = getColors();
+
+    colorsChanged(std::get<0>(colors), std::get<1>(colors), std::get<2>(colors));
 }
 
 } // namespace tagberry::models

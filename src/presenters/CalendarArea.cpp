@@ -86,6 +86,13 @@ void CalendarArea::rebuildCell(QDate date)
         connect(
             tag.get(), &models::Tag::focusChanged, label, &widgets::TagLabel::setFocused);
 
+        connect(
+            tag.get(), &models::Tag::colorsChanged, label, &widgets::TagLabel::setColors);
+
+        auto colors = tag->getColors();
+
+        label->setColors(std::get<0>(colors), std::get<1>(colors), std::get<2>(colors));
+
         m_calendar->addTag(date, label);
     }
 }

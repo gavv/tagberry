@@ -8,6 +8,7 @@
  */
 #pragma once
 
+#include "models/ColorScheme.hpp"
 #include "models/Tag.hpp"
 
 #include <QHash>
@@ -33,12 +34,15 @@ public:
 
     void clearTags();
 
+    void setColorScheme(ColorScheme*);
+
 private slots:
     virtual void tagTextChanged(QString);
     virtual void tagFocusChanged(bool);
 
 private:
     QHash<QString, TagPtr> m_tags;
+    ColorScheme* m_colorScheme {};
 };
 
 } // namespace tagberry::models

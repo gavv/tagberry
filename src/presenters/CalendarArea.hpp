@@ -8,6 +8,7 @@
  */
 #pragma once
 
+#include "models/ColorScheme.hpp"
 #include "models/RecordsDirectory.hpp"
 #include "models/TagsDirectory.hpp"
 #include "storage/LocalStorage.hpp"

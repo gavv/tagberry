@@ -8,10 +8,13 @@
  */
 #pragma once
 
+#include "models/ColorScheme.hpp"
+
 #include <QObject>
 #include <QString>
 
 #include <memory>
+#include <tuple>
 
 namespace tagberry::models {
 
@@ -22,6 +25,10 @@ public:
     QString name() const;
     bool focused() const;
 
+    std::tuple<QColor, QColor, QColor> getColors() const;
+
+    void setColorScheme(ColorScheme*);
+
 public slots:
     void setName(const QString&);
     void setFocused(bool);
@@ -29,10 +36,16 @@ public slots:
 signals:
     void nameChanged(QString);
     void focusChanged(bool);
+    void colorsChanged(QColor background, QColor regular, QColor focused);
+
+private slots:
+    void updateColors();
 
 private:
     QString m_name;
     bool m_focused { false };
+
+    ColorScheme* m_colorScheme {};
 };
 
 using TagPtr = std::shared_ptr<Tag>;

@@ -31,6 +31,7 @@ endif()
 set(SOURCES
  resources/icons.qrc
  src/main.cpp
+ src/models/ColorScheme.cpp
  src/models/Record.cpp
  src/models/RecordSet.cpp
  src/models/RecordsDirectory.cpp
@@ -48,6 +49,7 @@ set(SOURCES
 )
 
 set(MOC_HEADERS
+ src/models/ColorScheme.hpp
  src/models/Record.hpp
  src/models/RecordSet.hpp
  src/models/RecordsDirectory.hpp

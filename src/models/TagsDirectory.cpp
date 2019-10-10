@@ -31,6 +31,10 @@ TagPtr TagsDirectory::getOrCreateTag(const QString& name)
 
     tag->setName(name);
 
+    if (m_colorScheme) {
+        tag->setColorScheme(m_colorScheme);
+    }
+
     connect(tag.get(), &Tag::nameChanged, this, &TagsDirectory::tagTextChanged);
     connect(tag.get(), &Tag::focusChanged, this, &TagsDirectory::tagFocusChanged);
 
@@ -60,6 +64,15 @@ void TagsDirectory::clearTags()
     }
 
     m_tags.clear();
+}
+
+void TagsDirectory::setColorScheme(ColorScheme* colorScheme)
+{
+    m_colorScheme = colorScheme;
+
+    for (auto tag : m_tags) {
+        tag->setColorScheme(m_colorScheme);
+    }
 }
 
 void TagsDirectory::tagTextChanged(QString text)

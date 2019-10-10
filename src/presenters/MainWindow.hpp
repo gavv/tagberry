@@ -8,6 +8,7 @@
  */
 #pragma once
 
+#include "models/ColorScheme.hpp"
 #include "models/RecordsDirectory.hpp"
 #include "models/TagsDirectory.hpp"
 #include "presenters/CalendarArea.hpp"
@@ -29,6 +30,8 @@ private:
 
     models::TagsDirectory m_tagDir;
     models::RecordsDirectory m_recDir;
+
+    models::ColorScheme m_colorScheme;
 
     QHBoxLayout* m_layout;
     QWidget* m_widget;
