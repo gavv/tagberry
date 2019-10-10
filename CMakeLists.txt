@@ -42,22 +42,22 @@ set(SOURCES
  src/widgets/CalendarCell.cpp
  src/widgets/CalendarSwitch.cpp
  src/widgets/FlowLayout.cpp
- src/widgets/TagCounter.cpp
- src/widgets/TagCounterCalendar.cpp
+ src/widgets/TagCalendar.cpp
+ src/widgets/TagLabel.cpp
 )
 
 set(MOC_HEADERS
- src/presenters/MainWindow.hpp
  src/models/Record.hpp
  src/models/RecordSet.hpp
  src/models/RecordsDirectory.hpp
  src/models/Tag.hpp
  src/models/TagsDirectory.hpp
+ src/presenters/MainWindow.hpp
  src/widgets/Calendar.hpp
  src/widgets/CalendarCell.hpp
  src/widgets/CalendarSwitch.hpp
- src/widgets/TagCounter.hpp
- src/widgets/TagCounterCalendar.hpp
+ src/widgets/TagCalendar.hpp
+ src/widgets/TagLabel.hpp
 )
 
 include_directories(src)

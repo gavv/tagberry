@@ -7,14 +7,14 @@
  * (at your option) any later version.
  */
 
-#include "widgets/TagCounter.hpp"
+#include "widgets/TagLabel.hpp"
 
 #include <QFontMetrics>
 #include <QPainter>
 
 namespace tagberry::widgets {
 
-TagCounter::TagCounter(QWidget* parent)
+TagLabel::TagLabel(QWidget* parent)
     : QWidget(parent)
     , m_fgRegular(0x3c, 0x3c, 0x3c)
     , m_fgFocused(0xb0, 0xb0, 0xb0)
@@ -31,12 +31,12 @@ TagCounter::TagCounter(QWidget* parent)
 {
 }
 
-const QString& TagCounter::text() const
+const QString& TagLabel::text() const
 {
     return m_text;
 }
 
-void TagCounter::setText(QString text)
+void TagLabel::setText(QString text)
 {
     if (m_text == text) {
         return;
@@ -46,7 +46,7 @@ void TagCounter::setText(QString text)
     repaint();
 }
 
-void TagCounter::setCounter(int counter)
+void TagLabel::setCounter(int counter)
 {
     QString newCounter = QString("%1").arg(counter);
     if (m_counter == newCounter) {
@@ -57,7 +57,7 @@ void TagCounter::setCounter(int counter)
     repaint();
 }
 
-void TagCounter::setFocused(bool focused)
+void TagLabel::setFocused(bool focused)
 {
     if (m_isFocused == focused) {
         return;
@@ -66,7 +66,7 @@ void TagCounter::setFocused(bool focused)
     repaint();
 }
 
-void TagCounter::setChecked(bool checked)
+void TagLabel::setChecked(bool checked)
 {
     if (m_isChecked == checked) {
         return;
@@ -75,7 +75,7 @@ void TagCounter::setChecked(bool checked)
     repaint();
 }
 
-void TagCounter::setForegroundColor(const QColor& regular, const QColor& focused)
+void TagLabel::setForegroundColor(const QColor& regular, const QColor& focused)
 {
     if (m_fgRegular == regular && m_fgFocused == focused) {
         return;
@@ -85,7 +85,7 @@ void TagCounter::setForegroundColor(const QColor& regular, const QColor& focused
     repaint();
 }
 
-void TagCounter::setBackgroundColor(const QColor& color)
+void TagLabel::setBackgroundColor(const QColor& color)
 {
     if (m_bg == color) {
         return;
@@ -94,7 +94,7 @@ void TagCounter::setBackgroundColor(const QColor& color)
     repaint();
 }
 
-void TagCounter::setFont(const QFont& font)
+void TagLabel::setFont(const QFont& font)
 {
     if (m_font == font) {
         return;
@@ -104,7 +104,7 @@ void TagCounter::setFont(const QFont& font)
     repaint();
 }
 
-void TagCounter::setPadding(int h, int v)
+void TagLabel::setPadding(int h, int v)
 {
     if (m_hPad == h && m_vPad == v) {
         return;
@@ -115,7 +115,7 @@ void TagCounter::setPadding(int h, int v)
     repaint();
 }
 
-void TagCounter::setRounding(int r)
+void TagLabel::setRounding(int r)
 {
     if (m_rounding == r) {
         return;
@@ -124,7 +124,7 @@ void TagCounter::setRounding(int r)
     repaint();
 }
 
-void TagCounter::updateSize()
+void TagLabel::updateSize()
 {
     QFontMetrics metrics(m_font);
 
@@ -137,7 +137,7 @@ void TagCounter::updateSize()
     setFixedHeight(m_h + 1);
 }
 
-void TagCounter::paintEvent(QPaintEvent*)
+void TagLabel::paintEvent(QPaintEvent*)
 {
     QPainter pt(this);
 
@@ -190,7 +190,7 @@ void TagCounter::paintEvent(QPaintEvent*)
         Qt::AlignCenter, m_counter);
 }
 
-void TagCounter::mousePressEvent(QMouseEvent*)
+void TagLabel::mousePressEvent(QMouseEvent*)
 {
     clicked();
 }

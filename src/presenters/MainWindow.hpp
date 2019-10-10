@@ -11,7 +11,7 @@
 #include "models/RecordsDirectory.hpp"
 #include "models/TagsDirectory.hpp"
 #include "storage/LocalStorage.hpp"
-#include "widgets/TagCounterCalendar.hpp"
+#include "widgets/TagCalendar.hpp"
 
 #include <QDate>
 #include <QHBoxLayout>
@@ -26,7 +26,7 @@ public:
     explicit MainWindow(storage::LocalStorage& storage);
 
 private slots:
-    void setFocusedTag(widgets::TagCounter*);
+    void setFocusedTag(widgets::TagLabel*);
 
     void refreshCalendar();
     void refreshCalendarCell(QDate date);
@@ -39,7 +39,7 @@ private:
     QHBoxLayout* m_layout;
     QWidget* m_widget;
 
-    widgets::TagCounterCalendar* m_tagCalendarWidget;
+    widgets::TagCalendar* m_tagCalendarWidget;
 
     models::TagsDirectory m_tagDir;
     models::RecordsDirectory m_recDir;

@@ -15,11 +15,11 @@
 
 namespace tagberry::widgets {
 
-class TagCounter : public QWidget {
+class TagLabel : public QWidget {
     Q_OBJECT
 
 public:
-    explicit TagCounter(QWidget* parent = nullptr);
+    explicit TagLabel(QWidget* parent = nullptr);
 
     const QString& text() const;
 

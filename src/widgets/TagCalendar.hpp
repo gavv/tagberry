@@ -9,25 +9,22 @@
 #pragma once
 
 #include "widgets/Calendar.hpp"
-#include "widgets/TagCounter.hpp"
+#include "widgets/TagLabel.hpp"
 
 #include <QHBoxLayout>
 #include <QWidget>
 
 namespace tagberry::widgets {
 
-class TagCounterCalendar : public QWidget {
+class TagCalendar : public QWidget {
     Q_OBJECT
 
 public:
-    explicit TagCounterCalendar(QWidget* parent = nullptr);
+    explicit TagCalendar(QWidget* parent = nullptr);
 
     QPair<QDate, QDate> getVisibleRange() const;
 
-    QList<TagCounter*> getTags(const QDate& date);
-
-    void addTag(const QDate& date, TagCounter* tag);
-    void removeTag(const QDate& date, TagCounter* tag);
+    void addTag(const QDate& date, TagLabel* tag);
 
     void clearTags(const QDate& date);
     void clearTags();
@@ -36,7 +33,7 @@ signals:
     void pageChanged();
 
     void focusCleared();
-    void focusChanged(TagCounter*);
+    void focusChanged(TagLabel*);
 
 private:
     void removeCellTags(CalendarCell*);

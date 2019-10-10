@@ -7,12 +7,12 @@
  * (at your option) any later version.
  */
 
-#include "widgets/TagCounterCalendar.hpp"
+#include "widgets/TagCalendar.hpp"
 #include "widgets/FlowLayout.hpp"
 
 namespace tagberry::widgets {
 
-TagCounterCalendar::TagCounterCalendar(QWidget* parent)
+TagCalendar::TagCalendar(QWidget* parent)
     : QWidget(parent)
     , m_layout(new QHBoxLayout)
     , m_calendar(new Calendar)
@@ -22,8 +22,8 @@ TagCounterCalendar::TagCounterCalendar(QWidget* parent)
 
     setLayout(m_layout);
 
-    connect(m_calendar, &Calendar::pageChanged, this, &TagCounterCalendar::pageChanged);
-    connect(m_calendar, &Calendar::focusChanged, this, &TagCounterCalendar::focusCleared);
+    connect(m_calendar, &Calendar::pageChanged, this, &TagCalendar::pageChanged);
+    connect(m_calendar, &Calendar::focusChanged, this, &TagCalendar::focusCleared);
 
     for (int row = 0; row < m_calendar->rowCount(); row++) {
         for (int col = 0; col < m_calendar->columnCount(); col++) {
@@ -35,32 +35,12 @@ TagCounterCalendar::TagCounterCalendar(QWidget* parent)
     }
 }
 
-QPair<QDate, QDate> TagCounterCalendar::getVisibleRange() const
+QPair<QDate, QDate> TagCalendar::getVisibleRange() const
 {
     return m_calendar->getVisibleRange();
 }
 
-QList<TagCounter*> TagCounterCalendar::getTags(const QDate& date)
-{
-    auto cell = m_calendar->getCell(date);
-    if (!cell) {
-        return {};
-    }
-
-    QList<TagCounter*> ret;
-
-    for (int pos = 0; pos < cell->contentLayout()->count(); pos++) {
-        if (auto item = cell->contentLayout()->itemAt(pos)) {
-            if (auto tag = static_cast<TagCounter*>(item->widget())) {
-                ret.append(tag);
-            }
-        }
-    }
-
-    return ret;
-}
-
-void TagCounterCalendar::addTag(const QDate& date, TagCounter* tag)
+void TagCalendar::addTag(const QDate& date, TagLabel* tag)
 {
     auto cell = m_calendar->getCell(date);
     if (!cell) {
@@ -69,25 +49,13 @@ void TagCounterCalendar::addTag(const QDate& date, TagCounter* tag)
 
     cell->contentLayout()->addWidget(tag);
 
-    connect(tag, &TagCounter::clicked, [=] {
+    connect(tag, &TagLabel::clicked, [=] {
         m_calendar->setFocus(cell);
         focusChanged(tag);
     });
 }
 
-void TagCounterCalendar::removeTag(const QDate& date, TagCounter* tag)
-{
-    auto cell = m_calendar->getCell(date);
-    if (!cell) {
-        return;
-    }
-
-    cell->contentLayout()->removeWidget(tag);
-
-    delete tag;
-}
-
-void TagCounterCalendar::clearTags(const QDate& date)
+void TagCalendar::clearTags(const QDate& date)
 {
     auto cell = m_calendar->getCell(date);
     if (!cell) {
@@ -97,7 +65,7 @@ void TagCounterCalendar::clearTags(const QDate& date)
     removeCellTags(cell);
 }
 
-void TagCounterCalendar::clearTags()
+void TagCalendar::clearTags()
 {
     for (int row = 0; row < m_calendar->rowCount(); row++) {
         for (int col = 0; col < m_calendar->columnCount(); col++) {
@@ -106,7 +74,7 @@ void TagCounterCalendar::clearTags()
     }
 }
 
-void TagCounterCalendar::removeCellTags(CalendarCell* cell)
+void TagCalendar::removeCellTags(CalendarCell* cell)
 {
     if (!cell) {
         return;
