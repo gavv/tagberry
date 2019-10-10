@@ -10,30 +10,38 @@
 
 #include "models/RecordsDirectory.hpp"
 #include "models/TagsDirectory.hpp"
-#include "presenters/CalendarArea.hpp"
 #include "storage/LocalStorage.hpp"
+#include "widgets/TagCalendar.hpp"
 
 #include <QHBoxLayout>
-#include <QMainWindow>
+#include <QWidget>
 
 namespace tagberry::presenters {
 
-class MainWindow : public QMainWindow {
+class CalendarArea : public QWidget {
     Q_OBJECT
 
 public:
-    explicit MainWindow(storage::LocalStorage& storage);
+    CalendarArea(storage::LocalStorage& storage, models::TagsDirectory& tagDir,
+        models::RecordsDirectory& recDir);
+
+private slots:
+    void refreshPage();
+
+    void clearFocus();
+    void changeFocus(widgets::TagLabel*);
 
 private:
+    void rebuildCell(QDate);
+
+private:
+    QHBoxLayout* m_layout;
+    widgets::TagCalendar* m_calendar;
+
     storage::LocalStorage& m_storage;
 
-    models::TagsDirectory m_tagDir;
-    models::RecordsDirectory m_recDir;
-
-    QHBoxLayout* m_layout;
-    QWidget* m_widget;
-
-    CalendarArea* m_calendarArea;
+    models::TagsDirectory& m_tagDir;
+    models::RecordsDirectory& m_recDir;
 };
 
 } // tagberry::presenters

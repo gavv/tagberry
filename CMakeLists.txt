@@ -36,6 +36,7 @@ set(SOURCES
  src/models/RecordsDirectory.cpp
  src/models/Tag.cpp
  src/models/TagsDirectory.cpp
+ src/presenters/CalendarArea.cpp
  src/presenters/MainWindow.cpp
  src/storage/LocalStorage.cpp
  src/widgets/Calendar.cpp
@@ -52,6 +53,7 @@ set(MOC_HEADERS
  src/models/RecordsDirectory.hpp
  src/models/Tag.hpp
  src/models/TagsDirectory.hpp
+ src/presenters/CalendarArea.hpp
  src/presenters/MainWindow.hpp
  src/widgets/Calendar.hpp
  src/widgets/CalendarCell.hpp
