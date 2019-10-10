@@ -80,4 +80,4 @@ private:
     int m_weekStart;
 };
 
-} // tagberry::widgets
+} // namespace tagberry::widgets

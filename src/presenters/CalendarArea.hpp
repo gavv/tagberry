@@ -44,4 +44,4 @@ private:
     models::RecordsDirectory& m_recDir;
 };
 
-} // tagberry::presenters
+} // namespace tagberry::presenters

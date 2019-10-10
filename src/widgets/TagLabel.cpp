@@ -195,4 +195,4 @@ void TagLabel::mousePressEvent(QMouseEvent*)
     clicked();
 }
 
-} // tagberry::widgets
+} // namespace tagberry::widgets

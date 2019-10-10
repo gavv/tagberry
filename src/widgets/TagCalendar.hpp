@@ -42,4 +42,4 @@ private:
     Calendar* m_calendar;
 };
 
-} // tagberry::widgets
+} // namespace tagberry::widgets

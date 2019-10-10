@@ -80,4 +80,4 @@ int RecordSet::numRecordsWithTag(TagPtr tag)
     return ret;
 }
 
-} // tagberry::models
+} // namespace tagberry::models

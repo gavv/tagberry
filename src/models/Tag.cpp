@@ -39,4 +39,4 @@ void Tag::setFocused(bool focused)
     focusChanged(focused);
 }
 
-} // tagberry::models
+} // namespace tagberry::models

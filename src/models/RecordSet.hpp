@@ -43,4 +43,4 @@ private:
 
 using RecordSetPtr = std::shared_ptr<RecordSet>;
 
-} // tagberry::models
+} // namespace tagberry::models

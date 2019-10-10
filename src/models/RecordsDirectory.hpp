@@ -39,4 +39,4 @@ private:
     RecordSetPtr m_recordWithoutDate;
 };
 
-} // tagberry::models
+} // namespace tagberry::models

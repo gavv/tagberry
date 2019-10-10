@@ -203,4 +203,4 @@ void CalendarCell::updateTextColor()
     m_day->setStyleSheet(style);
 }
 
-} // tagberry::widgets
+} // namespace tagberry::widgets

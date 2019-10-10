@@ -85,4 +85,4 @@ void RecordsDirectory::recordDateChanged(QDate oldDate, QDate newDate)
     recordsByDate(newDate)->addRecord(rec->shared_from_this());
 }
 
-} // tagberry::models
+} // namespace tagberry::models

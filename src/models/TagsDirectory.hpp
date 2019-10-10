@@ -41,4 +41,4 @@ private:
     QHash<QString, TagPtr> m_tags;
 };
 
-} // tagberry::models
+} // namespace tagberry::models

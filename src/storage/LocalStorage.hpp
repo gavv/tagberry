@@ -21,4 +21,4 @@ public:
         models::RecordsDirectory& recDir, models::TagsDirectory& tagDir);
 };
 
-} // tagberry::storage
+} // namespace tagberry::storage

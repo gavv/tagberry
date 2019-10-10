@@ -87,4 +87,4 @@ void TagsDirectory::tagFocusChanged(bool focused)
     }
 }
 
-} // tagberry::models
+} // namespace tagberry::models

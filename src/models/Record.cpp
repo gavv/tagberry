@@ -78,4 +78,4 @@ void Record::setText(QString text)
     textChanged(text);
 }
 
-} // tagberry::models
+} // namespace tagberry::models

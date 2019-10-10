@@ -51,4 +51,4 @@ private:
     int m_month;
 };
 
-} // tagberry::widgets
+} // namespace tagberry::widgets

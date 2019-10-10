@@ -90,4 +90,4 @@ void TagCalendar::removeCellTags(CalendarCell* cell)
     }
 }
 
-} // tagberry::widgets
+} // namespace tagberry::widgets

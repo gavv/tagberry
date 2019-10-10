@@ -213,4 +213,4 @@ void Calendar::updateCells()
     }
 }
 
-} // tagberry::widgets
+} // namespace tagberry::widgets

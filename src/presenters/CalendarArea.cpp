@@ -80,11 +80,10 @@ void CalendarArea::rebuildCell(QDate date)
         label->setText(tag->name());
         label->setCounter(recSet->numRecordsWithTag(tag));
 
-        connect(tag.get(), &models::Tag::nameChanged, label,
-            &widgets::TagLabel::setText);
+        connect(tag.get(), &models::Tag::nameChanged, label, &widgets::TagLabel::setText);
 
-        connect(tag.get(), &models::Tag::focusChanged, label,
-            &widgets::TagLabel::setFocused);
+        connect(
+            tag.get(), &models::Tag::focusChanged, label, &widgets::TagLabel::setFocused);
 
         m_calendar->addTag(date, label);
     }

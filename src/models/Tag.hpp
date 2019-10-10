@@ -37,4 +37,4 @@ private:
 
 using TagPtr = std::shared_ptr<Tag>;
 
-} // tagberry::models
+} // namespace tagberry::models

@@ -197,4 +197,4 @@ void CalendarSwitch::setYearMonth(int year, int month)
     switched(m_year, m_month);
 }
 
-} // tagberry::widgets
+} // namespace tagberry::widgets

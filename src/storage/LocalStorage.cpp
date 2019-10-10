@@ -35,4 +35,4 @@ bool LocalStorage::fillRecordsAndTags(const QDate& from, const QDate& to,
     return true;
 }
 
-} // tagberry::storage
+} // namespace tagberry::storage

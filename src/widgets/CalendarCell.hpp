@@ -74,4 +74,4 @@ private:
     bool m_isDimmed;
 };
 
-} // tagberry::widgets
+} // namespace tagberry::widgets

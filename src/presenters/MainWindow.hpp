@@ -36,4 +36,4 @@ private:
     CalendarArea* m_calendarArea;
 };
 
-} // tagberry::presenters
+} // namespace tagberry::presenters

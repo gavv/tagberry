@@ -66,4 +66,4 @@ private:
     bool m_isChecked;
 };
 
-} // tagberry::widgets
+} // namespace tagberry::widgets
