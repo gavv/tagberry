@@ -13,13 +13,26 @@
 #include "models/TagsDirectory.hpp"
 
 #include <QDate>
+#include <QSqlDatabase>
 
 namespace tagberry::storage {
 
 class LocalStorage {
 public:
+    bool open();
+
+    bool saveTag(models::TagPtr tag);
+
+    bool saveRecord(models::RecordPtr record);
+
     bool readPage(const QPair<QDate, QDate> range, models::RecordsDirectory& recDir,
         models::TagsDirectory& tagDir);
+
+private:
+    bool initTables();
+    bool saveRecordBody(models::RecordPtr record);
+
+    QSqlDatabase m_db;
 };
 
 } // namespace tagberry::storage

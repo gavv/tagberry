@@ -18,6 +18,10 @@ int main(int argc, char** argv)
 
     tagberry::storage::LocalStorage storage;
 
+    if (!storage.open()) {
+        return 1;
+    }
+
     tagberry::presenters::MainWindow window(storage);
 
     window.show();

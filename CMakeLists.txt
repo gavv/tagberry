@@ -78,6 +78,7 @@ include_directories(src)
 
 find_package(Qt5Core REQUIRED)
 find_package(Qt5Widgets REQUIRED)
+find_package(Qt5Sql REQUIRED)
 
 qt5_wrap_cpp(MOC_SOURCES ${MOC_HEADERS})
 
@@ -86,7 +87,8 @@ add_executable(${PROJECT_NAME}
 
 target_link_libraries(${PROJECT_NAME}
   Qt5::Core
-  Qt5::Widgets)
+  Qt5::Widgets
+  Qt5::Sql)
 
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
   COMMAND "${CMAKE_COMMAND}" -E copy
