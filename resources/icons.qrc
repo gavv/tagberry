@@ -3,5 +3,7 @@
   <qresource>
     <file>icons/arrow-left.png</file>
     <file>icons/arrow-right.png</file>
+    <file>icons/plus.png</file>
+    <file>icons/minus.png</file>
   </qresource>
 </RCC>

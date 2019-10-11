@@ -46,6 +46,8 @@ set(SOURCES
  src/widgets/CalendarCell.cpp
  src/widgets/CalendarSwitch.cpp
  src/widgets/FlowLayout.cpp
+ src/widgets/RecordCell.cpp
+ src/widgets/RecordList.cpp
  src/widgets/TagCalendar.cpp
  src/widgets/TagLabel.cpp
 )
@@ -64,6 +66,8 @@ set(MOC_HEADERS
  src/widgets/Calendar.hpp
  src/widgets/CalendarCell.hpp
  src/widgets/CalendarSwitch.hpp
+ src/widgets/RecordCell.hpp
+ src/widgets/RecordList.hpp
  src/widgets/TagCalendar.hpp
  src/widgets/TagLabel.hpp
 )
