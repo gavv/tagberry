@@ -26,7 +26,7 @@ public:
     QString name() const;
     bool focused() const;
 
-    std::tuple<QColor, QColor, QColor> getColors() const;
+    std::tuple<QColor, QColor> getColors() const;
 
     void setColorScheme(ColorScheme*);
 
@@ -37,7 +37,7 @@ public slots:
 signals:
     void nameChanged(QString);
     void focusChanged(bool);
-    void colorsChanged(QColor background, QColor regular, QColor focused);
+    void colorsChanged(QColor regular, QColor focused);
 
 private slots:
     void updateColors();

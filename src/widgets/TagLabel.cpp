@@ -76,13 +76,11 @@ void TagLabel::setChecked(bool checked)
     repaint();
 }
 
-void TagLabel::setColors(QColor background, QColor regular, QColor focused)
+void TagLabel::setColors(QColor regular, QColor focused)
 {
-    if (m_bg == background && m_fgRegular == regular
-        && m_fgFocused == focused) {
+    if (m_fgRegular == regular && m_fgFocused == focused) {
         return;
     }
-    m_bg = background;
     m_fgRegular = regular;
     m_fgFocused = focused;
     repaint();

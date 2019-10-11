@@ -22,19 +22,15 @@ class ColorScheme : public QObject {
 public:
     ColorScheme();
 
-    QColor backgroundColor() const;
-
     QColor tagRegularColor(const QString& name) const;
     QColor tagFocusedColor(const QString& name) const;
 
-    void setBackgroundColor(QColor);
     void setTagColors(QList<QColor>);
 
 signals:
     void colorsChanged();
 
 private:
-    QColor m_bgColor;
     QList<QColor> m_tagColors;
 };
 

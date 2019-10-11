@@ -38,7 +38,6 @@ QColor shiftColor(const QColor c, int shift)
 
 ColorScheme::ColorScheme()
 {
-    setBackgroundColor("#ffffff");
     setTagColors({
         "#ab6730",
         "#8A2F62",
@@ -54,11 +53,6 @@ ColorScheme::ColorScheme()
         "#479493",
         "#8f9140",
     });
-}
-
-QColor ColorScheme::backgroundColor() const
-{
-    return m_bgColor;
 }
 
 QColor ColorScheme::tagRegularColor(const QString& name) const
@@ -81,15 +75,6 @@ QColor ColorScheme::tagFocusedColor(const QString& name) const
     int index = tagIndex(name, m_tagColors.size());
 
     return shiftColor(m_tagColors[index], 50);
-}
-
-void ColorScheme::setBackgroundColor(QColor color)
-{
-    if (m_bgColor == color) {
-        return;
-    }
-    m_bgColor = color;
-    colorsChanged();
 }
 
 void ColorScheme::setTagColors(QList<QColor> colors)

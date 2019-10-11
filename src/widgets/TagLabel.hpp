@@ -35,7 +35,7 @@ public slots:
     void setFocused(bool);
     void setChecked(bool);
 
-    void setColors(QColor background, QColor regular, QColor focused);
+    void setColors(QColor regular, QColor focused);
 
 signals:
     void clicked();
