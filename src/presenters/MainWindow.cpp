@@ -16,11 +16,15 @@ MainWindow::MainWindow(storage::LocalStorage& storage)
     , m_layout(new QHBoxLayout)
     , m_widget(new QWidget(this))
     , m_calendarArea(new CalendarArea(m_storage, m_root))
+    , m_recordsArea(new RecordsArea(m_storage, m_root))
 {
-    m_layout->addWidget(m_calendarArea);
-    m_layout->setContentsMargins(QMargins(0, 0, 0, 0));
+    m_layout->setContentsMargins(QMargins(2, 0, 6, 0));
+
+    m_layout->addWidget(m_calendarArea, 4);
+    m_layout->addWidget(m_recordsArea, 1);
 
     m_widget->setLayout(m_layout);
+
     setCentralWidget(m_widget);
 }
 

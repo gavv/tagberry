@@ -11,6 +11,7 @@
 
 #include "models/Root.hpp"
 #include "presenters/CalendarArea.hpp"
+#include "presenters/RecordsArea.hpp"
 #include "storage/LocalStorage.hpp"
 
 #include <QHBoxLayout>
@@ -33,6 +34,7 @@ private:
     QWidget* m_widget;
 
     CalendarArea* m_calendarArea;
+    RecordsArea* m_recordsArea;
 };
 
 } // namespace tagberry::presenters
