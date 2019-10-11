@@ -50,7 +50,6 @@ Calendar::Calendar(QWidget* parent)
     connect(m_switch, &CalendarSwitch::today, this, &Calendar::setToday);
 
     setWeekStart(Qt::Monday);
-    setToday();
 }
 
 QList<QDate> Calendar::getSelectedDates() const

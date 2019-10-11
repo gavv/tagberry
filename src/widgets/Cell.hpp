@@ -39,8 +39,8 @@ signals:
     void clicked();
 
 protected:
-    virtual void paintEvent(QPaintEvent* event) override;
-    virtual void mousePressEvent(QMouseEvent* event) override;
+    void paintEvent(QPaintEvent* event) override;
+    void mousePressEvent(QMouseEvent* event) override;
 
 private:
     QVBoxLayout m_layout;

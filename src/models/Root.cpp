@@ -59,7 +59,7 @@ void Root::setCurrentDate(QDate date)
         return;
     }
     m_currentDate = date;
-    currentDateChanged();
+    currentDateChanged(date);
 }
 
 } // namespace tagberry::models

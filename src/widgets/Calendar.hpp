@@ -52,10 +52,11 @@ signals:
 public slots:
     virtual void setFocus(CalendarCell*);
 
+    void setToday();
+
 private slots:
     void setPage(int year, int month);
     void setDate(const QDate&);
-    void setToday();
 
 private:
     enum { NumDays = 7, NumWeeks = 5 };

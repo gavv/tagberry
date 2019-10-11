@@ -30,6 +30,8 @@ public:
     void clearTags(const QDate& date);
     void clearTags();
 
+    void setToday();
+
 signals:
     void pageChanged();
 

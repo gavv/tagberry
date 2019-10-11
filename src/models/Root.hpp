@@ -39,7 +39,7 @@ public:
 
 signals:
     void currentPageChanged();
-    void currentDateChanged();
+    void currentDateChanged(QDate);
 
 private:
     ColorScheme m_colorScheme;

@@ -35,6 +35,11 @@ TagCalendar::TagCalendar(QWidget* parent)
     }
 }
 
+void TagCalendar::setToday()
+{
+    m_calendar->setToday();
+}
+
 QPair<QDate, QDate> TagCalendar::getVisibleRange() const
 {
     return m_calendar->getVisibleRange();

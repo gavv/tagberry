@@ -34,7 +34,7 @@ CalendarArea::CalendarArea(storage::LocalStorage& storage, models::Root& root)
     connect(m_calendar, &widgets::TagCalendar::tagFocusChanged, this,
         &CalendarArea::changeTagFocus);
 
-    refreshPage();
+    m_calendar->setToday();
 }
 
 void CalendarArea::changeCurrentDate(QDate date)
