@@ -16,7 +16,7 @@ QString Tag::name() const
     return m_name;
 }
 
-bool Tag::focused() const
+bool Tag::isFocused() const
 {
     return m_focused;
 }

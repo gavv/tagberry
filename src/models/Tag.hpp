@@ -24,7 +24,7 @@ class Tag : public QObject, public std::enable_shared_from_this<Tag> {
 
 public:
     QString name() const;
-    bool focused() const;
+    bool isFocused() const;
 
     std::tuple<QColor, QColor> getColors() const;
 
