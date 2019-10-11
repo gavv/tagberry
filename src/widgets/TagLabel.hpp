@@ -24,8 +24,11 @@ public:
 
     const QString& text() const;
 
+    void setClosable(bool);
+
     void setFont(const QFont& font);
     void setPadding(int h, int v);
+    void setMargin(int h, int v);
     void setRounding(int r);
 
 public slots:
@@ -39,17 +42,21 @@ public slots:
 
 signals:
     void clicked();
+    void closeClicked();
 
 protected:
     void paintEvent(QPaintEvent* event) override;
+
     void mousePressEvent(QMouseEvent* event) override;
+    void mouseReleaseEvent(QMouseEvent* event) override;
+    void mouseMoveEvent(QMouseEvent* event) override;
 
 private:
     void updateSize();
 
     QString m_text;
     QString m_customIndicator;
-    bool m_closeIndicator;
+    bool m_closeButton;
 
     QColor m_fgRegular;
     QColor m_fgFocused;
@@ -63,11 +70,14 @@ private:
     int m_textVertShift;
     int m_rounding;
 
-    QRect m_rect;
+    QRect m_innerRect;
+    QRect m_closeRect;
     int m_indicatorWidth;
 
     bool m_isFocused;
     bool m_isChecked;
+    bool m_isClosePressed;
+    bool m_closePressStarted;
 };
 
 } // namespace tagberry::widgets
