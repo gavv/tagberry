@@ -13,10 +13,10 @@
 #include "storage/LocalStorage.hpp"
 #include "widgets/RecordList.hpp"
 
-#include <QVBoxLayout>
-#include <QWidget>
 #include <QLabel>
 #include <QScrollArea>
+#include <QVBoxLayout>
+#include <QWidget>
 
 namespace tagberry::presenters {
 

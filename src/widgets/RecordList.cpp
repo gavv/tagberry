@@ -40,7 +40,7 @@ void RecordList::cellChanged(RecordCell* focusedCell)
 {
     m_focusedCell = focusedCell;
 
-    for (auto cell: m_records) {
+    for (auto cell : m_records) {
         cell->setFocused(cell == focusedCell);
     }
 }
