@@ -19,6 +19,7 @@ mkdir build
 cd build
 cmake ..
 make -j
+cd ..
 ```
 
 ## Run
@@ -32,6 +33,20 @@ make -j
 ```
 ./scripts/format.sh
 ```
+
+## Code structure
+
+The codebase is divided into four parts:
+
+* **widgets** - A collection of application-specific widgets, supplementing standard Qt widgets. Widgets don't know anything about models and business-logic.
+
+* **models** - A collection of data objects to be displayed and manipulated by user. Models don't know anything about widgets and UI.
+
+* **storage** - Classes to read and write models from a persistent storage.
+
+* **presenters** - Classes that put all these things together. Presenters create the UI using widgets and interconnect models with widgets and storage.
+
+![Code Structure](./diagram.png)
 
 ## Authors
 
