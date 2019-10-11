@@ -1,0 +1,12 @@
+language: cpp
+compiler: gcc
+dist: bionic
+
+install:
+  - sudo apt-get install -y qtbase5-dev cmake
+
+script:
+  - mkdir build
+  - cd build
+  - cmake ..
+  - make -j
