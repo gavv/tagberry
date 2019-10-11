@@ -11,14 +11,33 @@
 
 namespace tagberry::models {
 
-Tag::Tag(QString id)
-    : m_id(id)
+bool Tag::isDirty() const
 {
+    return m_isDirty;
+}
+
+void Tag::unsetDirty()
+{
+    m_isDirty = false;
 }
 
 QString Tag::id() const
 {
     return m_id;
+}
+
+bool Tag::hasID() const
+{
+    return !m_id.isEmpty();
+}
+
+void Tag::setID(QString id)
+{
+    if (id == m_id) {
+        return;
+    }
+    m_id = id;
+    idChanged(id);
 }
 
 QString Tag::name() const
@@ -36,6 +55,7 @@ void Tag::setName(const QString& text)
     if (text == m_name) {
         return;
     }
+    m_isDirty = true;
     m_name = text;
     nameChanged(text);
     updateColors();

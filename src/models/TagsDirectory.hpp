@@ -17,6 +17,8 @@
 #include <QObject>
 #include <QString>
 
+#include <unordered_set>
+
 namespace tagberry::models {
 
 class TagsDirectory : public QObject {
@@ -27,7 +29,7 @@ public:
 
     TagPtr getTagByName(const QString& name) const;
 
-    TagPtr createTag(const QString& id);
+    TagPtr createTag();
 
     TagPtr getOrCreateTag(const QString& id);
 
@@ -40,10 +42,13 @@ public:
     void setColorScheme(ColorScheme*);
 
 private slots:
+    virtual void tagIdChanged(QString);
     virtual void tagNameChanged(QString);
     virtual void tagFocusChanged(bool);
 
 private:
+    std::unordered_set<TagPtr> m_tags;
+
     QHash<QString, TagPtr> m_tagByName;
     QHash<QString, TagPtr> m_tagByID;
 

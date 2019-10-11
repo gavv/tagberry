@@ -12,8 +12,11 @@
 #include "models/Record.hpp"
 #include "models/RecordSet.hpp"
 
+#include <QHash>
 #include <QList>
 #include <QObject>
+
+#include <unordered_set>
 
 namespace tagberry::models {
 
@@ -25,7 +28,7 @@ public:
 
     RecordSetPtr recordsWithoutDate();
 
-    RecordPtr createRecord(const QString& id);
+    RecordPtr createRecord();
 
     RecordPtr getOrCreateRecord(const QString& id);
 
@@ -34,10 +37,12 @@ public:
     void clearRecords();
 
 private slots:
+    void recordIdChanged(QString id);
     void recordDateChanged(QDate oldDate, QDate newDate);
 
 private:
-    QHash<QString, RecordPtr> m_recordsById;
+    std::unordered_set<RecordPtr> m_records;
+    QHash<QString, RecordPtr> m_recordByID;
     QHash<QDate, RecordSetPtr> m_recordsByDate;
     RecordSetPtr m_recordWithoutDate;
 };

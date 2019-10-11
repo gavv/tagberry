@@ -31,13 +31,14 @@ RecordSetPtr RecordsDirectory::recordsWithoutDate()
     return m_recordWithoutDate;
 }
 
-RecordPtr RecordsDirectory::createRecord(const QString& id)
+RecordPtr RecordsDirectory::createRecord()
 {
-    auto rec = std::make_shared<Record>(id);
+    auto rec = std::make_shared<Record>();
 
+    connect(rec.get(), &Record::idChanged, this, &RecordsDirectory::recordIdChanged);
     connect(rec.get(), &Record::dateChanged, this, &RecordsDirectory::recordDateChanged);
 
-    m_recordsById[id] = rec;
+    m_records.insert(rec);
     recordsWithoutDate()->addRecord(rec);
 
     return rec;
@@ -45,11 +46,14 @@ RecordPtr RecordsDirectory::createRecord(const QString& id)
 
 RecordPtr RecordsDirectory::getOrCreateRecord(const QString& id)
 {
-    if (auto rec = m_recordsById[id]) {
+    if (auto rec = m_recordByID[id]) {
         return rec;
     }
 
-    return createRecord(id);
+    auto rec = createRecord();
+    rec->setID(id);
+
+    return rec;
 }
 
 void RecordsDirectory::removeRecord(RecordPtr rec)
@@ -62,18 +66,39 @@ void RecordsDirectory::removeRecord(RecordPtr rec)
         recordsByDate(rec->date())->removeRecord(rec);
     }
 
-    m_recordsById.remove(rec->id());
+    if (rec->hasID()) {
+        m_recordByID.remove(rec->id());
+    }
+
+    m_records.erase(rec);
 }
 
 void RecordsDirectory::clearRecords()
 {
-    for (auto rec : m_recordsById) {
+    for (auto rec : m_records) {
         disconnect(rec.get(), nullptr, this, nullptr);
     }
 
-    m_recordsById.clear();
+    m_recordByID.clear();
     m_recordsByDate.clear();
     m_recordWithoutDate.reset();
+    m_records.clear();
+}
+
+void RecordsDirectory::recordIdChanged(QString id)
+{
+    auto record = qobject_cast<Record*>(sender());
+
+    for (auto it = m_recordByID.begin(); it != m_recordByID.end(); ++it) {
+        if (it.value().get() == record) {
+            m_recordByID.erase(it);
+            break;
+        }
+    }
+
+    if (!id.isEmpty()) {
+        m_recordByID[id] = record->shared_from_this();
+    }
 }
 
 void RecordsDirectory::recordDateChanged(QDate oldDate, QDate newDate)

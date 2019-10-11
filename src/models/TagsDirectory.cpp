@@ -21,18 +21,19 @@ TagPtr TagsDirectory::getTagByName(const QString& name) const
     return m_tagByName[name];
 }
 
-TagPtr TagsDirectory::createTag(const QString& id)
+TagPtr TagsDirectory::createTag()
 {
-    auto tag = std::make_shared<Tag>(id);
+    auto tag = std::make_shared<Tag>();
 
     if (m_colorScheme) {
         tag->setColorScheme(m_colorScheme);
     }
 
+    connect(tag.get(), &Tag::idChanged, this, &TagsDirectory::tagIdChanged);
     connect(tag.get(), &Tag::nameChanged, this, &TagsDirectory::tagNameChanged);
     connect(tag.get(), &Tag::focusChanged, this, &TagsDirectory::tagFocusChanged);
 
-    m_tagByID[tag->id()] = tag;
+    m_tags.insert(tag);
 
     return tag;
 }
@@ -43,14 +44,21 @@ TagPtr TagsDirectory::getOrCreateTag(const QString& id)
         return tag;
     }
 
-    return createTag(id);
+    auto tag = createTag();
+    tag->setID(id);
+
+    return tag;
 }
 
 void TagsDirectory::removeTag(TagPtr tag)
 {
     disconnect(tag.get(), nullptr, this, nullptr);
 
-    m_tagByID.remove(tag->id());
+    m_tags.erase(tag);
+
+    if (!tag->id().isEmpty()) {
+        m_tagByID.remove(tag->id());
+    }
 
     if (!tag->name().isEmpty()) {
         m_tagByName.remove(tag->name());
@@ -59,27 +67,45 @@ void TagsDirectory::removeTag(TagPtr tag)
 
 void TagsDirectory::focusTag(TagPtr focusedTag)
 {
-    for (auto tag : m_tagByID) {
+    for (auto tag : m_tags) {
         tag->setFocused(tag == focusedTag);
     }
 }
 
 void TagsDirectory::clearTags()
 {
-    for (auto tag : m_tagByID) {
+    for (auto tag : m_tags) {
         disconnect(tag.get(), nullptr, this, nullptr);
     }
 
     m_tagByName.clear();
     m_tagByID.clear();
+
+    m_tags.clear();
 }
 
 void TagsDirectory::setColorScheme(ColorScheme* colorScheme)
 {
     m_colorScheme = colorScheme;
 
-    for (auto tag : m_tagByID) {
+    for (auto tag : m_tags) {
         tag->setColorScheme(m_colorScheme);
+    }
+}
+
+void TagsDirectory::tagIdChanged(QString id)
+{
+    auto tag = qobject_cast<Tag*>(sender());
+
+    for (auto it = m_tagByID.begin(); it != m_tagByID.end(); ++it) {
+        if (it.value().get() == tag) {
+            m_tagByID.erase(it);
+            break;
+        }
+    }
+
+    if (!id.isEmpty()) {
+        m_tagByID[id] = tag->shared_from_this();
     }
 }
 

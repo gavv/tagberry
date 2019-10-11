@@ -23,15 +23,18 @@ class Tag : public QObject, public std::enable_shared_from_this<Tag> {
     Q_OBJECT
 
 public:
-    explicit Tag(QString id);
+    bool isDirty() const;
+    void unsetDirty();
 
     QString id() const;
+    bool hasID() const;
+    void setID(QString);
 
     QString name() const;
+
     bool isFocused() const;
 
     std::tuple<QColor, QColor> getColors() const;
-
     void setColorScheme(ColorScheme*);
 
 public slots:
@@ -39,6 +42,7 @@ public slots:
     void setFocused(bool);
 
 signals:
+    void idChanged(QString);
     void nameChanged(QString);
     void focusChanged(bool);
     void colorsChanged(QColor regular, QColor focused);
@@ -47,6 +51,8 @@ private slots:
     void updateColors();
 
 private:
+    bool m_isDirty { true };
+
     QString m_id;
     QString m_name;
     bool m_focused { false };

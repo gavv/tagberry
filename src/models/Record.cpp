@@ -11,9 +11,22 @@
 
 namespace tagberry::models {
 
-Record::Record(QString id)
-    : m_id(id)
+bool Record::isDirty() const
 {
+    if (m_isDirty) {
+        return true;
+    }
+    for (auto tag : m_tags) {
+        if (tag->isDirty()) {
+            return true;
+        }
+    }
+    return false;
+}
+
+void Record::unsetDirty()
+{
+    m_isDirty = false;
 }
 
 QString Record::id() const
@@ -21,14 +34,49 @@ QString Record::id() const
     return m_id;
 }
 
+bool Record::hasID() const
+{
+    return !m_id.isEmpty();
+}
+
+void Record::setID(QString id)
+{
+    if (m_id == id) {
+        return;
+    }
+    m_id = id;
+    idChanged(id);
+}
+
 QDate Record::date() const
 {
     return m_date;
 }
 
+void Record::setDate(QDate date)
+{
+    if (date == m_date) {
+        return;
+    }
+    QDate oldDate = m_date;
+    m_date = date;
+    m_isDirty = true;
+    dateChanged(oldDate, date);
+}
+
 QString Record::title() const
 {
     return m_title;
+}
+
+void Record::setTitle(QString text)
+{
+    if (text == m_title) {
+        return;
+    }
+    m_title = text;
+    m_isDirty = true;
+    textChanged(text);
 }
 
 QList<TagPtr> Record::tags() const
@@ -46,6 +94,7 @@ void Record::addTag(TagPtr tag)
     if (m_tags.indexOf(tag) != -1) {
         return;
     }
+    m_isDirty = true;
     m_tags.append(tag);
     tagsChanged();
 }
@@ -55,27 +104,9 @@ void Record::removeTag(TagPtr tag)
     if (m_tags.indexOf(tag) == -1) {
         return;
     }
+    m_isDirty = true;
     m_tags.removeAll(tag);
     tagsChanged();
-}
-
-void Record::setDate(QDate date)
-{
-    if (date == m_date) {
-        return;
-    }
-    QDate oldDate = m_date;
-    m_date = date;
-    dateChanged(oldDate, date);
-}
-
-void Record::setTitle(QString text)
-{
-    if (text == m_title) {
-        return;
-    }
-    m_title = text;
-    textChanged(text);
 }
 
 } // namespace tagberry::models

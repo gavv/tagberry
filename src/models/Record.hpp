@@ -24,18 +24,19 @@ class Record : public QObject, public std::enable_shared_from_this<Record> {
     Q_OBJECT
 
 public:
-    explicit Record(QString id);
+    bool isDirty() const;
+    void unsetDirty();
 
     QString id() const;
+    bool hasID() const;
+    void setID(QString);
 
     QDate date() const;
-
     QString title() const;
 
     QList<TagPtr> tags() const;
 
     bool hasTag(TagPtr) const;
-
     void addTag(TagPtr);
     void removeTag(TagPtr);
 
@@ -44,11 +45,13 @@ public slots:
     void setTitle(QString);
 
 signals:
+    void idChanged(QString);
     void dateChanged(QDate oldDate, QDate newDate);
     void textChanged(QString);
     void tagsChanged();
 
 private:
+    bool m_isDirty { true };
     QString m_id;
     QDate m_date;
     QString m_title;
