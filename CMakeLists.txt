@@ -41,6 +41,7 @@ set(SOURCES
  src/presenters/CalendarArea.cpp
  src/presenters/MainWindow.cpp
  src/storage/LocalStorage.cpp
+ src/widgets/Cell.cpp
  src/widgets/Calendar.cpp
  src/widgets/CalendarCell.cpp
  src/widgets/CalendarSwitch.cpp
@@ -59,6 +60,7 @@ set(MOC_HEADERS
  src/models/TagsDirectory.hpp
  src/presenters/CalendarArea.hpp
  src/presenters/MainWindow.hpp
+ src/widgets/Cell.hpp
  src/widgets/Calendar.hpp
  src/widgets/CalendarCell.hpp
  src/widgets/CalendarSwitch.hpp

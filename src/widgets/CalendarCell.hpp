@@ -9,12 +9,10 @@
 
 #pragma once
 
-#include <QColor>
-#include <QFont>
-#include <QFrame>
+#include "widgets/Cell.hpp"
+
 #include <QHBoxLayout>
 #include <QLabel>
-#include <QVBoxLayout>
 #include <QWidget>
 
 namespace tagberry::widgets {
@@ -29,7 +27,6 @@ public:
     int column() const;
 
     QLayout* contentLayout();
-
     void setContentLayout(QLayout*);
 
     void setMonth(int);
@@ -38,17 +35,10 @@ public:
     void setFocused(bool);
     void setDimmed(bool);
 
-    void setBorderColor(const QColor&);
-    void setBackgroundColor(const QColor&);
-    void setHeaderColor(const QColor&);
-    void setTextColor(const QColor& normal, const QColor& dimmed);
+    void setHeaderColor(QColor color);
 
 signals:
     void clicked(CalendarCell*);
-
-protected:
-    virtual void paintEvent(QPaintEvent* event) override;
-    virtual void mousePressEvent(QMouseEvent* event) override;
 
 private:
     void updateTextColor();
@@ -56,22 +46,16 @@ private:
     const int m_row;
     const int m_col;
 
-    QLabel* m_month;
-    QLabel* m_day;
-
-    QFrame* m_headFrame;
-    QFrame* m_bodyFrame;
+    QHBoxLayout m_layout;
+    Cell m_cell;
 
     QHBoxLayout m_headLayout;
-    QVBoxLayout m_cellLayout;
+    QLabel m_month;
+    QLabel m_day;
 
-    QColor m_bgColor;
-    QColor m_borderColor;
-    QColor m_headerColor;
     QColor m_normalTextColor;
     QColor m_dimmedTextColor;
 
-    bool m_isFocused;
     bool m_isDimmed;
 };
 

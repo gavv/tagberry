@@ -19,45 +19,32 @@ CalendarCell::CalendarCell(QWidget* parent, int row, int col)
     : QWidget(parent)
     , m_row(row)
     , m_col(col)
-    , m_month(new QLabel)
-    , m_day(new QLabel)
-    , m_headFrame(new QFrame)
-    , m_bodyFrame(new QFrame)
-    , m_bgColor("#ffffff")
-    , m_borderColor("#767C82")
-    , m_headerColor(m_bgColor)
     , m_normalTextColor("#000000")
     , m_dimmedTextColor("#999999")
-    , m_isFocused(false)
     , m_isDimmed(false)
 {
-    m_cellLayout.addWidget(m_headFrame, 0);
-    m_cellLayout.addWidget(m_bodyFrame, 1);
-    setLayout(&m_cellLayout);
+    m_layout.addWidget(&m_cell);
+    m_layout.setContentsMargins(QMargins(0, 0, 0, 0));
 
-    m_headLayout.addWidget(m_month);
-    m_headLayout.addWidget(m_day);
+    setLayout(&m_layout);
 
-    m_headFrame->setLayout(&m_headLayout);
-
+    m_headLayout.addWidget(&m_month);
+    m_headLayout.addWidget(&m_day);
     m_headLayout.setContentsMargins(QMargins(5, 3, 5, 3));
-    m_cellLayout.setContentsMargins(QMargins(0, 0, 0, 0));
-    m_cellLayout.setSpacing(0);
 
-    m_headFrame->setContentsMargins(QMargins(0, 0, 0, 0));
-    m_bodyFrame->setContentsMargins(QMargins(0, 0, 0, 0));
-
-    m_headFrame->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
+    m_cell.setHeadLayout(&m_headLayout);
 
     QFont font;
     font.setBold(true);
-    m_month->setFont(font);
+    m_month.setFont(font);
 
-    m_month->setAlignment(Qt::AlignLeft);
-    m_day->setAlignment(Qt::AlignRight);
+    m_month.setAlignment(Qt::AlignLeft);
+    m_day.setAlignment(Qt::AlignRight);
 
-    m_month->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
-    m_day->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
+    m_month.setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
+    m_day.setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+    connect(&m_cell, &Cell::clicked, [=] { clicked(this); });
 
     updateTextColor();
 }
@@ -74,36 +61,27 @@ int CalendarCell::column() const
 
 QLayout* CalendarCell::contentLayout()
 {
-    return m_bodyFrame->layout();
+    return m_cell.bodyLayout();
 }
 
 void CalendarCell::setContentLayout(QLayout* layout)
 {
-    m_bodyFrame->setLayout(layout);
+    m_cell.setBodyLayout(layout);
 }
 
 void CalendarCell::setMonth(int month)
 {
-    m_month->setText(month >= 1 ? QDate::shortMonthName(month) : "");
+    m_month.setText(month >= 1 ? QDate::shortMonthName(month) : "");
 }
 
 void CalendarCell::setDay(int day)
 {
-    m_day->setText(QString("%1").arg(day));
+    m_day.setText(QString("%1").arg(day));
 }
 
 void CalendarCell::setFocused(bool focused)
 {
-    if (focused == m_isFocused) {
-        return;
-    }
-    m_isFocused = focused;
-    repaint();
-    if (m_isFocused) {
-        if (auto widget = qApp->focusWidget()) {
-            widget->clearFocus();
-        }
-    }
+    m_cell.setFocused(focused);
 }
 
 void CalendarCell::setDimmed(bool dimmed)
@@ -115,82 +93,9 @@ void CalendarCell::setDimmed(bool dimmed)
     updateTextColor();
 }
 
-void CalendarCell::setBackgroundColor(const QColor& color)
+void CalendarCell::setHeaderColor(QColor color)
 {
-    if (m_bgColor == color) {
-        return;
-    }
-    m_bgColor = color;
-    repaint();
-}
-
-void CalendarCell::setBorderColor(const QColor& color)
-{
-    if (m_borderColor == color) {
-        return;
-    }
-    m_borderColor = color;
-    repaint();
-}
-
-void CalendarCell::setHeaderColor(const QColor& color)
-{
-    if (m_headerColor == color) {
-        return;
-    }
-    m_headerColor = color;
-    repaint();
-}
-
-void CalendarCell::setTextColor(const QColor& normal, const QColor& dimmed)
-{
-    if (m_normalTextColor == normal && m_dimmedTextColor == dimmed) {
-        return;
-    }
-    m_normalTextColor = normal;
-    m_dimmedTextColor = dimmed;
-    updateTextColor();
-}
-
-void CalendarCell::paintEvent(QPaintEvent* event)
-{
-    QPainter pt(this);
-
-    pt.setRenderHint(QPainter::Qt4CompatiblePainting, true);
-
-    if (m_isFocused) {
-        pt.setRenderHint(QPainter::Antialiasing, true);
-    }
-
-    const int f1 = m_isFocused ? 1 : 0;
-    const int f2 = f1 + 1;
-    const int hf = m_headFrame->height();
-
-    pt.setPen(m_headerColor);
-    pt.setBrush(m_headerColor);
-    pt.drawRoundedRect(QRect(1, 1, width() - 1, height() - 1), f2, f2);
-
-    pt.setPen(m_bgColor);
-    pt.setBrush(m_bgColor);
-    pt.drawRoundedRect(QRect(1, hf + 1, width() - 1, height() - 1), f2, f2);
-
-    pt.setPen(QPen(m_borderColor, f2));
-    pt.setBrush(QBrush());
-    pt.drawRoundedRect(QRect(f1, f1, width() - f2, height() - f2), f2, f2);
-
-    if (m_isFocused) {
-        pt.setRenderHint(QPainter::Antialiasing, false);
-    }
-
-    pt.setPen(QPen(m_borderColor, 1));
-    pt.drawLine(QLine(0, hf, width(), hf));
-
-    QWidget::paintEvent(event);
-}
-
-void CalendarCell::mousePressEvent(QMouseEvent*)
-{
-    clicked(this);
+    m_cell.setHeaderColor(color);
 }
 
 void CalendarCell::updateTextColor()
@@ -199,8 +104,8 @@ void CalendarCell::updateTextColor()
         = QString("QLabel { color: %1; }")
               .arg(m_isDimmed ? m_dimmedTextColor.name() : m_normalTextColor.name());
 
-    m_month->setStyleSheet(style);
-    m_day->setStyleSheet(style);
+    m_month.setStyleSheet(style);
+    m_day.setStyleSheet(style);
 }
 
 } // namespace tagberry::widgets
