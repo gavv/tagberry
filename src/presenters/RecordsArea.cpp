@@ -58,7 +58,7 @@ void RecordsArea::recordAdded(widgets::RecordCell* record)
 
 void RecordsArea::tagAdded(widgets::TagLabel* label)
 {
-    auto tag = m_root.tags().getOrCreateTag("tag-1");
+    auto tag = m_root.tags().getOrCreateTag("tagID1");
 
     connect(tag.get(), &models::Tag::nameChanged, label, &widgets::TagLabel::setText);
 

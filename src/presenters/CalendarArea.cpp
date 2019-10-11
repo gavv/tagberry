@@ -53,7 +53,7 @@ void CalendarArea::changeTagFocus(widgets::TagLabel* label)
         return;
     }
 
-    auto tag = m_root.tags().getTag(label->text());
+    auto tag = m_root.tags().getTagByName(label->text());
 
     m_root.tags().focusTag(tag);
 }

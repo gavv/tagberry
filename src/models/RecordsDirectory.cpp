@@ -31,21 +31,25 @@ RecordSetPtr RecordsDirectory::recordsWithoutDate()
     return m_recordWithoutDate;
 }
 
-RecordPtr RecordsDirectory::getOrCreateRecord(const QString& id)
+RecordPtr RecordsDirectory::createRecord(const QString& id)
 {
-    auto rec = m_recordsById[id];
+    auto rec = std::make_shared<Record>(id);
 
-    if (!rec) {
-        rec = std::make_shared<Record>(id);
+    connect(rec.get(), &Record::dateChanged, this, &RecordsDirectory::recordDateChanged);
 
-        connect(
-            rec.get(), &Record::dateChanged, this, &RecordsDirectory::recordDateChanged);
-
-        m_recordsById[id] = rec;
-        recordsWithoutDate()->addRecord(rec);
-    }
+    m_recordsById[id] = rec;
+    recordsWithoutDate()->addRecord(rec);
 
     return rec;
+}
+
+RecordPtr RecordsDirectory::getOrCreateRecord(const QString& id)
+{
+    if (auto rec = m_recordsById[id]) {
+        return rec;
+    }
+
+    return createRecord(id);
 }
 
 void RecordsDirectory::removeRecord(RecordPtr rec)

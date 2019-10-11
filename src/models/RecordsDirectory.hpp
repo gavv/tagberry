@@ -25,6 +25,8 @@ public:
 
     RecordSetPtr recordsWithoutDate();
 
+    RecordPtr createRecord(const QString& id);
+
     RecordPtr getOrCreateRecord(const QString& id);
 
     void removeRecord(RecordPtr);

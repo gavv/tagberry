@@ -16,12 +16,16 @@ bool LocalStorage::readPage(const QPair<QDate, QDate> range,
 {
     // FIXME: implement and use sqlite backend
 
-    auto t1 = tagDir.getOrCreateTag("tag-1");
-    auto t2 = tagDir.getOrCreateTag("tag-2");
-    auto t3 = tagDir.getOrCreateTag("tag-3");
+    auto t1 = tagDir.getOrCreateTag("tagID1");
+    auto t2 = tagDir.getOrCreateTag("tagID2");
+    auto t3 = tagDir.getOrCreateTag("tagID3");
 
     auto r1 = recDir.getOrCreateRecord("recID1");
     auto r2 = recDir.getOrCreateRecord("recID2");
+
+    t1->setName("tag-1");
+    t2->setName("tag-2");
+    t3->setName("tag-3");
 
     r1->setDate(range.first);
     r2->setDate(range.second);

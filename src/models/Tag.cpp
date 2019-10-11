@@ -11,6 +11,16 @@
 
 namespace tagberry::models {
 
+Tag::Tag(QString id)
+    : m_id(id)
+{
+}
+
+QString Tag::id() const
+{
+    return m_id;
+}
+
 QString Tag::name() const
 {
     return m_name;

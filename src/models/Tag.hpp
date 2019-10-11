@@ -23,6 +23,10 @@ class Tag : public QObject, public std::enable_shared_from_this<Tag> {
     Q_OBJECT
 
 public:
+    explicit Tag(QString id);
+
+    QString id() const;
+
     QString name() const;
     bool isFocused() const;
 
@@ -43,6 +47,7 @@ private slots:
     void updateColors();
 
 private:
+    QString m_id;
     QString m_name;
     bool m_focused { false };
 

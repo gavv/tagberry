@@ -25,9 +25,11 @@ class TagsDirectory : public QObject {
 public:
     QList<TagPtr> getTags() const;
 
-    TagPtr getTag(const QString& name) const;
+    TagPtr getTagByName(const QString& name) const;
 
-    TagPtr getOrCreateTag(const QString& name);
+    TagPtr createTag(const QString& id);
+
+    TagPtr getOrCreateTag(const QString& id);
 
     void removeTag(TagPtr);
 
@@ -38,11 +40,13 @@ public:
     void setColorScheme(ColorScheme*);
 
 private slots:
-    virtual void tagTextChanged(QString);
+    virtual void tagNameChanged(QString);
     virtual void tagFocusChanged(bool);
 
 private:
-    QHash<QString, TagPtr> m_tags;
+    QHash<QString, TagPtr> m_tagByName;
+    QHash<QString, TagPtr> m_tagByID;
+
     ColorScheme* m_colorScheme {};
 };
 

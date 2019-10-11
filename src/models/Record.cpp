@@ -26,9 +26,9 @@ QDate Record::date() const
     return m_date;
 }
 
-QString Record::text() const
+QString Record::title() const
 {
-    return m_text;
+    return m_title;
 }
 
 QList<TagPtr> Record::tags() const
@@ -69,12 +69,12 @@ void Record::setDate(QDate date)
     dateChanged(oldDate, date);
 }
 
-void Record::setText(QString text)
+void Record::setTitle(QString text)
 {
-    if (text == m_text) {
+    if (text == m_title) {
         return;
     }
-    m_text = text;
+    m_title = text;
     textChanged(text);
 }
 

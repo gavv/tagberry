@@ -30,7 +30,7 @@ public:
 
     QDate date() const;
 
-    QString text() const;
+    QString title() const;
 
     QList<TagPtr> tags() const;
 
@@ -41,7 +41,7 @@ public:
 
 public slots:
     void setDate(QDate);
-    void setText(QString);
+    void setTitle(QString);
 
 signals:
     void dateChanged(QDate oldDate, QDate newDate);
@@ -51,7 +51,7 @@ signals:
 private:
     QString m_id;
     QDate m_date;
-    QString m_text;
+    QString m_title;
     QList<TagPtr> m_tags;
 };
 
