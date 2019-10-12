@@ -131,8 +131,6 @@ void TagsDirectory::tagFocusChanged(bool focused)
 
     if (focused) {
         focusTag(tag->shared_from_this());
-    } else {
-        focusTag(nullptr);
     }
 }
 

@@ -62,7 +62,8 @@ void RecordsArea::tagAdded(widgets::TagLabel* label)
 
     connect(tag.get(), &models::Tag::nameChanged, label, &widgets::TagLabel::setText);
 
-    connect(tag.get(), &models::Tag::focusChanged, label, &widgets::TagLabel::setFocused);
+    connect(tag.get(), &models::Tag::focusChanged,
+        [=] { label->setFocused(tag->isFocused()); });
 
     connect(tag.get(), &models::Tag::colorsChanged, label, &widgets::TagLabel::setColors);
 

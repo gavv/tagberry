@@ -73,10 +73,10 @@ void RecordCell::addTag()
 {
     auto tag = new TagLabel;
 
-    tag->setText("tag");
-    tag->setMargin(2, 3);
+    tag->setMargin(1, 2);
     tag->setClosable(true);
     tag->setChecked(true);
+    tag->setEditable(true);
 
     m_bodyLayout.removeWidget(&m_addTag);
     m_bodyLayout.addWidget(tag);
@@ -84,11 +84,14 @@ void RecordCell::addTag()
 
     connect(tag, &TagLabel::closeClicked, this, &RecordCell::removeTag);
     connect(tag, &TagLabel::clicked, this, &RecordCell::tagClicked);
+    connect(tag, &TagLabel::editingStarted, this, &RecordCell::tagFocusCleared);
 
     m_tags.append(tag);
 
     tagAdded(tag);
     tagsChanged();
+
+    tag->startEditing();
 }
 
 void RecordCell::removeTag()

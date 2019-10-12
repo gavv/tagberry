@@ -11,7 +11,9 @@
 
 #include <QColor>
 #include <QFont>
+#include <QLineEdit>
 #include <QString>
+#include <QVBoxLayout>
 #include <QWidget>
 
 namespace tagberry::widgets {
@@ -24,12 +26,17 @@ public:
 
     const QString& text() const;
 
+    bool isFocused() const;
+
     void setClosable(bool);
+    void setEditable(bool);
 
     void setFont(const QFont& font);
     void setPadding(int h, int v);
     void setMargin(int h, int v);
     void setRounding(int r);
+
+    void startEditing();
 
 public slots:
     void setText(QString text);
@@ -41,8 +48,15 @@ public slots:
     void setColors(QColor regular, QColor focused);
 
 signals:
+    void textChanged(QString);
+
     void clicked();
     void closeClicked();
+
+    void editingStarted();
+
+private slots:
+    void finishEditing();
 
 protected:
     void paintEvent(QPaintEvent* event) override;
@@ -50,13 +64,19 @@ protected:
     void mousePressEvent(QMouseEvent* event) override;
     void mouseReleaseEvent(QMouseEvent* event) override;
     void mouseMoveEvent(QMouseEvent* event) override;
+    void mouseDoubleClickEvent(QMouseEvent* event) override;
 
 private:
-    void updateSize();
+    void updateSizes();
+    void updateColors();
+
+    QVBoxLayout m_layout;
+    QLineEdit* m_edit;
 
     QString m_text;
     QString m_customIndicator;
     bool m_closeButton;
+    bool m_isEditable;
 
     QColor m_fgRegular;
     QColor m_fgFocused;
@@ -69,6 +89,7 @@ private:
     int m_vPad;
     int m_textVertShift;
     int m_rounding;
+    int m_cursorWidth;
 
     QRect m_innerRect;
     QRect m_closeRect;
