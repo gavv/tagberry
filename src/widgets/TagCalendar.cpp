@@ -56,7 +56,7 @@ void TagCalendar::addTag(const QDate& date, TagLabel* tag)
 
     connect(tag, &TagLabel::editingStarted, this, &TagCalendar::tagFocusCleared);
 
-    connect(tag, &TagLabel::clicked, [=] {
+    connect(tag, &TagLabel::clicked, this, [=] {
         m_calendar->setFocus(cell);
         tagFocusChanged(tag);
     });

@@ -70,7 +70,7 @@ void RecordList::removeRecord()
     m_layout.removeWidget(m_focusedCell);
     m_records.removeAll(m_focusedCell);
 
-    delete m_focusedCell;
+    m_focusedCell->deleteLater();
 
     if (pos >= m_records.count()) {
         pos = m_records.count() - 1;

@@ -101,7 +101,7 @@ void RecordCell::removeTag()
     m_bodyLayout.removeWidget(tag);
 
     m_tags.removeAll(tag);
-    delete tag;
+    tag->deleteLater();
 
     tagsChanged();
     clicked(this);
