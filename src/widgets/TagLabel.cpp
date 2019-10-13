@@ -391,10 +391,14 @@ void TagLabel::finishEditing()
         return;
     }
 
+    auto oldText = m_text;
+
     setText(m_edit->text());
 
     m_edit->deleteLater();
     m_edit = nullptr;
+
+    editingFinished(oldText, m_text);
 }
 
 } // namespace tagberry::widgets

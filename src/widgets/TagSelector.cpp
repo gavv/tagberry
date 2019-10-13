@@ -52,6 +52,7 @@ void TagSelector::addTag()
     connect(tag, &TagLabel::closeClicked, this, &TagSelector::removeTag);
     connect(tag, &TagLabel::clicked, this, &TagSelector::catchTagClick);
     connect(tag, &TagLabel::editingStarted, this, &TagSelector::tagFocusCleared);
+    connect(tag, &TagLabel::editingFinished, this, &TagSelector::updateTag);
 
     m_tags.append(tag);
 
@@ -72,6 +73,27 @@ void TagSelector::removeTag()
 
     tagsChanged();
     clicked();
+}
+
+void TagSelector::updateTag(QString, QString)
+{
+    auto editedTag = qobject_cast<TagLabel*>(sender());
+
+    if (editedTag->text().isEmpty()) {
+        m_layout.removeWidget(editedTag);
+        m_tags.removeAll(editedTag);
+        editedTag->deleteLater();
+    } else {
+        for (auto oldTag : m_tags) {
+            if (oldTag->text() == editedTag->text() && oldTag != editedTag) {
+                m_layout.removeWidget(oldTag);
+                m_tags.removeAll(oldTag);
+                oldTag->deleteLater();
+            }
+        }
+    }
+
+    tagsChanged();
 }
 
 void TagSelector::catchTagClick()

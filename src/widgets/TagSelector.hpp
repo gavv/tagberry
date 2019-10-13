@@ -41,6 +41,8 @@ private slots:
     void addTag();
     void removeTag();
 
+    void updateTag(QString oldText, QString newText);
+
     void catchTagClick();
     void catchFocus(QWidget* old, QWidget* now);
 

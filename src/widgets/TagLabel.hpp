@@ -54,6 +54,7 @@ signals:
     void closeClicked();
 
     void editingStarted();
+    void editingFinished(QString oldText, QString newText);
 
 private slots:
     void finishEditing();
