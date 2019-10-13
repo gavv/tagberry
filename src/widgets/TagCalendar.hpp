@@ -32,6 +32,8 @@ public:
 
     void setToday();
 
+    int headerHeight();
+
 signals:
     void pageChanged();
 

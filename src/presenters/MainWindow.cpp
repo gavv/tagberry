@@ -28,4 +28,10 @@ MainWindow::MainWindow(storage::LocalStorage& storage)
     setCentralWidget(m_widget);
 }
 
+void MainWindow::resizeEvent(QResizeEvent* event)
+{
+    QMainWindow::resizeEvent(event);
+    m_recordsArea->setHeaderHeight(m_calendarArea->headerHeight());
+}
+
 } // namespace tagberry::presenters

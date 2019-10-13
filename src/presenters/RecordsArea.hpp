@@ -26,6 +26,8 @@ class RecordsArea : public QWidget {
 public:
     RecordsArea(storage::LocalStorage& storage, models::Root& root);
 
+    void setHeaderHeight(int);
+
 public slots:
     void setCurrentDate(QDate);
 
@@ -36,7 +38,6 @@ private slots:
 private:
     QVBoxLayout m_layout;
 
-    QLabel m_date;
     QScrollArea m_scroll;
 
     widgets::RecordList m_recordList;

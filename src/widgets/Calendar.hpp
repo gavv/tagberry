@@ -45,6 +45,8 @@ public:
     void setNormalColor(const QColor&);
     void setTodayColor(const QColor&);
 
+    int headerHeight();
+
 signals:
     void pageChanged();
     void focusChanged(CalendarCell*);

@@ -20,19 +20,12 @@ RecordsArea::RecordsArea(storage::LocalStorage& storage, models::Root& root)
     m_scroll.setFrameShape(QFrame::NoFrame);
 
     m_layout.setContentsMargins(QMargins(0, 14, 0, 0));
-
-    m_layout.addWidget(&m_date);
     m_layout.addWidget(&m_scroll);
 
     setLayout(&m_layout);
 
     setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Expanding);
     setMinimumWidth(200);
-
-    m_date.setAlignment(Qt::AlignCenter);
-    m_date.setStyleSheet("font-weight: bold; border-style: solid; border-width: 1px; "
-                         "border-color: #767C82; border-radius: 2px; padding: 3px; "
-                         "margin-right: 5px; background-color: #ffffff;");
 
     connect(
         &m_root, &models::Root::currentDateChanged, this, &RecordsArea::setCurrentDate);
@@ -41,11 +34,17 @@ RecordsArea::RecordsArea(storage::LocalStorage& storage, models::Root& root)
         &RecordsArea::recordAdded);
 
     setCurrentDate(m_root.currentDate());
+
+    setHeaderHeight(0);
 }
 
-void RecordsArea::setCurrentDate(QDate date)
+void RecordsArea::setHeaderHeight(int h)
 {
-    m_date.setText(date.toString(Qt::ISODate));
+    m_layout.setContentsMargins(QMargins(0, h, 0, 0));
+}
+
+void RecordsArea::setCurrentDate(QDate)
+{
 }
 
 void RecordsArea::recordAdded(widgets::RecordCell* record)

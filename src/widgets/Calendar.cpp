@@ -80,6 +80,11 @@ int Calendar::columnCount() const
     return NumDays;
 }
 
+int Calendar::headerHeight()
+{
+    return m_switch->height() + m_days[0]->height() + 8;
+}
+
 void Calendar::setWeekStart(Qt::DayOfWeek day)
 {
     for (int col = 0; col < columnCount(); col++) {

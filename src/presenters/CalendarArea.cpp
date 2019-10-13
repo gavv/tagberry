@@ -37,6 +37,11 @@ CalendarArea::CalendarArea(storage::LocalStorage& storage, models::Root& root)
     m_calendar->setToday();
 }
 
+int CalendarArea::headerHeight()
+{
+    return m_calendar->headerHeight();
+}
+
 void CalendarArea::changeCurrentDate(QDate date)
 {
     m_root.setCurrentDate(date);

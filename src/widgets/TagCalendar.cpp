@@ -35,6 +35,11 @@ TagCalendar::TagCalendar(QWidget* parent)
     }
 }
 
+int TagCalendar::headerHeight()
+{
+    return m_calendar->headerHeight();
+}
+
 void TagCalendar::setToday()
 {
     m_calendar->setToday();

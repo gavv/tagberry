@@ -24,6 +24,8 @@ class CalendarArea : public QWidget {
 public:
     CalendarArea(storage::LocalStorage& storage, models::Root& root);
 
+    int headerHeight();
+
 private slots:
     void refreshPage();
 

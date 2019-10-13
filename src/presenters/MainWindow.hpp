@@ -25,6 +25,9 @@ class MainWindow : public QMainWindow {
 public:
     explicit MainWindow(storage::LocalStorage& storage);
 
+protected:
+    void resizeEvent(QResizeEvent* event) override;
+
 private:
     storage::LocalStorage& m_storage;
 
