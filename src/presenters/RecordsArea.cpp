@@ -15,16 +15,12 @@ RecordsArea::RecordsArea(storage::LocalStorage& storage, models::Root& root)
     : m_storage(storage)
     , m_root(root)
 {
-    m_scroll.setWidget(&m_recordList);
-    m_scroll.setWidgetResizable(true);
-    m_scroll.setFrameShape(QFrame::NoFrame);
-
-    m_layout.setContentsMargins(QMargins(0, 14, 0, 0));
-    m_layout.addWidget(&m_scroll);
+    m_layout.setContentsMargins(QMargins(0, 0, 0, 0));
+    m_layout.addWidget(&m_recordList);
 
     setLayout(&m_layout);
 
-    setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Expanding);
+    setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Minimum);
     setMinimumWidth(200);
 
     connect(
@@ -34,13 +30,12 @@ RecordsArea::RecordsArea(storage::LocalStorage& storage, models::Root& root)
         &RecordsArea::recordAdded);
 
     setCurrentDate(m_root.currentDate());
-
     setHeaderHeight(0);
 }
 
 void RecordsArea::setHeaderHeight(int h)
 {
-    m_layout.setContentsMargins(QMargins(0, h, 0, 0));
+    m_recordList.alignHeader(h);
 }
 
 void RecordsArea::setCurrentDate(QDate)

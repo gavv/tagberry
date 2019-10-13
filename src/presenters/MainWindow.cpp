@@ -18,7 +18,7 @@ MainWindow::MainWindow(storage::LocalStorage& storage)
     , m_calendarArea(new CalendarArea(m_storage, m_root))
     , m_recordsArea(new RecordsArea(m_storage, m_root))
 {
-    m_layout->setContentsMargins(QMargins(2, 0, 6, 0));
+    m_layout->setContentsMargins(QMargins(4, 0, 10, 0));
 
     m_layout->addWidget(m_calendarArea, 4);
     m_layout->addWidget(m_recordsArea, 1);

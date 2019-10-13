@@ -14,6 +14,7 @@
 #include <QHBoxLayout>
 #include <QList>
 #include <QPushButton>
+#include <QScrollArea>
 #include <QVBoxLayout>
 #include <QWidget>
 
@@ -24,6 +25,8 @@ class RecordList : public QWidget {
 
 public:
     explicit RecordList(QWidget* parent = nullptr);
+
+    void alignHeader(int);
 
 signals:
     void recordAdded(RecordCell*);
@@ -37,12 +40,16 @@ private slots:
 
 private:
     QVBoxLayout m_layout;
+
+    QScrollArea m_scroll;
+    QWidget m_scrollWidget;
+    QVBoxLayout m_scrollLayout;
+
     QHBoxLayout m_buttonLayout;
+    QPushButton m_addRecordButton;
+    QPushButton m_removeRecordButton;
 
-    QPushButton m_addRecord;
-    QPushButton m_removeRecord;
-
-    QList<RecordCell*> m_records;
+    QList<RecordCell*> m_recordCells;
     RecordCell* m_focusedCell {};
 };
 

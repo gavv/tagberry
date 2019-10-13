@@ -82,7 +82,7 @@ int Calendar::columnCount() const
 
 int Calendar::headerHeight()
 {
-    return m_switch->height() + m_days[0]->height() + 8;
+    return m_switch->height() + m_days[0]->height();
 }
 
 void Calendar::setWeekStart(Qt::DayOfWeek day)

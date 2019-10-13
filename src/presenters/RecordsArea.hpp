@@ -38,8 +38,6 @@ private slots:
 private:
     QVBoxLayout m_layout;
 
-    QScrollArea m_scroll;
-
     widgets::RecordList m_recordList;
 
     storage::LocalStorage& m_storage;

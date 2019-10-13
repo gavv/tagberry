@@ -9,38 +9,60 @@
 
 #include "widgets/RecordList.hpp"
 
+#include <QScrollBar>
+#include <QTimer>
+
 namespace tagberry::widgets {
 
 RecordList::RecordList(QWidget* parent)
     : QWidget(parent)
 {
-    m_buttonLayout.setContentsMargins(QMargins(0, 0, 0, 0));
-    m_buttonLayout.addStretch(1);
-    m_buttonLayout.addWidget(&m_removeRecord);
-    m_buttonLayout.addWidget(&m_addRecord);
+    m_scrollWidget.setLayout(&m_scrollLayout);
 
-    m_layout.setContentsMargins(QMargins(0, 10, 5, 10));
-    m_layout.setSpacing(10);
+    m_scroll.setWidget(&m_scrollWidget);
+    m_scroll.setWidgetResizable(true);
+    m_scroll.setFrameShape(QFrame::NoFrame);
+
+    m_scrollLayout.setContentsMargins(QMargins(0, 0, 2, 0));
+    m_scrollLayout.setSpacing(10);
+    m_scrollLayout.addStretch(1);
+
+    m_buttonLayout.setContentsMargins(QMargins(0, 0, 2, 0));
+    m_buttonLayout.addStretch(1);
+    m_buttonLayout.addWidget(&m_removeRecordButton);
+    m_buttonLayout.addWidget(&m_addRecordButton);
+
     m_layout.addLayout(&m_buttonLayout);
-    m_layout.addStretch(1);
+    m_layout.addSpacing(4);
+    m_layout.addWidget(&m_scroll);
 
     setLayout(&m_layout);
 
-    m_removeRecord.setFixedSize(40, 40);
-    m_removeRecord.setIcon(QIcon(":/icons/minus.png"));
+    m_removeRecordButton.setFixedSize(40, 40);
+    m_removeRecordButton.setIcon(QIcon(":/icons/minus.png"));
 
-    m_addRecord.setFixedSize(40, 40);
-    m_addRecord.setIcon(QIcon(":/icons/plus.png"));
+    m_addRecordButton.setFixedSize(40, 40);
+    m_addRecordButton.setIcon(QIcon(":/icons/plus.png"));
 
-    connect(&m_addRecord, &QPushButton::clicked, this, &RecordList::addRecord);
-    connect(&m_removeRecord, &QPushButton::clicked, this, &RecordList::removeRecord);
+    connect(&m_addRecordButton, &QPushButton::clicked, this, &RecordList::addRecord);
+    connect(&m_removeRecordButton, &QPushButton::clicked, this, &RecordList::removeRecord);
+
+    alignHeader(0);
+}
+
+void RecordList::alignHeader(int hs)
+{
+    auto top = hs - m_addRecordButton.height() + 8;
+    auto bottom = 7;
+
+    m_layout.setContentsMargins(QMargins(0, top, 0, bottom));
 }
 
 void RecordList::cellChanged(RecordCell* focusedCell)
 {
     m_focusedCell = focusedCell;
 
-    for (auto cell : m_records) {
+    for (auto cell : m_recordCells) {
         cell->setFocused(cell == focusedCell);
     }
 }
@@ -51,8 +73,10 @@ void RecordList::addRecord()
 
     connect(record, &RecordCell::clicked, this, &RecordList::cellChanged);
 
-    m_layout.insertWidget(m_layout.count() - 2, record);
-    m_records.append(record);
+    m_scrollLayout.insertWidget(m_scrollLayout.count() - 1, record);
+    m_recordCells.append(record);
+
+    QTimer::singleShot(5, this, [=] { m_scroll.ensureWidgetVisible(record); });
 
     cellChanged(record);
     recordAdded(record);
@@ -65,19 +89,19 @@ void RecordList::removeRecord()
         return;
     }
 
-    int pos = m_records.indexOf(m_focusedCell);
+    int pos = m_recordCells.indexOf(m_focusedCell);
 
-    m_layout.removeWidget(m_focusedCell);
-    m_records.removeAll(m_focusedCell);
+    m_scrollLayout.removeWidget(m_focusedCell);
+    m_recordCells.removeAll(m_focusedCell);
 
     m_focusedCell->deleteLater();
 
-    if (pos >= m_records.count()) {
-        pos = m_records.count() - 1;
+    if (pos >= m_recordCells.count()) {
+        pos = m_recordCells.count() - 1;
     }
 
-    if (pos >= 0 && pos < m_records.count()) {
-        cellChanged(m_records[pos]);
+    if (pos >= 0 && pos < m_recordCells.count()) {
+        cellChanged(m_recordCells[pos]);
     } else {
         cellChanged(nullptr);
     }
