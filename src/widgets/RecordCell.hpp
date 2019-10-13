@@ -32,6 +32,8 @@ public:
 
     void setFocused(bool);
 
+    void startEditing();
+
 signals:
     void clicked(RecordCell*);
 

@@ -9,8 +9,8 @@
 
 #include "widgets/RecordList.hpp"
 
-#include <QScrollBar>
 #include <QTimer>
+#include <QMouseEvent>
 
 namespace tagberry::widgets {
 
@@ -58,6 +58,11 @@ void RecordList::alignHeader(int hs)
     m_layout.setContentsMargins(QMargins(0, top, 0, bottom));
 }
 
+void RecordList::clearFocus()
+{
+    cellChanged(nullptr);
+}
+
 void RecordList::cellChanged(RecordCell* focusedCell)
 {
     m_focusedCell = focusedCell;
@@ -81,6 +86,8 @@ void RecordList::addRecord()
     cellChanged(record);
     recordAdded(record);
     recordListChanged();
+
+    record->startEditing();
 }
 
 void RecordList::removeRecord()
@@ -107,6 +114,19 @@ void RecordList::removeRecord()
     }
 
     recordListChanged();
+}
+
+void RecordList::mousePressEvent(QMouseEvent* event)
+{
+    auto emptySpace = m_scrollLayout.itemAt(m_scrollLayout.count() - 1);
+
+    if (!emptySpace) {
+        return;
+    }
+
+    if (emptySpace->geometry().contains(event->pos())) {
+        clearFocus();
+    }
 }
 
 } // namespace tagberry::widgets

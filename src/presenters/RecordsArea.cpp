@@ -42,6 +42,11 @@ void RecordsArea::setCurrentDate(QDate)
 {
 }
 
+void RecordsArea::clearFocus()
+{
+    m_recordList.clearFocus();
+}
+
 void RecordsArea::recordAdded(widgets::RecordCell* record)
 {
     connect(record, &widgets::RecordCell::tagAdded, this, &RecordsArea::tagAdded);

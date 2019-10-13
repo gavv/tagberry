@@ -65,6 +65,11 @@ void RecordCell::setFocused(bool focused)
     m_cell.setFocused(focused);
 }
 
+void RecordCell::startEditing()
+{
+    m_title.setFocus(Qt::MouseFocusReason);
+}
+
 QString RecordCell::title() const
 {
     return m_title.toPlainText();

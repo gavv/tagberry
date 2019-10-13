@@ -26,6 +26,10 @@ MainWindow::MainWindow(storage::LocalStorage& storage)
     m_widget->setLayout(m_layout);
 
     setCentralWidget(m_widget);
+    setWindowTitle("Tagberry");
+
+    connect(m_calendarArea, &CalendarArea::focusTaken, m_recordsArea,
+        &RecordsArea::clearFocus);
 }
 
 void MainWindow::resizeEvent(QResizeEvent* event)

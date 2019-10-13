@@ -34,6 +34,9 @@ CalendarArea::CalendarArea(storage::LocalStorage& storage, models::Root& root)
     connect(m_calendar, &widgets::TagCalendar::tagFocusChanged, this,
         &CalendarArea::changeTagFocus);
 
+    connect(
+        m_calendar, &widgets::TagCalendar::focusTaken, this, &CalendarArea::focusTaken);
+
     m_calendar->setToday();
 }
 

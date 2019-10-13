@@ -94,6 +94,7 @@ void TagCalendar::cellChanged(CalendarCell* cell)
 
     currentDateChanged(m_calendar->getDate(cell->row(), cell->column()));
     tagFocusCleared();
+    focusTaken();
 }
 
 void TagCalendar::removeCellTags(CalendarCell* cell)

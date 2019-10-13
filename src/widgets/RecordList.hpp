@@ -32,11 +32,17 @@ signals:
     void recordAdded(RecordCell*);
     void recordListChanged();
 
+public slots:
+    void clearFocus();
+
 private slots:
     void cellChanged(RecordCell*);
 
     void addRecord();
     void removeRecord();
+
+protected:
+    void mousePressEvent(QMouseEvent* event) override;
 
 private:
     QVBoxLayout m_layout;

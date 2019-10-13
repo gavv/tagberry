@@ -26,6 +26,9 @@ public:
 
     int headerHeight();
 
+signals:
+    void focusTaken();
+
 private slots:
     void refreshPage();
 

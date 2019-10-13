@@ -29,6 +29,7 @@ public:
     void setHeaderHeight(int);
 
 public slots:
+    void clearFocus();
     void setCurrentDate(QDate);
 
 private slots:

@@ -42,6 +42,8 @@ signals:
     void tagFocusCleared();
     void tagFocusChanged(TagLabel*);
 
+    void focusTaken();
+
 private slots:
     void cellChanged(CalendarCell*);
 
