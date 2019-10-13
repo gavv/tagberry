@@ -88,11 +88,22 @@ void RecordCell::cellClicked()
 
 void RecordCell::updateTitle()
 {
+    auto str = title();
+
+    if (str.contains('\r') || str.contains('\n')) {
+        auto cursor = m_title.textCursor();
+        str.remove('\r');
+        str.remove('\n');
+        m_title.setText(str);
+        m_title.setTextCursor(cursor);
+        return;
+    }
+
     auto size = m_title.document()->size().toSize().height() + 2;
 
     m_title.setFixedHeight(size);
 
-    titleChanged(title());
+    titleChanged(str);
 
     m_title.setTextColor(QColor("#2a2a2a"));
 }
