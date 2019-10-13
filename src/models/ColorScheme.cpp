@@ -9,6 +9,8 @@
 
 #include "models/ColorScheme.hpp"
 
+#include <QCryptographicHash>
+
 #include <algorithm>
 #include <functional>
 #include <string>
@@ -19,7 +21,10 @@ namespace {
 
 int tagIndex(const QString& name, int size)
 {
-    const size_t hash = std::hash<std::string>()(name.toStdString());
+    auto str
+        = QCryptographicHash::hash(name.toUtf8(), QCryptographicHash::Md5).toStdString();
+
+    const size_t hash = std::hash<std::string>()(str);
     const int index = int(hash % size_t(size));
 
     return index;
