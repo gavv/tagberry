@@ -34,6 +34,7 @@ public slots:
 private slots:
     void recordAdded(widgets::RecordCell*);
     void tagAdded(widgets::TagLabel*);
+    void tagEdited(QString oldText, QString newText);
 
 private:
     QVBoxLayout m_layout;

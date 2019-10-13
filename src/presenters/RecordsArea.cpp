@@ -52,7 +52,27 @@ void RecordsArea::recordAdded(widgets::RecordCell* record)
 
 void RecordsArea::tagAdded(widgets::TagLabel* label)
 {
-    auto tag = m_root.tags().getOrCreateTag("tagID1");
+    connect(label, &widgets::TagLabel::editingFinished, this, &RecordsArea::tagEdited);
+}
+
+void RecordsArea::tagEdited(QString oldText, QString newText)
+{
+    auto label = qobject_cast<widgets::TagLabel*>(sender());
+
+    if (!oldText.isEmpty()) {
+        auto oldTag = m_root.tags().getTagByName(oldText);
+
+        if (oldTag) {
+            disconnect(label, nullptr, oldTag.get(), nullptr);
+            disconnect(oldTag.get(), nullptr, label, nullptr);
+        }
+    }
+
+    auto tag = m_root.tags().getTagByName(newText);
+    if (!tag) {
+        tag = m_root.tags().createTag();
+        tag->setName(label->text());
+    }
 
     connect(tag.get(), &models::Tag::nameChanged, label, &widgets::TagLabel::setText);
 
@@ -66,7 +86,8 @@ void RecordsArea::tagAdded(widgets::TagLabel* label)
     label->setColors(std::get<0>(colors), std::get<1>(colors));
     label->setFocused(tag->isFocused());
 
-    connect(label, &widgets::TagLabel::clicked, [=] { m_root.tags().focusTag(tag); });
+    connect(label, &widgets::TagLabel::clicked, tag.get(),
+        [=] { m_root.tags().focusTag(tag); });
 }
 
 } // namespace tagberry::presenters
