@@ -51,6 +51,7 @@ set(SOURCES
  src/widgets/RecordList.cpp
  src/widgets/TagCalendar.cpp
  src/widgets/TagLabel.cpp
+ src/widgets/TagSelector.cpp
 )
 
 set(MOC_HEADERS
@@ -72,6 +73,7 @@ set(MOC_HEADERS
  src/widgets/RecordList.hpp
  src/widgets/TagCalendar.hpp
  src/widgets/TagLabel.hpp
+ src/widgets/TagSelector.hpp
 )
 
 include_directories(src)

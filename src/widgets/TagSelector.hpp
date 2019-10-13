@@ -12,30 +12,24 @@
 #include "widgets/Cell.hpp"
 #include "widgets/FlowLayout.hpp"
 #include "widgets/TagLabel.hpp"
-#include "widgets/TagSelector.hpp"
 
 #include <QHBoxLayout>
+#include <QPushButton>
 #include <QTextEdit>
-#include <QVBoxLayout>
 #include <QWidget>
 
 namespace tagberry::widgets {
 
-class RecordCell : public QWidget {
+class TagSelector : public QWidget {
     Q_OBJECT
 
 public:
-    explicit RecordCell(QWidget* parent = nullptr);
+    explicit TagSelector(QWidget* parent = nullptr);
 
-    QString title() const;
     QList<TagLabel*> tags() const;
 
-    void setFocused(bool);
-
 signals:
-    void clicked(RecordCell*);
-
-    void titleChanged(QString);
+    void clicked();
 
     void tagsChanged();
     void tagAdded(TagLabel*);
@@ -44,25 +38,17 @@ signals:
     void tagFocusCleared();
 
 private slots:
-    void cellClicked();
+    void addTag();
+    void removeTag();
 
-    void updateTitle();
+    void catchTagClick();
     void catchFocus(QWidget* old, QWidget* now);
 
-protected:
-    void showEvent(QShowEvent* event) override;
-
 private:
-    QHBoxLayout m_layout;
-    Cell m_cell;
+    FlowLayout m_layout;
+    QList<TagLabel*> m_tags;
 
-    QHBoxLayout m_headLayout;
-    QTextEdit m_title;
-
-    QVBoxLayout m_bodyLayout;
-    TagSelector m_tagSelector;
-
-    bool m_firstShow { true };
+    QPushButton m_addTagButton;
 };
 
 } // namespace tagberry::widgets

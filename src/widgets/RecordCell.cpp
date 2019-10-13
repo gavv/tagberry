@@ -27,6 +27,9 @@ RecordCell::RecordCell(QWidget* parent)
     m_headLayout.setContentsMargins(QMargins(3, 3, 3, 3));
     m_headLayout.addWidget(&m_title);
 
+    m_bodyLayout.setContentsMargins(QMargins(0, 0, 0, 0));
+    m_bodyLayout.addWidget(&m_tagSelector);
+
     m_cell.setHeadLayout(&m_headLayout);
     m_cell.setBodyLayout(&m_bodyLayout);
 
@@ -44,12 +47,14 @@ RecordCell::RecordCell(QWidget* parent)
 
     connect(&m_title, &QTextEdit::textChanged, this, &RecordCell::updateTitle);
 
-    m_addTag.setFixedSize(28, 28);
-    m_addTag.setIcon(QIcon(":/icons/plus.png"));
+    connect(&m_tagSelector, &TagSelector::clicked, this, [=] { clicked(this); });
 
-    m_bodyLayout.addWidget(&m_addTag);
-
-    connect(&m_addTag, &QPushButton::clicked, this, &RecordCell::addTag);
+    connect(&m_tagSelector, &TagSelector::tagsChanged, this, &RecordCell::tagsChanged);
+    connect(&m_tagSelector, &TagSelector::tagAdded, this, &RecordCell::tagAdded);
+    connect(&m_tagSelector, &TagSelector::tagFocusChanged, this,
+        &RecordCell::tagFocusChanged);
+    connect(&m_tagSelector, &TagSelector::tagFocusCleared, this,
+        &RecordCell::tagFocusCleared);
 
     connect(qApp, &QApplication::focusChanged, this, &RecordCell::catchFocus);
 }
@@ -66,58 +71,12 @@ QString RecordCell::title() const
 
 QList<TagLabel*> RecordCell::tags() const
 {
-    return m_tags;
-}
-
-void RecordCell::addTag()
-{
-    auto tag = new TagLabel;
-
-    tag->setMargin(1, 2);
-    tag->setClosable(true);
-    tag->setChecked(true);
-    tag->setEditable(true);
-
-    m_bodyLayout.removeWidget(&m_addTag);
-    m_bodyLayout.addWidget(tag);
-    m_bodyLayout.addWidget(&m_addTag);
-
-    connect(tag, &TagLabel::closeClicked, this, &RecordCell::removeTag);
-    connect(tag, &TagLabel::clicked, this, &RecordCell::tagClicked);
-    connect(tag, &TagLabel::editingStarted, this, &RecordCell::tagFocusCleared);
-
-    m_tags.append(tag);
-
-    tagAdded(tag);
-    tagsChanged();
-
-    tag->startEditing();
-}
-
-void RecordCell::removeTag()
-{
-    auto tag = qobject_cast<TagLabel*>(sender());
-
-    m_bodyLayout.removeWidget(tag);
-
-    m_tags.removeAll(tag);
-    tag->deleteLater();
-
-    tagsChanged();
-    clicked(this);
+    return m_tagSelector.tags();
 }
 
 void RecordCell::cellClicked()
 {
     tagFocusCleared();
-    clicked(this);
-}
-
-void RecordCell::tagClicked()
-{
-    auto tag = qobject_cast<TagLabel*>(sender());
-
-    tagFocusChanged(tag);
     clicked(this);
 }
 
@@ -132,7 +91,7 @@ void RecordCell::updateTitle()
 
 void RecordCell::catchFocus(QWidget*, QWidget* now)
 {
-    if (now == &m_title || now == &m_addTag) {
+    if (now == &m_title) {
         clicked(this);
         now->setFocus(Qt::MouseFocusReason);
     }
