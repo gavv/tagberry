@@ -28,6 +28,9 @@ public:
 
     void alignHeader(int);
 
+    void addRecord(RecordCell*);
+    void clearRecords();
+
 signals:
     void recordAdded(RecordCell*);
     void recordListChanged();
@@ -38,8 +41,8 @@ public slots:
 private slots:
     void cellChanged(RecordCell*);
 
-    void addRecord();
-    void removeRecord();
+    void handleAddRecord();
+    void handleRemoveRecord();
 
 protected:
     void mousePressEvent(QMouseEvent* event) override;

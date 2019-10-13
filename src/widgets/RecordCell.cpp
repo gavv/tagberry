@@ -60,6 +60,19 @@ RecordCell::RecordCell(QWidget* parent)
     connect(qApp, &QApplication::focusChanged, this, &RecordCell::catchFocus);
 }
 
+void RecordCell::setTags(QList<TagLabel*> tags)
+{
+    m_tagSelector.setTags(tags);
+}
+
+void RecordCell::setTitle(QString str)
+{
+    if (title() == str) {
+        return;
+    }
+    m_title.setText(str);
+}
+
 void RecordCell::setFocused(bool focused)
 {
     m_cell.setFocused(focused);
@@ -102,10 +115,9 @@ void RecordCell::updateTitle()
     auto size = m_title.document()->size().toSize().height() + 2;
 
     m_title.setFixedHeight(size);
-
-    titleChanged(str);
-
     m_title.setTextColor(QColor("#2a2a2a"));
+
+    titleChanged(title());
 }
 
 void RecordCell::catchFocus(QWidget*, QWidget* now)

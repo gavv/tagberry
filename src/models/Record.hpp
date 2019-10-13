@@ -39,6 +39,7 @@ public:
     bool hasTag(TagPtr) const;
     void addTag(TagPtr);
     void removeTag(TagPtr);
+    void setTags(QList<TagPtr>);
 
 public slots:
     void setDate(QDate);

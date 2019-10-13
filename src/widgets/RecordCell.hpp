@@ -30,8 +30,9 @@ public:
     QString title() const;
     QList<TagLabel*> tags() const;
 
-    void setFocused(bool);
+    void setTags(QList<TagLabel*>);
 
+    void setFocused(bool);
     void startEditing();
 
 signals:
@@ -44,6 +45,9 @@ signals:
 
     void tagFocusChanged(TagLabel*);
     void tagFocusCleared();
+
+public slots:
+    void setTitle(QString);
 
 private slots:
     void cellClicked();

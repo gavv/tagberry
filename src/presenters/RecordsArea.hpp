@@ -38,6 +38,12 @@ private slots:
     void tagEdited(QString oldText, QString newText);
 
 private:
+    void bindRecord(widgets::RecordCell* cell, models::RecordPtr record);
+    void bindTag(widgets::TagLabel* label, models::TagPtr tag);
+
+    void tagsFromModel(widgets::RecordCell* cell, models::RecordPtr record);
+    void tagsToModel(widgets::RecordCell* cell, models::RecordPtr record);
+
     QVBoxLayout m_layout;
 
     widgets::RecordList m_recordList;

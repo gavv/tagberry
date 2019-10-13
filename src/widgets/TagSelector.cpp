@@ -36,10 +36,19 @@ QList<TagLabel*> TagSelector::tags() const
     return m_tags;
 }
 
-void TagSelector::addTag()
+void TagSelector::setTags(QList<TagLabel*> tags)
 {
-    auto tag = new TagLabel;
+    while (m_tags.count() != 0) {
+        detachTag(m_tags[0]);
+    }
 
+    for (auto tag : tags) {
+        attachTag(tag);
+    }
+}
+
+void TagSelector::attachTag(TagLabel* tag)
+{
     tag->setMargin(1, 2);
     tag->setClosable(true);
     tag->setChecked(true);
@@ -55,9 +64,22 @@ void TagSelector::addTag()
     connect(tag, &TagLabel::editingFinished, this, &TagSelector::updateTag);
 
     m_tags.append(tag);
+}
 
+void TagSelector::detachTag(TagLabel* tag)
+{
+    m_layout.removeWidget(tag);
+
+    m_tags.removeAll(tag);
+    tag->deleteLater();
+}
+
+void TagSelector::addTag()
+{
+    auto tag = new TagLabel;
+
+    attachTag(tag);
     tagAdded(tag);
-    tagsChanged();
 
     tag->startEditing();
 }
@@ -66,16 +88,13 @@ void TagSelector::removeTag()
 {
     auto tag = qobject_cast<TagLabel*>(sender());
 
-    m_layout.removeWidget(tag);
-
-    m_tags.removeAll(tag);
-    tag->deleteLater();
+    detachTag(tag);
 
     tagsChanged();
     clicked();
 }
 
-void TagSelector::updateTag(QString, QString)
+void TagSelector::updateTag(QString oldText, QString)
 {
     auto editedTag = qobject_cast<TagLabel*>(sender());
 
@@ -83,6 +102,9 @@ void TagSelector::updateTag(QString, QString)
         m_layout.removeWidget(editedTag);
         m_tags.removeAll(editedTag);
         editedTag->deleteLater();
+        if (oldText.isEmpty()) {
+            return;
+        }
     } else {
         for (auto oldTag : m_tags) {
             if (oldTag->text() == editedTag->text() && oldTag != editedTag) {

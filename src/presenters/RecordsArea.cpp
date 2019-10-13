@@ -40,6 +40,19 @@ void RecordsArea::setHeaderHeight(int h)
 
 void RecordsArea::setCurrentDate(QDate)
 {
+    m_recordList.clearRecords();
+
+    auto recordSet = m_root.currentPage().recordsByDate(m_root.currentDate());
+
+    for (auto record : recordSet->getRecords()) {
+        auto cell = new widgets::RecordCell;
+        cell->setTitle(record->title());
+
+        tagsFromModel(cell, record);
+        bindRecord(cell, record);
+
+        m_recordList.addRecord(cell);
+    }
 }
 
 void RecordsArea::clearFocus()
@@ -47,12 +60,13 @@ void RecordsArea::clearFocus()
     m_recordList.clearFocus();
 }
 
-void RecordsArea::recordAdded(widgets::RecordCell* record)
+void RecordsArea::recordAdded(widgets::RecordCell* cell)
 {
-    connect(record, &widgets::RecordCell::tagAdded, this, &RecordsArea::tagAdded);
+    auto record = m_root.currentPage().createRecord();
 
-    connect(record, &widgets::RecordCell::tagFocusCleared,
-        [=] { m_root.tags().focusTag(nullptr); });
+    record->setDate(m_root.currentDate());
+
+    bindRecord(cell, record);
 }
 
 void RecordsArea::tagAdded(widgets::TagLabel* label)
@@ -73,12 +87,37 @@ void RecordsArea::tagEdited(QString oldText, QString newText)
         }
     }
 
-    auto tag = m_root.tags().getTagByName(newText);
-    if (!tag) {
-        tag = m_root.tags().createTag();
-        tag->setName(label->text());
+    auto newTag = m_root.tags().getTagByName(newText);
+    if (!newTag) {
+        newTag = m_root.tags().createTag();
+        newTag->setName(label->text());
     }
 
+    bindTag(label, newTag);
+}
+
+void RecordsArea::bindRecord(widgets::RecordCell* cell, models::RecordPtr record)
+{
+    connect(
+        record.get(), &models::Record::textChanged, cell, &widgets::RecordCell::setTitle);
+
+    connect(record.get(), &models::Record::tagsChanged, cell,
+        [=] { tagsFromModel(cell, record); });
+
+    connect(cell, &widgets::RecordCell::titleChanged, record.get(),
+        &models::Record::setTitle);
+
+    connect(cell, &widgets::RecordCell::tagAdded, this, &RecordsArea::tagAdded);
+
+    connect(cell, &widgets::RecordCell::tagFocusCleared,
+        [=] { m_root.tags().focusTag(nullptr); });
+
+    connect(cell, &widgets::RecordCell::tagsChanged, record.get(),
+        [=] { tagsToModel(cell, record); });
+}
+
+void RecordsArea::bindTag(widgets::TagLabel* label, models::TagPtr tag)
+{
     connect(tag.get(), &models::Tag::nameChanged, label, &widgets::TagLabel::setText);
 
     connect(tag.get(), &models::Tag::focusChanged, label,
@@ -93,6 +132,39 @@ void RecordsArea::tagEdited(QString oldText, QString newText)
 
     connect(label, &widgets::TagLabel::clicked, tag.get(),
         [=] { m_root.tags().focusTag(tag); });
+}
+
+void RecordsArea::tagsFromModel(widgets::RecordCell* cell, models::RecordPtr record)
+{
+    QList<widgets::TagLabel*> labelList;
+
+    for (auto tag: record->tags()) {
+        auto label = new widgets::TagLabel;
+        label->setText(tag->name());
+
+        bindTag(label, tag);
+
+        labelList.append(label);
+    }
+
+    cell->setTags(labelList);
+}
+
+void RecordsArea::tagsToModel(widgets::RecordCell* cell, models::RecordPtr record)
+{
+    QList<models::TagPtr> tagList;
+
+    for (auto label : cell->tags()) {
+        auto tag = m_root.tags().getTagByName(label->text());
+        if (!tag) {
+            tag = m_root.tags().createTag();
+            tag->setName(label->text());
+        }
+
+        tagList.append(tag);
+    }
+
+    record->setTags(tagList);
 }
 
 } // namespace tagberry::presenters

@@ -44,8 +44,11 @@ RecordList::RecordList(QWidget* parent)
     m_addRecordButton.setFixedSize(34, 34);
     m_addRecordButton.setIcon(QIcon(":/icons/plus.png"));
 
-    connect(&m_addRecordButton, &QPushButton::clicked, this, &RecordList::addRecord);
-    connect(&m_removeRecordButton, &QPushButton::clicked, this, &RecordList::removeRecord);
+    connect(
+        &m_addRecordButton, &QPushButton::clicked, this, &RecordList::handleAddRecord);
+
+    connect(&m_removeRecordButton, &QPushButton::clicked, this,
+        &RecordList::handleRemoveRecord);
 
     alignHeader(0);
 }
@@ -72,10 +75,8 @@ void RecordList::cellChanged(RecordCell* focusedCell)
     }
 }
 
-void RecordList::addRecord()
+void RecordList::addRecord(RecordCell* record)
 {
-    auto record = new RecordCell;
-
     connect(record, &RecordCell::clicked, this, &RecordList::cellChanged);
 
     m_scrollLayout.insertWidget(m_scrollLayout.count() - 1, record);
@@ -84,13 +85,33 @@ void RecordList::addRecord()
     QTimer::singleShot(5, this, [=] { m_scroll.ensureWidgetVisible(record); });
 
     cellChanged(record);
+}
+
+void RecordList::clearRecords()
+{
+    for (auto record : m_recordCells) {
+        m_scrollLayout.removeWidget(record);
+        record->deleteLater();
+    }
+
+    m_recordCells.clear();
+
+    m_focusedCell = nullptr;
+}
+
+void RecordList::handleAddRecord()
+{
+    auto record = new RecordCell;
+
+    addRecord(record);
+
     recordAdded(record);
     recordListChanged();
 
     record->startEditing();
 }
 
-void RecordList::removeRecord()
+void RecordList::handleRemoveRecord()
 {
     if (!m_focusedCell) {
         return;

@@ -28,6 +28,8 @@ public:
 
     QList<TagLabel*> tags() const;
 
+    void setTags(QList<TagLabel*>);
+
 signals:
     void clicked();
 
@@ -47,6 +49,9 @@ private slots:
     void catchFocus(QWidget* old, QWidget* now);
 
 private:
+    void attachTag(TagLabel*);
+    void detachTag(TagLabel*);
+
     FlowLayout m_layout;
     QList<TagLabel*> m_tags;
 

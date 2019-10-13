@@ -9,6 +9,8 @@
 
 #include "models/Record.hpp"
 
+#include <algorithm>
+
 namespace tagberry::models {
 
 bool Record::isDirty() const
@@ -106,6 +108,17 @@ void Record::removeTag(TagPtr tag)
     }
     m_isDirty = true;
     m_tags.removeAll(tag);
+    tagsChanged();
+}
+
+void Record::setTags(QList<TagPtr> tags)
+{
+    if (tags.size() == m_tags.size()
+        && std::equal(tags.begin(), tags.end(), m_tags.begin())) {
+        return;
+    }
+    m_isDirty = true;
+    m_tags = tags;
     tagsChanged();
 }
 
