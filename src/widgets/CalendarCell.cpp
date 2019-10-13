@@ -35,6 +35,9 @@ CalendarCell::CalendarCell(QWidget* parent, int row, int col)
     m_cell.setHeadLayout(&m_headLayout);
 
     QFont font;
+    font.setPointSize(10);
+    m_day.setFont(font);
+
     font.setBold(true);
     m_month.setFont(font);
 

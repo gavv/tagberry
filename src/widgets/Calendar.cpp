@@ -37,6 +37,10 @@ Calendar::Calendar(QWidget* parent)
         m_head.addSpacing(3);
         m_head.addWidget((m_days[col] = new QLabel));
 
+        QFont font;
+        font.setPointSize(10);
+        m_days[col]->setFont(font);
+
         for (int row = 0; row < rowCount(); row++) {
             auto cell = new CalendarCell(nullptr, row, col);
 

@@ -42,7 +42,8 @@ RecordCell::RecordCell(QWidget* parent)
     m_title.setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
     auto font = m_title.font();
-    font.setPointSize(11);
+    font.setPointSize(10);
+    font.setWeight(QFont::Bold);
     m_title.setFont(font);
 
     connect(&m_title, &QTextEdit::textChanged, this, &RecordCell::updateTitle);
@@ -87,6 +88,8 @@ void RecordCell::updateTitle()
     m_title.setFixedHeight(size);
 
     titleChanged(title());
+
+    m_title.setTextColor(QColor("#2a2a2a"));
 }
 
 void RecordCell::catchFocus(QWidget*, QWidget* now)

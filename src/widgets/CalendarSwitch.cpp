@@ -111,6 +111,10 @@ CalendarSwitch::CalendarSwitch(QWidget* parent)
     m_editYear->setValidator(makeValidator("^[1-9][0-9]{3}$"));
 
     QFont font;
+    font.setPointSize(10);
+    m_editMonth->setFont(font);
+    m_editYear->setFont(font);
+
     font.setBold(true);
     m_today->setFont(font);
 

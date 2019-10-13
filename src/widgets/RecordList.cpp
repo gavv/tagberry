@@ -38,10 +38,10 @@ RecordList::RecordList(QWidget* parent)
 
     setLayout(&m_layout);
 
-    m_removeRecordButton.setFixedSize(40, 40);
+    m_removeRecordButton.setFixedSize(34, 34);
     m_removeRecordButton.setIcon(QIcon(":/icons/minus.png"));
 
-    m_addRecordButton.setFixedSize(40, 40);
+    m_addRecordButton.setFixedSize(34, 34);
     m_addRecordButton.setIcon(QIcon(":/icons/plus.png"));
 
     connect(&m_addRecordButton, &QPushButton::clicked, this, &RecordList::addRecord);
