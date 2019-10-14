@@ -14,6 +14,7 @@
 #include "widgets/RecordList.hpp"
 
 #include <QLabel>
+#include <QPointer>
 #include <QScrollArea>
 #include <QVBoxLayout>
 #include <QWidget>
@@ -29,8 +30,8 @@ public:
     void setHeaderHeight(int);
 
 public slots:
+    void rebuildRecords();
     void clearFocus();
-    void setCurrentDate(QDate);
 
 private slots:
     void recordAdded(widgets::RecordCell*);
@@ -38,6 +39,9 @@ private slots:
     void tagEdited(QString oldText, QString newText);
 
 private:
+    void resubscribeRecords();
+    void unsubscribeRecords();
+
     void bindRecord(widgets::RecordCell* cell, models::RecordPtr record);
     void bindTag(widgets::TagLabel* label, models::TagPtr tag);
 
@@ -50,6 +54,8 @@ private:
 
     storage::LocalStorage& m_storage;
     models::Root& m_root;
+
+    QPointer<models::RecordSet> m_subscribedRecordSet;
 };
 
 } // namespace tagberry::presenters

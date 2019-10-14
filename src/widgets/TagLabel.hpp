@@ -74,6 +74,7 @@ private:
     QVBoxLayout m_layout;
     QLineEdit* m_edit;
 
+    QString m_oldText;
     QString m_text;
     QString m_customIndicator;
     bool m_closeButton;

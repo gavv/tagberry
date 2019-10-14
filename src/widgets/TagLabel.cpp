@@ -377,6 +377,8 @@ void TagLabel::startEditing()
 
     updateColors();
 
+    m_oldText = m_text;
+
     connect(m_edit, &QLineEdit::textChanged, this, &TagLabel::setText);
     connect(m_edit, &QLineEdit::editingFinished, this, &TagLabel::finishEditing);
 
@@ -391,14 +393,14 @@ void TagLabel::finishEditing()
         return;
     }
 
-    auto oldText = m_text;
-
     setText(m_edit->text());
 
     m_edit->deleteLater();
     m_edit = nullptr;
 
-    editingFinished(oldText, m_text);
+    editingFinished(m_oldText, m_text);
+
+    m_oldText.clear();
 }
 
 } // namespace tagberry::widgets

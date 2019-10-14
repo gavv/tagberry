@@ -24,7 +24,7 @@ RecordsArea::RecordsArea(storage::LocalStorage& storage, models::Root& root)
     setMinimumWidth(200);
 
     connect(
-        &m_root, &models::Root::currentDateChanged, this, &RecordsArea::setCurrentDate);
+        &m_root, &models::Root::currentDateChanged, this, &RecordsArea::rebuildRecords);
 
     connect(&m_recordList, &widgets::RecordList::recordAdded, this,
         &RecordsArea::recordAdded);
@@ -32,8 +32,8 @@ RecordsArea::RecordsArea(storage::LocalStorage& storage, models::Root& root)
     connect(&m_recordList, &widgets::RecordList::focusCleared, this,
         [=] { m_root.tags().focusTag(nullptr); });
 
-    setCurrentDate(m_root.currentDate());
     setHeaderHeight(0);
+    rebuildRecords();
 }
 
 void RecordsArea::setHeaderHeight(int h)
@@ -41,7 +41,7 @@ void RecordsArea::setHeaderHeight(int h)
     m_recordList.alignHeader(h);
 }
 
-void RecordsArea::setCurrentDate(QDate)
+void RecordsArea::rebuildRecords()
 {
     m_recordList.clearRecords();
 
@@ -56,6 +56,31 @@ void RecordsArea::setCurrentDate(QDate)
 
         m_recordList.addRecord(cell);
     }
+
+    resubscribeRecords();
+}
+
+void RecordsArea::resubscribeRecords()
+{
+    unsubscribeRecords();
+
+    auto recSet = m_root.currentPage().recordsByDate(m_root.currentDate());
+
+    m_subscribedRecordSet = recSet.get();
+
+    connect(recSet.get(), &models::RecordSet::recordListChanged, this,
+        &RecordsArea::rebuildRecords);
+}
+
+void RecordsArea::unsubscribeRecords()
+{
+    if (!m_subscribedRecordSet) {
+        return;
+    }
+
+    disconnect(m_subscribedRecordSet, nullptr, this, nullptr);
+
+    m_subscribedRecordSet.clear();
 }
 
 void RecordsArea::clearFocus()
@@ -65,11 +90,15 @@ void RecordsArea::clearFocus()
 
 void RecordsArea::recordAdded(widgets::RecordCell* cell)
 {
+    unsubscribeRecords();
+
     auto record = m_root.currentPage().createRecord();
 
     record->setDate(m_root.currentDate());
 
     bindRecord(cell, record);
+
+    resubscribeRecords();
 }
 
 void RecordsArea::tagAdded(widgets::TagLabel* label)
@@ -118,8 +147,11 @@ void RecordsArea::bindRecord(widgets::RecordCell* cell, models::RecordPtr record
     connect(cell, &widgets::RecordCell::tagsChanged, record.get(),
         [=] { tagsToModel(cell, record); });
 
-    connect(cell, &widgets::RecordCell::removing, record.get(),
-        [=] { m_root.currentPage().removeRecord(record); });
+    connect(cell, &widgets::RecordCell::removing, record.get(), [=] {
+        unsubscribeRecords();
+        m_root.currentPage().removeRecord(record);
+        resubscribeRecords();
+    });
 }
 
 void RecordsArea::bindTag(widgets::TagLabel* label, models::TagPtr tag)
@@ -148,6 +180,7 @@ void RecordsArea::tagsFromModel(widgets::RecordCell* cell, models::RecordPtr rec
         auto label = new widgets::TagLabel;
         label->setText(tag->name());
 
+        tagAdded(label);
         bindTag(label, tag);
 
         labelList.append(label);
