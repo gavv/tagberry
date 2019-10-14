@@ -22,8 +22,8 @@ TagCalendar::TagCalendar(QWidget* parent)
 
     setLayout(m_layout);
 
-    connect(m_calendar, &Calendar::pageChanged, this, &TagCalendar::pageChanged);
-    connect(m_calendar, &Calendar::focusChanged, this, &TagCalendar::cellChanged);
+    connect(m_calendar, &Calendar::pageChanged, this, &TagCalendar::changePage);
+    connect(m_calendar, &Calendar::focusChanged, this, &TagCalendar::changeCell);
 
     for (int row = 0; row < m_calendar->rowCount(); row++) {
         for (int col = 0; col < m_calendar->columnCount(); col++) {
@@ -86,7 +86,20 @@ void TagCalendar::clearTags()
     }
 }
 
-void TagCalendar::cellChanged(CalendarCell* cell)
+void TagCalendar::changePage()
+{
+    pageChanged();
+
+    auto dates = m_calendar->getSelectedDates();
+    if (!dates.isEmpty()) {
+        currentDateChanged(dates[0]);
+    }
+
+    tagFocusCleared();
+    focusTaken();
+}
+
+void TagCalendar::changeCell(CalendarCell* cell)
 {
     if (!cell) {
         return;

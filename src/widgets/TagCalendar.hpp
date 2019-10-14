@@ -45,7 +45,8 @@ signals:
     void focusTaken();
 
 private slots:
-    void cellChanged(CalendarCell*);
+    void changePage();
+    void changeCell(CalendarCell*);
 
 private:
     void removeCellTags(CalendarCell*);
