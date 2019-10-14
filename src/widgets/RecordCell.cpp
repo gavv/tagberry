@@ -93,6 +93,11 @@ QList<TagLabel*> RecordCell::tags() const
     return m_tagSelector.tags();
 }
 
+void RecordCell::notifyRemoving()
+{
+    removing();
+}
+
 void RecordCell::cellClicked()
 {
     tagFocusCleared();

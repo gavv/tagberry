@@ -106,7 +106,6 @@ void RecordList::handleAddRecord()
     addRecord(record);
 
     recordAdded(record);
-    recordListChanged();
 
     record->startEditing();
 }
@@ -122,6 +121,7 @@ void RecordList::handleRemoveRecord()
     m_scrollLayout.removeWidget(m_focusedCell);
     m_recordCells.removeAll(m_focusedCell);
 
+    m_focusedCell->notifyRemoving();
     m_focusedCell->deleteLater();
 
     if (pos >= m_recordCells.count()) {
@@ -133,8 +133,6 @@ void RecordList::handleRemoveRecord()
     } else {
         cellChanged(nullptr);
     }
-
-    recordListChanged();
 }
 
 void RecordList::mousePressEvent(QMouseEvent* event)

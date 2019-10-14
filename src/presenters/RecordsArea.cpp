@@ -114,6 +114,9 @@ void RecordsArea::bindRecord(widgets::RecordCell* cell, models::RecordPtr record
 
     connect(cell, &widgets::RecordCell::tagsChanged, record.get(),
         [=] { tagsToModel(cell, record); });
+
+    connect(cell, &widgets::RecordCell::removing, record.get(),
+        [=] { m_root.currentPage().removeRecord(record); });
 }
 
 void RecordsArea::bindTag(widgets::TagLabel* label, models::TagPtr tag)

@@ -35,8 +35,12 @@ public:
     void setFocused(bool);
     void startEditing();
 
+    void notifyRemoving();
+
 signals:
     void clicked(RecordCell*);
+
+    void removing();
 
     void titleChanged(QString);
 
