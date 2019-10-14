@@ -43,6 +43,7 @@ signals:
     void removing();
 
     void titleChanged(QString);
+    void titleEditingFinished(QString);
 
     void tagsChanged();
     void tagAdded(TagLabel*);
@@ -73,6 +74,8 @@ private:
     TagSelector m_tagSelector;
 
     bool m_firstShow { true };
+
+    QString m_lastTitle;
 };
 
 } // namespace tagberry::widgets

@@ -136,7 +136,7 @@ void RecordsArea::bindRecord(widgets::RecordCell* cell, models::RecordPtr record
     connect(record.get(), &models::Record::tagsChanged, cell,
         [=] { tagsFromModel(cell, record); });
 
-    connect(cell, &widgets::RecordCell::titleChanged, record.get(),
+    connect(cell, &widgets::RecordCell::titleEditingFinished, record.get(),
         &models::Record::setTitle);
 
     connect(cell, &widgets::RecordCell::tagAdded, this, &RecordsArea::tagAdded);

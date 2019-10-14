@@ -125,11 +125,20 @@ void RecordCell::updateTitle()
     titleChanged(title());
 }
 
-void RecordCell::catchFocus(QWidget*, QWidget* now)
+void RecordCell::catchFocus(QWidget* old, QWidget* now)
 {
     if (now == &m_title) {
         clicked(this);
         now->setFocus(Qt::MouseFocusReason);
+        return;
+    }
+
+    if (old == &m_title) {
+        auto curTitle = title();
+        if (m_lastTitle != curTitle) {
+            m_lastTitle = curTitle;
+            titleEditingFinished(curTitle);
+        }
     }
 }
 
