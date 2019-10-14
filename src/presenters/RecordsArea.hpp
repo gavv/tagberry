@@ -48,6 +48,10 @@ private:
     void tagsFromModel(widgets::RecordCell* cell, models::RecordPtr record);
     void tagsToModel(widgets::RecordCell* cell, models::RecordPtr record);
 
+    void recordTitleToModel(widgets::RecordCell* cell, models::RecordPtr record);
+
+    void removeRecord(models::RecordPtr);
+
     QVBoxLayout m_layout;
 
     widgets::RecordList m_recordList;

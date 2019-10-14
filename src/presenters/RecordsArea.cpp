@@ -137,7 +137,7 @@ void RecordsArea::bindRecord(widgets::RecordCell* cell, models::RecordPtr record
         [=] { tagsFromModel(cell, record); });
 
     connect(cell, &widgets::RecordCell::titleEditingFinished, record.get(),
-        &models::Record::setTitle);
+        [=] { recordTitleToModel(cell, record); });
 
     connect(cell, &widgets::RecordCell::tagAdded, this, &RecordsArea::tagAdded);
 
@@ -147,11 +147,8 @@ void RecordsArea::bindRecord(widgets::RecordCell* cell, models::RecordPtr record
     connect(cell, &widgets::RecordCell::tagsChanged, record.get(),
         [=] { tagsToModel(cell, record); });
 
-    connect(cell, &widgets::RecordCell::removing, record.get(), [=] {
-        unsubscribeRecords();
-        m_root.currentPage().removeRecord(record);
-        resubscribeRecords();
-    });
+    connect(cell, &widgets::RecordCell::removing, record.get(),
+        [=] { removeRecord(record); });
 }
 
 void RecordsArea::bindTag(widgets::TagLabel* label, models::TagPtr tag)
@@ -204,6 +201,26 @@ void RecordsArea::tagsToModel(widgets::RecordCell* cell, models::RecordPtr recor
     }
 
     record->setTags(tagList);
+
+    m_storage.saveRecord(record);
+}
+
+void RecordsArea::recordTitleToModel(widgets::RecordCell* cell, models::RecordPtr record)
+{
+    record->setTitle(cell->title());
+
+    m_storage.saveRecord(record);
+}
+
+void RecordsArea::removeRecord(models::RecordPtr record)
+{
+    unsubscribeRecords();
+
+    m_storage.removeRecord(record);
+
+    m_root.currentPage().removeRecord(record);
+
+    resubscribeRecords();
 }
 
 } // namespace tagberry::presenters
