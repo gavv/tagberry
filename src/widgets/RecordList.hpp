@@ -34,6 +34,8 @@ public:
 signals:
     void recordAdded(RecordCell*);
 
+    void focusCleared();
+
 public slots:
     void clearFocus();
 

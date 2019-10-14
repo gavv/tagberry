@@ -64,6 +64,7 @@ void RecordList::alignHeader(int hs)
 void RecordList::clearFocus()
 {
     cellChanged(nullptr);
+    focusCleared();
 }
 
 void RecordList::cellChanged(RecordCell* focusedCell)

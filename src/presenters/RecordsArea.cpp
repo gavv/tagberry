@@ -29,6 +29,9 @@ RecordsArea::RecordsArea(storage::LocalStorage& storage, models::Root& root)
     connect(&m_recordList, &widgets::RecordList::recordAdded, this,
         &RecordsArea::recordAdded);
 
+    connect(&m_recordList, &widgets::RecordList::focusCleared, this,
+        [=] { m_root.tags().focusTag(nullptr); });
+
     setCurrentDate(m_root.currentDate());
     setHeaderHeight(0);
 }
