@@ -188,6 +188,28 @@ bool LocalStorage::saveRecordBody(models::RecordPtr record)
     return true;
 }
 
+bool LocalStorage::readAllTags(models::TagsDirectory& tagDir)
+{
+    QSqlQuery query;
+
+    if (!query.exec("SELECT * from tags")) {
+        qCritical() << "can't read tags";
+        return false;
+    }
+
+    auto indexTagID = query.record().indexOf("id");
+    auto indexTagName = query.record().indexOf("name");
+
+    while (query.next()) {
+        auto tag = tagDir.getOrCreateTag(query.value(indexTagID).toString());
+
+        tag->setName(query.value(indexTagName).toString());
+        tag->unsetDirty();
+    }
+
+    return true;
+}
+
 bool LocalStorage::readPage(const QPair<QDate, QDate> range,
     models::RecordsDirectory& recDir, models::TagsDirectory& tagDir)
 {

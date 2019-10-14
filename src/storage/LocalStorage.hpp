@@ -25,6 +25,8 @@ public:
 
     bool saveRecord(models::RecordPtr record);
 
+    bool readAllTags(models::TagsDirectory& tagDir);
+
     bool readPage(const QPair<QDate, QDate> range, models::RecordsDirectory& recDir,
         models::TagsDirectory& tagDir);
 

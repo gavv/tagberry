@@ -36,8 +36,8 @@ private:
     QHBoxLayout* m_layout;
     QWidget* m_widget;
 
-    CalendarArea* m_calendarArea;
-    RecordsArea* m_recordsArea;
+    CalendarArea* m_calendarArea {};
+    RecordsArea* m_recordsArea {};
 };
 
 } // namespace tagberry::presenters
