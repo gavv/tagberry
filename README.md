@@ -1,14 +1,32 @@
+![Tagberry](./images/logo.png)
+
 # Tagberry Qt5 desktop app
 
 [![Build Status](https://travis-ci.org/tagberry/tagberry-qt.svg?branch=master)](https://travis-ci.org/tagberry/tagberry-qt)
 
+## Features
+
 *Work in progress!*
+
+A minimum feature set is implemented:
+
+* create and edit records and record tags
+* display record tags on the calendar
+* store records and tags in the SQLite database
+
+## Screenshot
+
+![Screenshot](./images/screenshot.png)
 
 ## Dependencies
 
 * C++17 compiler
 * CMake >= 3.0
 * Qt5 >= 5.9
+
+## Platforms
+
+The code is written in a cross-platform manner, but only Linux was tested so far.
 
 ## Build
 
@@ -46,7 +64,7 @@ The codebase is divided into four parts:
 
 * **presenters** - Classes that put all these things together. Presenters create the UI using widgets and interconnect models with widgets and storage.
 
-![Code Structure](./diagram.png)
+![Code Structure](./images/diagram.png)
 
 ## Authors
 
