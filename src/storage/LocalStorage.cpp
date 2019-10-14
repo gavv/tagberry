@@ -59,7 +59,7 @@ bool LocalStorage::initTables()
     if (!m_db.tables().contains(QLatin1String("tags"))) {
         qDebug() << "creating table 'tags'";
         if (!query.exec("CREATE TABLE tags ("
-                        "id INT PRIMARY KEY, "
+                        "id INTEGER PRIMARY KEY AUTOINCREMENT, "
                         "name NVARCHAR(100))")) {
             return false;
         }
@@ -68,8 +68,8 @@ bool LocalStorage::initTables()
     if (!m_db.tables().contains(QLatin1String("records"))) {
         qDebug() << "creating table 'records'";
         if (!query.exec("CREATE TABLE records ("
-                        "id INT PRIMARY KEY, "
-                        "date INT, "
+                        "id INTEGER PRIMARY KEY AUTOINCREMENT, "
+                        "date INTEGER, "
                         "title NVARCHAR(1000))")) {
             return false;
         }
@@ -77,7 +77,9 @@ bool LocalStorage::initTables()
 
     if (!m_db.tables().contains(QLatin1String("record2tag"))) {
         qDebug() << "creating table 'record2tag'";
-        if (!query.exec("CREATE TABLE record2tag (record INT, tag INT)")) {
+        if (!query.exec("CREATE TABLE record2tag ("
+                        "record INTEGER, "
+                        "tag INTEGER)")) {
             return false;
         }
     }
@@ -156,7 +158,7 @@ bool LocalStorage::saveRecordBody(models::RecordPtr record)
 
     if (record->hasID()) {
         query.prepare(
-            "UPDATE records SET title = (:name), date = (:date) WHERE id = (:id)");
+            "UPDATE records SET title = (:title), date = (:date) WHERE id = (:id)");
         query.bindValue(":id", record->id());
     } else {
         query.prepare("INSERT INTO records (title, date) VALUES (:title, :date)");
@@ -183,6 +185,25 @@ bool LocalStorage::saveRecordBody(models::RecordPtr record)
             qCritical() << "can't insert record2tag";
             return false;
         }
+    }
+
+    return true;
+}
+
+bool LocalStorage::removeRecord(models::RecordPtr record)
+{
+    if (!record->hasID()) {
+        return true;
+    }
+
+    QSqlQuery query;
+
+    query.prepare("DELETE FROM records WHERE id = (:id)");
+    query.bindValue(":id", record->id());
+
+    if (!query.exec()) {
+        qCritical() << "can't delete record";
+        return false;
     }
 
     return true;
