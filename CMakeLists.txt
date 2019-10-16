@@ -18,14 +18,12 @@ set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin/${CMAKE_BUILD_TYPE})
 
 if(${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU")
   set(CMAKE_CXX_FLAGS
-    "${CMAKE_CXX_FLAGS} -Wall -Wextra -Werror")
+    "${CMAKE_CXX_FLAGS} -Wall -Wextra")
 endif()
 
 if(${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang")
   set(CMAKE_CXX_FLAGS
-    "${CMAKE_CXX_FLAGS} \
-    -Werror \
-    -Weverything")
+    "${CMAKE_CXX_FLAGS} -Weverything")
 endif()
 
 set(SOURCES
