@@ -9,8 +9,8 @@
 
 #include "widgets/RecordList.hpp"
 
-#include <QTimer>
 #include <QMouseEvent>
+#include <QTimer>
 
 namespace tagberry::widgets {
 

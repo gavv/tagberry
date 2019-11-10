@@ -173,7 +173,7 @@ void RecordsArea::tagsFromModel(widgets::RecordCell* cell, models::RecordPtr rec
 {
     QList<widgets::TagLabel*> labelList;
 
-    for (auto tag: record->tags()) {
+    for (auto tag : record->tags()) {
         auto label = new widgets::TagLabel;
         label->setText(tag->name());
 
