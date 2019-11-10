@@ -34,7 +34,9 @@ public:
 
 private:
     bool initTables();
-    bool saveRecordBody(models::RecordPtr record);
+
+    bool saveRecordImp(models::RecordPtr record);
+    bool removeRecordImp(models::RecordPtr record);
 
     QSqlDatabase m_db;
 };

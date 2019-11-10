@@ -131,7 +131,7 @@ bool LocalStorage::saveRecord(models::RecordPtr record)
 
     QSqlDatabase::database().transaction();
 
-    if (!saveRecordBody(record)) {
+    if (!saveRecordImp(record)) {
         QSqlDatabase::database().rollback();
         return false;
     }
@@ -142,7 +142,7 @@ bool LocalStorage::saveRecord(models::RecordPtr record)
     return true;
 }
 
-bool LocalStorage::saveRecordBody(models::RecordPtr record)
+bool LocalStorage::saveRecordImp(models::RecordPtr record)
 {
     QSqlQuery query;
 
@@ -196,13 +196,35 @@ bool LocalStorage::removeRecord(models::RecordPtr record)
         return true;
     }
 
+    QSqlDatabase::database().transaction();
+
+    if (!removeRecordImp(record)) {
+        QSqlDatabase::database().rollback();
+        return false;
+    }
+
+    QSqlDatabase::database().commit();
+
+    return true;
+}
+
+bool LocalStorage::removeRecordImp(models::RecordPtr record)
+{
     QSqlQuery query;
+
+    query.prepare("DELETE FROM record2tag WHERE record = (:record)");
+    query.bindValue(":record", record->id());
+
+    if (!query.exec()) {
+        qCritical() << "can't remove from record2tag";
+        return false;
+    }
 
     query.prepare("DELETE FROM records WHERE id = (:id)");
     query.bindValue(":id", record->id());
 
     if (!query.exec()) {
-        qCritical() << "can't delete record";
+        qCritical() << "can't remove from records";
         return false;
     }
 
