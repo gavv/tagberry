@@ -40,6 +40,8 @@ set(SOURCES
  src/presenters/MainWindow.cpp
  src/presenters/RecordsArea.cpp
  src/storage/LocalStorage.cpp
+ src/storage/Migrator.cpp
+ src/storage/migrations/01_CreateTables.cpp
  src/widgets/Cell.cpp
  src/widgets/Calendar.cpp
  src/widgets/CalendarCell.cpp
@@ -88,7 +90,9 @@ add_executable(${PROJECT_NAME}
 target_link_libraries(${PROJECT_NAME}
   Qt5::Core
   Qt5::Widgets
-  Qt5::Sql)
+  Qt5::Sql
+  QSqlMigrator
+  SqliteMigrator)
 
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
   COMMAND "${CMAKE_COMMAND}" -E copy

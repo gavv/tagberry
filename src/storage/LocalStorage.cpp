@@ -8,6 +8,7 @@
  */
 
 #include "storage/LocalStorage.hpp"
+#include "storage/Migrator.hpp"
 
 #include <QDebug>
 #include <QDir>
@@ -54,34 +55,16 @@ bool LocalStorage::open()
 
 bool LocalStorage::initTables()
 {
-    QSqlQuery query;
+    Migrator m(m_db);
 
-    if (!m_db.tables().contains(QLatin1String("tags"))) {
-        qDebug() << "creating table 'tags'";
-        if (!query.exec("CREATE TABLE tags ("
-                        "id INTEGER PRIMARY KEY AUTOINCREMENT, "
-                        "name NVARCHAR(100))")) {
-            return false;
-        }
+    if (!m.migrate()) {
+        qCritical() << "can't apply migrations";
+        return false;
     }
 
-    if (!m_db.tables().contains(QLatin1String("records"))) {
-        qDebug() << "creating table 'records'";
-        if (!query.exec("CREATE TABLE records ("
-                        "id INTEGER PRIMARY KEY AUTOINCREMENT, "
-                        "date INTEGER, "
-                        "title NVARCHAR(1000))")) {
-            return false;
-        }
-    }
-
-    if (!m_db.tables().contains(QLatin1String("record2tag"))) {
-        qDebug() << "creating table 'record2tag'";
-        if (!query.exec("CREATE TABLE record2tag ("
-                        "record INTEGER, "
-                        "tag INTEGER)")) {
-            return false;
-        }
+    if (!m.validate()) {
+        qCritical() << "can't validate db schema";
+        return false;
     }
 
     return true;
