@@ -120,7 +120,6 @@ void RecordCell::updateTitle()
     auto size = m_title.document()->size().toSize().height() + 2;
 
     m_title.setFixedHeight(size);
-    m_title.setTextColor(QColor("#2a2a2a"));
 
     titleChanged(title());
 }
