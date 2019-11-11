@@ -2,6 +2,30 @@ cmake_minimum_required(VERSION 3.0.0)
 
 project(tagberry-qt)
 
+include(ExternalProject)
+include(ProcessorCount)
+
+ProcessorCount(CPU_COUNT)
+
+ExternalProject_Add(qsqlmigrator
+  SOURCE_DIR ${PROJECT_SOURCE_DIR}/3rdparty/QSqlMigrator
+  BUILD_IN_SOURCE ON
+  LOG_BUILD ON
+  CONFIGURE_COMMAND qmake -r
+    "CONFIG+=static staticlib NO_QSM_TESTS NO_QSM_MYSQL NO_QSM_POSTGRES NO_QSM_FIREBIRD"
+  BUILD_COMMAND make "-j${CPU_COUNT}"
+  INSTALL_COMMAND ""
+)
+
+include_directories(
+  ${PROJECT_SOURCE_DIR}/3rdparty/QSqlMigrator/src
+  ${PROJECT_SOURCE_DIR}/3rdparty/QSqlMigrator/plugins
+)
+
+link_directories(
+  ${PROJECT_SOURCE_DIR}/3rdparty/QSqlMigrator/bin
+)
+
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
@@ -14,7 +38,7 @@ if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE "Debug")
 endif()
 
-set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin/${CMAKE_BUILD_TYPE})
+set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 
 if(${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU")
   set(CMAKE_CXX_FLAGS
@@ -87,12 +111,14 @@ qt5_wrap_cpp(MOC_SOURCES ${MOC_HEADERS})
 add_executable(${PROJECT_NAME}
   ${SOURCES} ${MOC_SOURCES})
 
+add_dependencies(${PROJECT_NAME} qsqlmigrator)
+
 target_link_libraries(${PROJECT_NAME}
   Qt5::Core
   Qt5::Widgets
   Qt5::Sql
-  QSqlMigrator
-  SqliteMigrator)
+  SqliteMigrator
+  QSqlMigrator)
 
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
   COMMAND "${CMAKE_COMMAND}" -E copy

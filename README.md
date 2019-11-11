@@ -22,7 +22,9 @@ A minimum feature set is implemented:
 
 * C++17 compiler
 * CMake >= 3.0
+* qmake
 * Qt5 >= 5.9
+* SQLite
 
 ## Platforms
 
@@ -31,19 +33,19 @@ The code is written in a cross-platform manner, but only Linux was tested so far
 ## Build
 
 ```
-git clone https://github.com/tagberry/tagberry-qt.git
+git clone --recurse-submodules https://github.com/tagberry/tagberry-qt.git
 cd tagberry-qt
 mkdir build
 cd build
 cmake ..
-make -j
+make -j4
 cd ..
 ```
 
 ## Run
 
 ```
-./bin/Debug/tagberry-qt
+./bin/tagberry-qt
 ```
 
 ## Format code
