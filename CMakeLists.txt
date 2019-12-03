@@ -108,19 +108,47 @@ find_package(Qt5Sql REQUIRED)
 
 qt5_wrap_cpp(MOC_SOURCES ${MOC_HEADERS})
 
-add_executable(${PROJECT_NAME}
+add_executable(tagberry-qt
   ${SOURCES} ${MOC_SOURCES})
 
-add_dependencies(${PROJECT_NAME} qsqlmigrator)
+add_dependencies(tagberry-qt qsqlmigrator)
 
-target_link_libraries(${PROJECT_NAME}
+target_link_libraries(tagberry-qt
   Qt5::Core
   Qt5::Widgets
   Qt5::Sql
   SqliteMigrator
   QSqlMigrator)
 
-add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+install(
+  TARGETS tagberry-qt
+  RUNTIME DESTINATION bin)
+
+install(
+  FILES resources/desktop/tagberry-qt.desktop
+  DESTINATION share/applications)
+
+install(
+  FILES resources/desktop/icon-256.png
+  RENAME tagberry-qt.png
+  DESTINATION share/icons/hicolor/256x256/apps)
+
+install(
+  FILES resources/desktop/icon-128.png
+  RENAME tagberry-qt.png
+  DESTINATION share/icons/hicolor/128x128/apps)
+
+install(
+  FILES resources/desktop/icon-64.png
+  RENAME tagberry-qt.png
+  DESTINATION share/icons/hicolor/64x64/apps)
+
+install(
+  FILES resources/desktop/icon-48.png
+  RENAME tagberry-qt.png
+  DESTINATION share/icons/hicolor/48x48/apps)
+
+add_custom_command(TARGET tagberry-qt POST_BUILD
   COMMAND "${CMAKE_COMMAND}" -E copy
      "${CMAKE_CURRENT_BINARY_DIR}/compile_commands.json"
      "${PROJECT_SOURCE_DIR}/compile_commands.json"

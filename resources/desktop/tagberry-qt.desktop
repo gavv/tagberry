@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Encoding=UTF-8
+Exec=tagberry-qt
+Icon=tagberry-qt
+StartupNotify=false
+Categories=Utility;
+Name=Tagberry
+Comment=Tagberry Qt

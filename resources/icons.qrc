@@ -1,6 +1,7 @@
 <!DOCTYPE RCC>
 <RCC version="1.0">
   <qresource>
+    <file>icons/app.png</file>
     <file>icons/arrow-left.png</file>
     <file>icons/arrow-right.png</file>
     <file>icons/plus.png</file>

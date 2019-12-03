@@ -48,6 +48,13 @@ cd ..
 ./bin/tagberry-qt
 ```
 
+## Install
+
+```
+cd build
+sudo make install
+```
+
 ## Format code
 
 ```
