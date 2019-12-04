@@ -18,23 +18,36 @@ A minimum feature set is implemented:
 
 ![Screenshot](./images/screenshot.png)
 
+## Supported platforms
+
+The code is written in a cross-platform manner, but only Linux was tested so far.
+
 ## Dependencies
 
 * C++17 compiler
 * CMake >= 3.0
-* qmake
+* qmake from Qt5 (for dependencies)
 * Qt5 >= 5.9
 * SQLite
 
-## Platforms
+## Instructions
 
-The code is written in a cross-platform manner, but only Linux was tested so far.
+### Install dependencies
 
-## Build
+```
+sudo apt install qt5-default cmake
+```
+
+### Clone repo
 
 ```
 git clone --recurse-submodules https://github.com/tagberry/tagberry-qt.git
 cd tagberry-qt
+```
+
+### Build
+
+```
 mkdir build
 cd build
 cmake ..
@@ -42,20 +55,21 @@ make -j4
 cd ..
 ```
 
-## Run
+### Run locally
 
 ```
 ./bin/tagberry-qt
 ```
 
-## Install
+### Install system-wide
 
 ```
 cd build
 sudo make install
+cd ..
 ```
 
-## Format code
+### Format code
 
 ```
 ./scripts/format.sh
