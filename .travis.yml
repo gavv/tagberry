@@ -3,10 +3,13 @@ compiler: gcc
 dist: bionic
 
 install:
-  - sudo apt-get install -y qtbase5-dev cmake
+  - sudo apt-get install -y qt5-default cmake
 
 script:
   - mkdir build
   - cd build
   - cmake ..
-  - make -j
+  - make -j2
+
+after_failure:
+  - cat qsqlmigrator-prefix/src/qsqlmigrator-stamp/qsqlmigrator-build-*.log
