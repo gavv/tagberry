@@ -18,6 +18,7 @@
 #include <QHBoxLayout>
 #include <QList>
 #include <QPair>
+#include <QTimer>
 #include <QVBoxLayout>
 #include <QWidget>
 
@@ -65,6 +66,9 @@ private:
 
     void updateCells();
 
+    void scheduleTimer();
+    void handleTimer();
+
     CalendarSwitch* m_switch;
 
     QVBoxLayout m_calendarLayout;
@@ -82,6 +86,9 @@ private:
     int m_month;
     int m_offset;
     int m_weekStart;
+
+    QTimer m_midnightTimer;
+    QTimer m_minuteTimer;
 };
 
 } // namespace tagberry::widgets

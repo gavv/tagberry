@@ -50,10 +50,15 @@ Calendar::Calendar(QWidget* parent)
         }
     }
 
+    setWeekStart(Qt::Monday);
+
     connect(m_switch, &CalendarSwitch::switched, this, &Calendar::setPage);
     connect(m_switch, &CalendarSwitch::today, this, &Calendar::setToday);
 
-    setWeekStart(Qt::Monday);
+    connect(&m_midnightTimer, &QTimer::timeout, this, &Calendar::handleTimer);
+    connect(&m_minuteTimer, &QTimer::timeout, this, &Calendar::handleTimer);
+
+    scheduleTimer();
 }
 
 QList<QDate> Calendar::getSelectedDates() const
@@ -219,6 +224,25 @@ void Calendar::updateCells()
                 date == QDate::currentDate() ? m_todayColor : m_normalColor);
         }
     }
+}
+
+void Calendar::scheduleTimer()
+{
+    auto msecs = QTime::currentTime().msecsTo(QTime(23, 59, 59, 999)) + 1;
+
+    // update current day exactly at midnight
+    m_midnightTimer.setSingleShot(true);
+    m_midnightTimer.start(msecs);
+
+    // also update current day every minute to handle system date change
+    m_minuteTimer.setSingleShot(false);
+    m_midnightTimer.start(60000);
+}
+
+void Calendar::handleTimer()
+{
+    updateCells();
+    scheduleTimer();
 }
 
 } // namespace tagberry::widgets
