@@ -51,7 +51,7 @@ void TagSelector::attachTag(TagLabel* tag)
 {
     tag->setMargin(1, 2);
     tag->setClosable(true);
-    tag->setChecked(true);
+    tag->setComplete(true);
     tag->setEditable(true);
 
     m_layout.removeWidget(&m_addTagButton);

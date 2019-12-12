@@ -34,11 +34,16 @@ public:
 
     int numRecordsWithTag(TagPtr);
 
+    bool checkAllRecordsWithTagComplete(TagPtr);
+
 signals:
     void recordListChanged();
     void recordTagsChanged();
+    void recordStatesChanged();
 
 private:
+    void notifyChanged();
+
     QList<RecordPtr> m_records;
 };
 

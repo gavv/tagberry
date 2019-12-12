@@ -33,7 +33,7 @@ TagLabel::TagLabel(QWidget* parent)
     , m_cursorWidth(2)
     , m_indicatorWidth(0)
     , m_isFocused(false)
-    , m_isChecked(false)
+    , m_isComplete(false)
     , m_isClosePressed(false)
     , m_closePressStarted(false)
 {
@@ -98,12 +98,12 @@ void TagLabel::setFocused(bool focused)
     repaint();
 }
 
-void TagLabel::setChecked(bool checked)
+void TagLabel::setComplete(bool checked)
 {
-    if (m_isChecked == checked) {
+    if (m_isComplete == checked) {
         return;
     }
-    m_isChecked = checked;
+    m_isComplete = checked;
     repaint();
 }
 
@@ -225,7 +225,7 @@ void TagLabel::paintEvent(QPaintEvent*)
 
     pt.drawRoundedRect(m_innerRect, m_rounding, m_rounding);
 
-    if (m_isChecked && !m_isFocused) {
+    if (m_isComplete && !m_isFocused) {
         if (m_isClosePressed) {
             pt.setPen(QPen(m_fgFocused, 1));
             pt.setBrush(QBrush(m_fgFocused));
@@ -240,7 +240,7 @@ void TagLabel::paintEvent(QPaintEvent*)
             m_rounding, m_rounding);
     }
 
-    if (!m_isChecked || m_isFocused || m_isClosePressed) {
+    if (!m_isComplete || m_isFocused || m_isClosePressed) {
         pt.setPen(QPen(m_fgRegular, 1));
 
         pt.drawLine(QLine(m_innerRect.right() - m_indicatorWidth - m_hPad * 2,
@@ -267,7 +267,7 @@ void TagLabel::paintEvent(QPaintEvent*)
             Qt::AlignCenter, m_text);
     }
 
-    if (m_isChecked || m_isFocused) {
+    if (m_isComplete || m_isFocused) {
         pt.setPen(QPen(m_bg, 1));
     } else {
         pt.setPen(QPen(m_fgRegular, 1));

@@ -23,11 +23,11 @@ void RecordSet::addRecord(RecordPtr rec)
     }
 
     connect(rec.get(), &Record::tagsChanged, this, &RecordSet::recordTagsChanged);
+    connect(rec.get(), &Record::completeChanged, this, &RecordSet::recordStatesChanged);
 
     m_records.append(rec);
 
-    recordListChanged();
-    recordTagsChanged();
+    notifyChanged();
 }
 
 void RecordSet::removeRecord(RecordPtr rec)
@@ -40,8 +40,7 @@ void RecordSet::removeRecord(RecordPtr rec)
 
     m_records.removeAll(rec);
 
-    recordListChanged();
-    recordTagsChanged();
+    notifyChanged();
 }
 
 void RecordSet::clearRecords()
@@ -52,8 +51,14 @@ void RecordSet::clearRecords()
 
     m_records.clear();
 
+    notifyChanged();
+}
+
+void RecordSet::notifyChanged()
+{
     recordListChanged();
     recordTagsChanged();
+    recordStatesChanged();
 }
 
 QList<TagPtr> RecordSet::getAllTags() const
@@ -78,6 +83,19 @@ int RecordSet::numRecordsWithTag(TagPtr tag)
         }
     }
     return ret;
+}
+
+bool RecordSet::checkAllRecordsWithTagComplete(TagPtr tag)
+{
+    for (auto rec : m_records) {
+        if (!rec->hasTag(tag)) {
+            continue;
+        }
+        if (!rec->complete()) {
+            return false;
+        }
+    }
+    return true;
 }
 
 } // namespace tagberry::models

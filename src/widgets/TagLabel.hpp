@@ -43,7 +43,7 @@ public slots:
     void setCustomIndicator(QString indicator);
 
     void setFocused(bool);
-    void setChecked(bool);
+    void setComplete(bool);
 
     void setColors(QColor regular, QColor focused);
 
@@ -98,7 +98,7 @@ private:
     int m_indicatorWidth;
 
     bool m_isFocused;
-    bool m_isChecked;
+    bool m_isComplete;
     bool m_isClosePressed;
     bool m_closePressStarted;
 };

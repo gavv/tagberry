@@ -80,6 +80,9 @@ void CalendarArea::refreshPage()
 
         connect(recSet.get(), &models::RecordSet::recordTagsChanged,
             [=] { rebuildCell(date); });
+
+        connect(recSet.get(), &models::RecordSet::recordStatesChanged,
+            [=] { rebuildCell(date); });
     }
 
     m_storage.readPage(range, m_root.currentPage(), m_root.tags());
@@ -94,8 +97,8 @@ void CalendarArea::rebuildCell(QDate date)
     for (auto tag : recSet->getAllTags()) {
         auto label = new widgets::TagLabel;
 
-        label->setChecked(true);
         label->setText(tag->name());
+        label->setComplete(recSet->checkAllRecordsWithTagComplete(tag));
         label->setCustomIndicator(QString("%1").arg(recSet->numRecordsWithTag(tag)));
 
         connect(tag.get(), &models::Tag::nameChanged, label, &widgets::TagLabel::setText);
