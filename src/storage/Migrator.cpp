@@ -10,6 +10,7 @@
 #include "storage/Migrator.hpp"
 
 #include "storage/migrations/01_CreateTables.hpp"
+#include "storage/migrations/02_AddRecordState.hpp"
 
 #include <QDebug>
 
@@ -29,6 +30,7 @@ Migrator::Migrator(QSqlDatabase& db)
     : m_db(db)
 {
     m_migrations.insert("M01_CreateTables", new M01_CreateTables());
+    m_migrations.insert("M02_AddRecordState", new M02_AddRecordState());
 }
 
 bool Migrator::migrate()

@@ -32,6 +32,7 @@ public:
     void setID(QString);
 
     QDate date() const;
+    bool complete() const;
     QString title() const;
 
     QList<TagPtr> tags() const;
@@ -43,11 +44,13 @@ public:
 
 public slots:
     void setDate(QDate);
+    void setComplete(bool);
     void setTitle(QString);
 
 signals:
     void idChanged(QString);
     void dateChanged(QDate oldDate, QDate newDate);
+    void completeChanged(bool);
     void textChanged(QString);
     void tagsChanged();
 
@@ -55,6 +58,7 @@ private:
     bool m_isDirty { true };
     QString m_id;
     QDate m_date;
+    bool m_complete {};
     QString m_title;
     QList<TagPtr> m_tags;
 };

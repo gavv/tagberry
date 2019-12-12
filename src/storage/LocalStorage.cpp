@@ -167,13 +167,16 @@ bool LocalStorage::saveRecordImp(models::RecordPtr record)
 
     if (record->hasID()) {
         query.prepare(
-            "UPDATE records SET title = (:title), date = (:date) WHERE id = (:id)");
+            "UPDATE records SET title = (:title), state = (:state), date = (:date) "
+            "WHERE id = (:id)");
         query.bindValue(":id", record->id());
     } else {
-        query.prepare("INSERT INTO records (title, date) VALUES (:title, :date)");
+        query.prepare("INSERT INTO records (title, state, date) "
+                      "VALUES (:title, :state, :date)");
     }
 
     query.bindValue(":title", record->title());
+    query.bindValue(":state", record->complete() ? 1 : 0);
     query.bindValue(":date", QDateTime(record->date()).toTime_t());
 
     if (!query.exec()) {
@@ -276,17 +279,19 @@ bool LocalStorage::readPage(const QPair<QDate, QDate> range,
     }
 
     auto indexRecID = recQuery.record().indexOf("id");
-    auto indexRecDate = recQuery.record().indexOf("date");
     auto indexRecTitle = recQuery.record().indexOf("title");
+    auto indexRecState = recQuery.record().indexOf("state");
+    auto indexRecDate = recQuery.record().indexOf("date");
 
     while (recQuery.next()) {
         auto rec = recDir.getOrCreateRecord(recQuery.value(indexRecID).toString());
 
+        rec->setTitle(recQuery.value(indexRecTitle).toString());
+        rec->setComplete(recQuery.value(indexRecState).toInt() == 1);
+
         QDateTime dt;
         dt.setTime_t(recQuery.value(indexRecDate).toInt());
-
         rec->setDate(dt.date());
-        rec->setTitle(recQuery.value(indexRecTitle).toString());
 
         QSqlQuery tagQuery;
 

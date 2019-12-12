@@ -66,6 +66,21 @@ void Record::setDate(QDate date)
     dateChanged(oldDate, date);
 }
 
+bool Record::complete() const
+{
+    return m_complete;
+}
+
+void Record::setComplete(bool complete)
+{
+    if (complete == m_complete) {
+        return;
+    }
+    m_complete = complete;
+    m_isDirty = true;
+    completeChanged(complete);
+}
+
 QString Record::title() const
 {
     return m_title;

@@ -49,6 +49,8 @@ void RecordsArea::rebuildRecords()
 
     for (auto record : recordSet->getRecords()) {
         auto cell = new widgets::RecordCell;
+
+        cell->setComplete(record->complete());
         cell->setTitle(record->title());
 
         tagsFromModel(cell, record);
@@ -130,14 +132,24 @@ void RecordsArea::tagEdited(QString oldText, QString newText)
 
 void RecordsArea::bindRecord(widgets::RecordCell* cell, models::RecordPtr record)
 {
+    connect(record.get(), &models::Record::completeChanged, cell,
+        &widgets::RecordCell::setComplete);
+
     connect(
         record.get(), &models::Record::textChanged, cell, &widgets::RecordCell::setTitle);
 
     connect(record.get(), &models::Record::tagsChanged, cell,
         [=] { tagsFromModel(cell, record); });
 
-    connect(cell, &widgets::RecordCell::titleEditingFinished, record.get(),
-        [=] { recordTitleToModel(cell, record); });
+    connect(cell, &widgets::RecordCell::completeChanged, record.get(), [=] {
+        record->setComplete(cell->complete());
+        m_storage.saveRecord(record);
+    });
+
+    connect(cell, &widgets::RecordCell::titleEditingFinished, record.get(), [=] {
+        record->setTitle(cell->title());
+        m_storage.saveRecord(record);
+    });
 
     connect(cell, &widgets::RecordCell::tagAdded, this, &RecordsArea::tagAdded);
 
@@ -201,13 +213,6 @@ void RecordsArea::tagsToModel(widgets::RecordCell* cell, models::RecordPtr recor
     }
 
     record->setTags(tagList);
-
-    m_storage.saveRecord(record);
-}
-
-void RecordsArea::recordTitleToModel(widgets::RecordCell* cell, models::RecordPtr record)
-{
-    record->setTitle(cell->title());
 
     m_storage.saveRecord(record);
 }

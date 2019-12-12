@@ -66,6 +66,7 @@ set(SOURCES
  src/storage/LocalStorage.cpp
  src/storage/Migrator.cpp
  src/storage/migrations/01_CreateTables.cpp
+ src/storage/migrations/02_AddRecordState.cpp
  src/widgets/Cell.cpp
  src/widgets/Calendar.cpp
  src/widgets/CalendarCell.cpp
