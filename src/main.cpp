@@ -12,16 +12,54 @@
 
 #include <QApplication>
 #include <QIcon>
+#include <QCommandLineParser>
+#include <QStandardPaths>
+#include <QDir>
+
+#include <iostream>
+
+namespace {
+
+QString defaultDBPath()
+{
+    auto config = QStandardPaths::writableLocation(QStandardPaths::ConfigLocation);
+    if (!config.isEmpty()) {
+        return QDir(config).filePath("tagberry-qt");
+    }
+    return QDir(QDir::homePath()).filePath(".tagberry-qt");
+}
+
+} // namespace
 
 int main(int argc, char** argv)
 {
     QApplication app(argc, argv);
 
+    app.setApplicationName("tagberry-qt");
     app.setWindowIcon(QIcon(":/icons/app.png"));
+
+    QCommandLineParser parser;
+    parser.setApplicationDescription("Tagberry Qt5 desktop app");
+
+    QCommandLineOption helpOpt({"h", "help"}, "Display help.");
+    parser.addOption(helpOpt);
+
+    QCommandLineOption dbOpt("db", "DB path.", "db", defaultDBPath());
+    parser.addOption(dbOpt);
+
+    if (!parser.parse(app.arguments())) {
+        std::cerr << parser.errorText().toStdString();
+        return 1;
+    }
+
+    if (parser.isSet(helpOpt)) {
+        std::cerr << parser.helpText().toStdString();
+        return 0;
+    }
 
     tagberry::storage::LocalStorage storage;
 
-    if (!storage.open()) {
+    if (!storage.open(parser.value(dbOpt))) {
         return 1;
     }
 

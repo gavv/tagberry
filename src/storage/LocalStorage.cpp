@@ -11,30 +11,13 @@
 #include "storage/Migrator.hpp"
 
 #include <QDebug>
-#include <QDir>
 #include <QSqlQuery>
 #include <QSqlRecord>
-#include <QStandardPaths>
 
 namespace tagberry::storage {
 
-namespace {
-
-QString dbPath()
+bool LocalStorage::open(const QString& path)
 {
-    auto config = QStandardPaths::writableLocation(QStandardPaths::ConfigLocation);
-    if (!config.isEmpty()) {
-        return QDir(config).filePath("tagberry-qt");
-    }
-    return QDir(QDir::homePath()).filePath(".tagberry-qt");
-}
-
-} // namespace
-
-bool LocalStorage::open()
-{
-    auto path = dbPath();
-
     qDebug() << "opening" << path;
 
     m_db = QSqlDatabase::addDatabase("QSQLITE");

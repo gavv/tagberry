@@ -19,7 +19,7 @@ namespace tagberry::storage {
 
 class LocalStorage {
 public:
-    bool open();
+    bool open(const QString& path);
 
     bool saveTag(models::TagPtr tag);
 
