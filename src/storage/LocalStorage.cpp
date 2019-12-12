@@ -11,14 +11,56 @@
 #include "storage/Migrator.hpp"
 
 #include <QDebug>
+#include <QFile>
 #include <QSqlQuery>
 #include <QSqlRecord>
 
 namespace tagberry::storage {
 
+namespace {
+
+std::unique_ptr<QLockFile> lockDB(QString path) {
+    auto lockPath = path + ".lock";
+
+    qDebug() << "locking" << lockPath;
+
+    auto lock = std::make_unique<QLockFile>(lockPath);
+
+    if (!lock->tryLock()) {
+        return nullptr;
+    }
+
+    return lock;
+}
+
+bool backupDB(QString path)
+{
+    auto bakPath = path + ".bak";
+
+    qDebug() << "copying" << path << "to" << bakPath;
+
+    if (QFile::exists(bakPath)) {
+        QFile::remove(bakPath);
+    }
+
+    return QFile::copy(path, bakPath);
+}
+
+} // namespace
+
 bool LocalStorage::open(const QString& path)
 {
     qDebug() << "opening" << path;
+
+    if (!(m_lock = lockDB(path))) {
+        qCritical() << "can't acquire exclusive lock on DB";
+        return false;
+    }
+
+    if (!backupDB(path)) {
+        qCritical() << "can't make backup";
+        return false;
+    }
 
     m_db = QSqlDatabase::addDatabase("QSQLITE");
     m_db.setDatabaseName(path);

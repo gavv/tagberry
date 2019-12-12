@@ -17,6 +17,7 @@
 #include <QIcon>
 #include <QStandardPaths>
 #include <QTime>
+#include <QDebug>
 
 #include <iostream>
 

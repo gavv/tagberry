@@ -13,7 +13,10 @@
 #include "models/TagsDirectory.hpp"
 
 #include <QDate>
+#include <QLockFile>
 #include <QSqlDatabase>
+
+#include <memory>
 
 namespace tagberry::storage {
 
@@ -38,6 +41,7 @@ private:
     bool saveRecordImp(models::RecordPtr record);
     bool removeRecordImp(models::RecordPtr record);
 
+    std::unique_ptr<QLockFile> m_lock;
     QSqlDatabase m_db;
 };
 
