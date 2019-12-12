@@ -11,14 +11,67 @@
 #include "storage/LocalStorage.hpp"
 
 #include <QApplication>
-#include <QIcon>
 #include <QCommandLineParser>
-#include <QStandardPaths>
 #include <QDir>
+#include <QFileInfo>
+#include <QIcon>
+#include <QStandardPaths>
+#include <QTime>
 
 #include <iostream>
 
 namespace {
+
+void nullOutput(QtMsgType, const QMessageLogContext&, const QString&)
+{
+    return;
+}
+
+void stderrOutput(QtMsgType type, const QMessageLogContext& context, const QString& msg)
+{
+    QString time = QTime::currentTime().toString("HH:mm:ss.zzz");
+
+    QString component;
+    if (QString(context.category) != "default") {
+        component = context.category;
+    }
+    if (context.file) {
+        component = QFileInfo(context.file).baseName();
+    }
+
+    const char *level;
+    switch (type) {
+    case QtFatalMsg:
+        level = "fatal";
+        break;
+    case QtCriticalMsg:
+        level = "critical";
+        break;
+    case QtWarningMsg:
+        level = "warning";
+        break;
+    case QtInfoMsg:
+        level = "info";
+        break;
+    default:
+        level = "debug";
+        break;
+    }
+
+    QString line;
+
+    line += time + " [";
+    line += level;
+    line += "] ";
+
+    if (!component.isEmpty()) {
+        line += "[" + component + "] ";
+    }
+
+    line += msg + "\n";
+
+    std::cerr << line.toStdString();
+}
 
 QString defaultDBPath()
 {
@@ -33,6 +86,8 @@ QString defaultDBPath()
 
 int main(int argc, char** argv)
 {
+    qInstallMessageHandler(nullOutput);
+
     QApplication app(argc, argv);
 
     app.setApplicationName("tagberry-qt");
@@ -56,6 +111,8 @@ int main(int argc, char** argv)
         std::cerr << parser.helpText().toStdString();
         return 0;
     }
+
+    qInstallMessageHandler(stderrOutput);
 
     tagberry::storage::LocalStorage storage;
 
