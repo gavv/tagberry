@@ -14,6 +14,7 @@
 #include "widgets/TagLabel.hpp"
 #include "widgets/TagSelector.hpp"
 
+#include <QCheckBox>
 #include <QHBoxLayout>
 #include <QTextEdit>
 #include <QVBoxLayout>
@@ -27,6 +28,7 @@ class RecordCell : public QWidget {
 public:
     explicit RecordCell(QWidget* parent = nullptr);
 
+    bool complete() const;
     QString title() const;
     QList<TagLabel*> tags() const;
 
@@ -42,6 +44,8 @@ signals:
 
     void removing();
 
+    void completeChanged(bool);
+
     void titleChanged(QString);
     void titleEditingFinished(QString);
 
@@ -52,6 +56,7 @@ signals:
     void tagFocusCleared();
 
 public slots:
+    void setComplete(bool);
     void setTitle(QString);
 
 private slots:
@@ -68,6 +73,7 @@ private:
     Cell m_cell;
 
     QHBoxLayout m_headLayout;
+    QCheckBox m_complete;
     QTextEdit m_title;
 
     QVBoxLayout m_bodyLayout;

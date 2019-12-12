@@ -24,8 +24,31 @@ RecordCell::RecordCell(QWidget* parent)
 
     setLayout(&m_layout);
 
+    m_complete.setFixedWidth(24);
+    m_complete.setStyleSheet(R"(
+      QCheckBox::indicator {
+        width: 17px;
+        height: 17px;
+        margin: 4px;
+        border-style: solid;
+        border-width: 1px;
+        border-radius: 2px;
+        border-color: #767C82;
+      }
+      QCheckBox::indicator:unchecked {
+        image: none;
+      }
+      QCheckBox::indicator:checked {
+        image: url(:/icons/mark.png);
+        background-color: #f2f5f0;
+      }
+)");
+
     m_headLayout.setContentsMargins(QMargins(3, 3, 3, 3));
+    m_headLayout.setSpacing(4);
+    m_headLayout.addWidget(&m_complete);
     m_headLayout.addWidget(&m_title);
+    m_headLayout.setAlignment(&m_complete, Qt::AlignTop);
 
     m_bodyLayout.setContentsMargins(QMargins(0, 0, 0, 0));
     m_bodyLayout.addWidget(&m_tagSelector);
@@ -46,6 +69,9 @@ RecordCell::RecordCell(QWidget* parent)
     font.setWeight(QFont::Bold);
     m_title.setFont(font);
 
+    connect(&m_complete, &QCheckBox::stateChanged, this,
+        [=] { completeChanged(complete()); });
+
     connect(&m_title, &QTextEdit::textChanged, this, &RecordCell::updateTitle);
 
     connect(&m_tagSelector, &TagSelector::clicked, this, [=] { clicked(this); });
@@ -65,6 +91,11 @@ void RecordCell::setTags(QList<TagLabel*> tags)
     m_tagSelector.setTags(tags);
 }
 
+void RecordCell::setComplete(bool complete)
+{
+    m_complete.setChecked(complete);
+}
+
 void RecordCell::setTitle(QString str)
 {
     if (title() == str) {
@@ -81,6 +112,11 @@ void RecordCell::setFocused(bool focused)
 void RecordCell::startEditing()
 {
     m_title.setFocus(Qt::MouseFocusReason);
+}
+
+bool RecordCell::complete() const
+{
+    return m_complete.isChecked();
 }
 
 QString RecordCell::title() const
@@ -126,7 +162,7 @@ void RecordCell::updateTitle()
 
 void RecordCell::catchFocus(QWidget* old, QWidget* now)
 {
-    if (now == &m_title) {
+    if (now == &m_complete || now == &m_title) {
         clicked(this);
         now->setFocus(Qt::MouseFocusReason);
         return;

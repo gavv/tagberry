@@ -12,12 +12,12 @@
 
 #include <QApplication>
 #include <QCommandLineParser>
+#include <QDebug>
 #include <QDir>
 #include <QFileInfo>
 #include <QIcon>
 #include <QStandardPaths>
 #include <QTime>
-#include <QDebug>
 
 #include <iostream>
 
@@ -40,7 +40,7 @@ void stderrOutput(QtMsgType type, const QMessageLogContext& context, const QStri
         component = QFileInfo(context.file).baseName();
     }
 
-    const char *level;
+    const char* level;
     switch (type) {
     case QtFatalMsg:
         level = "fatal";
@@ -97,7 +97,7 @@ int main(int argc, char** argv)
     QCommandLineParser parser;
     parser.setApplicationDescription("Tagberry Qt5 desktop app");
 
-    QCommandLineOption helpOpt({"h", "help"}, "Display help.");
+    QCommandLineOption helpOpt({ "h", "help" }, "Display help.");
     parser.addOption(helpOpt);
 
     QCommandLineOption dbOpt("db", "DB path.", "db", defaultDBPath());

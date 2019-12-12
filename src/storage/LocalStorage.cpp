@@ -19,7 +19,8 @@ namespace tagberry::storage {
 
 namespace {
 
-std::unique_ptr<QLockFile> lockDB(QString path) {
+std::unique_ptr<QLockFile> lockDB(QString path)
+{
     auto lockPath = path + ".lock";
 
     qDebug() << "locking" << lockPath;
