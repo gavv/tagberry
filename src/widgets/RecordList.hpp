@@ -51,7 +51,7 @@ protected:
 private:
     QVBoxLayout m_layout;
 
-    QScrollArea m_scroll;
+    QScrollArea m_scrollArea;
     QWidget m_scrollWidget;
     QVBoxLayout m_scrollLayout;
 

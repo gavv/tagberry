@@ -17,15 +17,15 @@ namespace tagberry::widgets {
 RecordList::RecordList(QWidget* parent)
     : QWidget(parent)
 {
-    m_scrollWidget.setLayout(&m_scrollLayout);
-
-    m_scroll.setWidget(&m_scrollWidget);
-    m_scroll.setWidgetResizable(true);
-    m_scroll.setFrameShape(QFrame::NoFrame);
-
     m_scrollLayout.setContentsMargins(QMargins(0, 0, 2, 0));
     m_scrollLayout.setSpacing(10);
     m_scrollLayout.addStretch(1);
+
+    m_scrollWidget.setLayout(&m_scrollLayout);
+
+    m_scrollArea.setWidget(&m_scrollWidget);
+    m_scrollArea.setWidgetResizable(true);
+    m_scrollArea.setFrameShape(QFrame::NoFrame);
 
     m_buttonLayout.setContentsMargins(QMargins(0, 0, 2, 0));
     m_buttonLayout.addStretch(1);
@@ -34,7 +34,7 @@ RecordList::RecordList(QWidget* parent)
 
     m_layout.addLayout(&m_buttonLayout);
     m_layout.addSpacing(4);
-    m_layout.addWidget(&m_scroll);
+    m_layout.addWidget(&m_scrollArea);
 
     setLayout(&m_layout);
 
@@ -83,7 +83,7 @@ void RecordList::addRecord(RecordCell* record)
     m_scrollLayout.insertWidget(m_scrollLayout.count() - 1, record);
     m_recordCells.append(record);
 
-    QTimer::singleShot(5, this, [=] { m_scroll.ensureWidgetVisible(record); });
+    QTimer::singleShot(5, this, [=] { m_scrollArea.ensureWidgetVisible(record); });
 
     cellChanged(record);
 }
