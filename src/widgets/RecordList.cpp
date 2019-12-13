@@ -138,15 +138,24 @@ void RecordList::handleRemoveRecord()
 
 void RecordList::mousePressEvent(QMouseEvent* event)
 {
+    if (clickedOutsideRecords(event)) {
+        clearFocus();
+    }
+}
+
+bool RecordList::clickedOutsideRecords(QMouseEvent* event)
+{
+    if (!m_scrollWidget.geometry().contains(event->pos())) {
+        return true;
+    }
+
     auto emptySpace = m_scrollLayout.itemAt(m_scrollLayout.count() - 1);
 
     if (!emptySpace) {
-        return;
+        return false;
     }
 
-    if (emptySpace->geometry().contains(event->pos())) {
-        clearFocus();
-    }
+    return emptySpace->geometry().contains(event->pos());
 }
 
 } // namespace tagberry::widgets

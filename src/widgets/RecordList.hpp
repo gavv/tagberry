@@ -49,6 +49,8 @@ protected:
     void mousePressEvent(QMouseEvent* event) override;
 
 private:
+    bool clickedOutsideRecords(QMouseEvent* event);
+
     QVBoxLayout m_layout;
 
     QScrollArea m_scrollArea;
