@@ -172,9 +172,7 @@ void RecordsArea::bindTag(widgets::TagLabel* label, models::TagPtr tag)
 
     connect(tag.get(), &models::Tag::colorsChanged, label, &widgets::TagLabel::setColors);
 
-    auto colors = tag->getColors();
-
-    label->setColors(std::get<0>(colors), std::get<1>(colors));
+    label->setColors(tag->getColors());
     label->setFocused(tag->isFocused());
 
     connect(label, &widgets::TagLabel::clicked, tag.get(),

@@ -14,6 +14,8 @@
 #include <QObject>
 #include <QString>
 
+#include <tuple>
+
 namespace tagberry::models {
 
 class ColorScheme : public QObject {
@@ -22,8 +24,7 @@ class ColorScheme : public QObject {
 public:
     ColorScheme();
 
-    QColor tagRegularColor(const QString& name) const;
-    QColor tagFocusedColor(const QString& name) const;
+    std::tuple<QColor, QColor, QColor> tagColors(const QString& name) const;
 
     void setTagColors(QList<QColor>);
 

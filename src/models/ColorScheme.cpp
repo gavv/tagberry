@@ -30,11 +30,20 @@ int tagIndex(const QString& name, int size)
     return index;
 }
 
-QColor shiftColor(const QColor c, int shift)
+QColor lightenColor(const QColor c, int shift)
 {
     const int r = std::min(255, shift + c.red());
     const int g = std::min(255, shift + c.green());
     const int b = std::min(255, shift + c.blue());
+
+    return QColor(r, g, b);
+}
+
+QColor fadeColor(const QColor c, float fade)
+{
+    const int r = std::min(255, c.red() + int((255 - c.red()) * fade));
+    const int g = std::min(255, c.green() + int((255 - c.green()) * fade));
+    const int b = std::min(255, c.blue() + int((255 - c.blue()) * fade));
 
     return QColor(r, g, b);
 }
@@ -60,7 +69,7 @@ ColorScheme::ColorScheme()
     });
 }
 
-QColor ColorScheme::tagRegularColor(const QString& name) const
+std::tuple<QColor, QColor, QColor> ColorScheme::tagColors(const QString& name) const
 {
     if (!m_tagColors.size()) {
         return {};
@@ -68,18 +77,9 @@ QColor ColorScheme::tagRegularColor(const QString& name) const
 
     int index = tagIndex(name, m_tagColors.size());
 
-    return m_tagColors[index];
-}
+    auto color = m_tagColors[index];
 
-QColor ColorScheme::tagFocusedColor(const QString& name) const
-{
-    if (!m_tagColors.size()) {
-        return {};
-    }
-
-    int index = tagIndex(name, m_tagColors.size());
-
-    return shiftColor(m_tagColors[index], 50);
+    return std::make_tuple(color, lightenColor(color, 50), fadeColor(color, 0.9));
 }
 
 void ColorScheme::setTagColors(QList<QColor> colors)

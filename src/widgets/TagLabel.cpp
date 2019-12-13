@@ -21,7 +21,8 @@ TagLabel::TagLabel(QWidget* parent)
     , m_closeButton(false)
     , m_isEditable(false)
     , m_fgRegular(0x3e, 0x3e, 0x3e)
-    , m_fgFocused(0xb0, 0xb0, 0xb0)
+    , m_fgFocusedComplete(0xb0, 0xb0, 0xb0)
+    , m_fgFocusedIncomplete(0xe0, 0xe0, 0xe0)
     , m_bg(0xff, 0xff, 0xff)
     , m_font("monospace", 8)
     , m_hMargin(0)
@@ -107,13 +108,21 @@ void TagLabel::setComplete(bool checked)
     repaint();
 }
 
-void TagLabel::setColors(QColor regular, QColor focused)
+void TagLabel::setColors(std::tuple<QColor, QColor, QColor> colors)
 {
-    if (m_fgRegular == regular && m_fgFocused == focused) {
+    auto regular = std::get<0>(colors);
+    auto focusedComplete = std::get<1>(colors);
+    auto focusedIncomplete = std::get<2>(colors);
+
+    if (m_fgRegular == regular && m_fgFocusedComplete == focusedComplete
+        && m_fgFocusedIncomplete == focusedIncomplete) {
         return;
     }
+
     m_fgRegular = regular;
-    m_fgFocused = focused;
+    m_fgFocusedComplete = focusedComplete;
+    m_fgFocusedIncomplete = focusedIncomplete;
+
     updateColors();
     repaint();
 }
@@ -215,9 +224,12 @@ void TagLabel::paintEvent(QPaintEvent*)
 
     pt.setRenderHint(QPainter::Qt4CompatiblePainting, true);
 
-    if (m_isFocused) {
-        pt.setPen(QPen(m_fgFocused, 1));
-        pt.setBrush(QBrush(m_fgFocused));
+    if (m_isFocused && m_isComplete) {
+        pt.setPen(QPen(m_fgFocusedComplete, 1));
+        pt.setBrush(QBrush(m_fgFocusedComplete));
+    } else if (m_isFocused) {
+        pt.setPen(QPen(m_fgFocusedIncomplete, 1));
+        pt.setBrush(QBrush(m_fgFocusedIncomplete));
     } else {
         pt.setPen(QPen(m_bg, 1));
         pt.setBrush(QBrush(m_bg));
@@ -227,8 +239,8 @@ void TagLabel::paintEvent(QPaintEvent*)
 
     if (m_isComplete && !m_isFocused) {
         if (m_isClosePressed) {
-            pt.setPen(QPen(m_fgFocused, 1));
-            pt.setBrush(QBrush(m_fgFocused));
+            pt.setPen(QPen(m_fgFocusedComplete, 1));
+            pt.setBrush(QBrush(m_fgFocusedComplete));
         } else {
             pt.setPen(QPen(m_fgRegular, 1));
             pt.setBrush(QBrush(m_fgRegular));
@@ -254,7 +266,7 @@ void TagLabel::paintEvent(QPaintEvent*)
 
     pt.setFont(m_font);
 
-    if (m_isFocused) {
+    if (m_isFocused && m_isComplete) {
         pt.setPen(QPen(m_bg, 1));
     } else {
         pt.setPen(QPen(m_fgRegular, 1));
@@ -267,7 +279,7 @@ void TagLabel::paintEvent(QPaintEvent*)
             Qt::AlignCenter, m_text);
     }
 
-    if (m_isComplete || m_isFocused) {
+    if (m_isComplete) {
         pt.setPen(QPen(m_bg, 1));
     } else {
         pt.setPen(QPen(m_fgRegular, 1));

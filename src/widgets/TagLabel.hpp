@@ -16,6 +16,8 @@
 #include <QVBoxLayout>
 #include <QWidget>
 
+#include <tuple>
+
 namespace tagberry::widgets {
 
 class TagLabel : public QWidget {
@@ -45,7 +47,7 @@ public slots:
     void setFocused(bool);
     void setComplete(bool);
 
-    void setColors(QColor regular, QColor focused);
+    void setColors(std::tuple<QColor, QColor, QColor> colors);
 
 signals:
     void textChanged(QString);
@@ -81,7 +83,8 @@ private:
     bool m_isEditable;
 
     QColor m_fgRegular;
-    QColor m_fgFocused;
+    QColor m_fgFocusedComplete;
+    QColor m_fgFocusedIncomplete;
     QColor m_bg;
     QFont m_font;
 
