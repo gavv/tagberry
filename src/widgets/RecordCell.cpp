@@ -25,24 +25,7 @@ RecordCell::RecordCell(QWidget* parent)
     setLayout(&m_layout);
 
     m_complete.setFixedWidth(24);
-    m_complete.setStyleSheet(R"(
-      QCheckBox::indicator {
-        width: 17px;
-        height: 17px;
-        margin: 4px;
-        border-style: solid;
-        border-width: 1px;
-        border-radius: 2px;
-        border-color: #767C82;
-      }
-      QCheckBox::indicator:unchecked {
-        image: none;
-      }
-      QCheckBox::indicator:checked {
-        image: url(:/icons/mark.png);
-        background-color: #f2f2f2;
-      }
-)");
+    updateStyleSheet("#ffffff", "#000000");
 
     m_headLayout.setContentsMargins(QMargins(3, 3, 3, 3));
     m_headLayout.setSpacing(4);
@@ -192,6 +175,35 @@ void RecordCell::paintEvent(QPaintEvent* event)
         updateTitle();
     }
     QWidget::paintEvent(event);
+}
+
+void RecordCell::setColors(QHash<QString, QColor> colors)
+{
+    m_cell.setColors(colors["background"], colors["background"], colors["border"]);
+    updateStyleSheet(colors["background-dimmed"], colors["border"]);
+}
+
+void RecordCell::updateStyleSheet(QColor bg, QColor border)
+{
+    auto style = R"(
+      QCheckBox::indicator {
+        width: 17px;
+        height: 17px;
+        margin: 4px;
+        border-style: solid;
+        border-width: 1px;
+        border-radius: 2px;
+        border-color: %1;
+      }
+      QCheckBox::indicator:unchecked {
+        image: none;
+      }
+      QCheckBox::indicator:checked {
+        image: url(:/icons/mark.png);
+        background-color: %2;
+      }
+)";
+    m_complete.setStyleSheet(QString(style).arg(border.name(), bg.name()));
 }
 
 } // namespace tagberry::widgets

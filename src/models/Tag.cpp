@@ -70,7 +70,7 @@ void Tag::setFocused(bool focused)
     focusChanged(focused);
 }
 
-std::tuple<QColor, QColor, QColor> Tag::getColors() const
+QHash<QString, QColor> Tag::getColors() const
 {
     if (!m_colorScheme) {
         return {};
@@ -88,7 +88,7 @@ void Tag::setColorScheme(ColorScheme* scheme)
     m_colorScheme = scheme;
 
     if (m_colorScheme) {
-        connect(m_colorScheme, &ColorScheme::colorsChanged, this, &Tag::updateColors);
+        connect(m_colorScheme, &ColorScheme::tagColorsChanged, this, &Tag::updateColors);
     }
 
     updateColors();

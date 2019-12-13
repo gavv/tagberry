@@ -113,17 +113,19 @@ void TagLabel::setComplete(bool checked)
     repaint();
 }
 
-void TagLabel::setColors(std::tuple<QColor, QColor, QColor> colors)
+void TagLabel::setColors(QHash<QString, QColor> colors)
 {
-    auto regular = std::get<0>(colors);
-    auto focusedComplete = std::get<1>(colors);
-    auto focusedIncomplete = std::get<2>(colors);
+    auto bg = colors["background"];
+    auto regular = colors["regular"];
+    auto focusedComplete = colors["focused-complete"];
+    auto focusedIncomplete = colors["focused-incomplete"];
 
-    if (m_fgRegular == regular && m_fgFocusedComplete == focusedComplete
+    if (m_bg == bg && m_fgRegular == regular && m_fgFocusedComplete == focusedComplete
         && m_fgFocusedIncomplete == focusedIncomplete) {
         return;
     }
 
+    m_bg = bg;
     m_fgRegular = regular;
     m_fgFocusedComplete = focusedComplete;
     m_fgFocusedIncomplete = focusedIncomplete;

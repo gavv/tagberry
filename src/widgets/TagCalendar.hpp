@@ -44,6 +44,9 @@ signals:
 
     void focusTaken();
 
+public slots:
+    void setColors(QHash<QString, QColor>);
+
 private slots:
     void changePage();
     void changeCell(CalendarCell*);

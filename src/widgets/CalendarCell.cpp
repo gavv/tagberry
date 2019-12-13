@@ -19,9 +19,8 @@ CalendarCell::CalendarCell(QWidget* parent, int row, int col)
     : QWidget(parent)
     , m_row(row)
     , m_col(col)
-    , m_normalTextColor("#000000")
-    , m_dimmedTextColor("#999999")
     , m_isDimmed(false)
+    , m_isToday(false)
 {
     m_layout.addWidget(&m_cell);
     m_layout.setContentsMargins(QMargins(0, 0, 0, 0));
@@ -49,7 +48,7 @@ CalendarCell::CalendarCell(QWidget* parent, int row, int col)
 
     connect(&m_cell, &Cell::clicked, [=] { clicked(this); });
 
-    updateTextColor();
+    updateTextColors();
 }
 
 int CalendarCell::row() const
@@ -93,15 +92,42 @@ void CalendarCell::setDimmed(bool dimmed)
         return;
     }
     m_isDimmed = dimmed;
-    updateTextColor();
+    updateTextColors();
 }
 
-void CalendarCell::setHeaderColor(QColor color)
+void CalendarCell::setToday(bool today)
 {
-    m_cell.setHeaderColor(color);
+    if (today == m_isToday) {
+        return;
+    }
+    m_isToday = today;
+    updateCellColors();
 }
 
-void CalendarCell::updateTextColor()
+void CalendarCell::setColors(QHash<QString, QColor> colors)
+{
+    m_normalTextColor = colors["text"];
+    m_dimmedTextColor = colors["text-dimmed"];
+
+    m_normalBackgroundColor = colors["background"];
+    m_todayBackgroundColor = colors["background-today"];
+
+    m_borderColor = colors["border"];
+
+    updateCellColors();
+    updateTextColors();
+}
+
+void CalendarCell::updateCellColors()
+{
+    if (m_isToday) {
+        m_cell.setColors(m_todayBackgroundColor, m_normalBackgroundColor, m_borderColor);
+    } else {
+        m_cell.setColors(m_normalBackgroundColor, m_normalBackgroundColor, m_borderColor);
+    }
+}
+
+void CalendarCell::updateTextColors()
 {
     auto style
         = QString("QLabel { color: %1; }")

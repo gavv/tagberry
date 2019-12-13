@@ -11,11 +11,11 @@
 
 #include "models/ColorScheme.hpp"
 
+#include <QHash>
 #include <QObject>
 #include <QString>
 
 #include <memory>
-#include <tuple>
 
 namespace tagberry::models {
 
@@ -34,7 +34,7 @@ public:
 
     bool isFocused() const;
 
-    std::tuple<QColor, QColor, QColor> getColors() const;
+    QHash<QString, QColor> getColors() const;
     void setColorScheme(ColorScheme*);
 
 public slots:
@@ -45,7 +45,7 @@ signals:
     void idChanged(QString);
     void nameChanged(QString);
     void focusChanged(bool);
-    void colorsChanged(std::tuple<QColor, QColor, QColor>);
+    void colorsChanged(QHash<QString, QColor>);
 
 private slots:
     void updateColors();

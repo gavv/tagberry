@@ -52,7 +52,17 @@ QColor fadeColor(const QColor c, float fade)
 
 ColorScheme::ColorScheme()
 {
-    setTagColors({
+    m_widgetColors["background"] = "#ffffff";
+
+    m_widgetColors["background-dimmed"] = "#f2f2f2";
+    m_widgetColors["background-today"] = "#e4f5d7";
+
+    m_widgetColors["text"] = "#000000";
+    m_widgetColors["text-dimmed"] = "#999999";
+
+    m_widgetColors["border"] = "#767C82";
+
+    m_tagColors = {
         "#ab6730",
         "#8A2F62",
         "#46573f",
@@ -66,10 +76,16 @@ ColorScheme::ColorScheme()
         "#3c75a3",
         "#479493",
         "#8f9140",
-    });
+    };
 }
 
-std::tuple<QColor, QColor, QColor> ColorScheme::tagColors(const QString& name) const
+QHash<QString, QColor> ColorScheme::widgetColors() const
+{
+    return m_widgetColors;
+}
+
+QHash<QString, QColor> ColorScheme::tagColors(
+    const QString& name) const
 {
     if (!m_tagColors.size()) {
         return {};
@@ -77,15 +93,16 @@ std::tuple<QColor, QColor, QColor> ColorScheme::tagColors(const QString& name) c
 
     int index = tagIndex(name, m_tagColors.size());
 
-    auto color = m_tagColors[index];
+    auto tagColor = m_tagColors[index];
 
-    return std::make_tuple(color, lightenColor(color, 50), fadeColor(color, 0.9));
-}
+    QHash<QString, QColor> ret;
 
-void ColorScheme::setTagColors(QList<QColor> colors)
-{
-    m_tagColors = colors;
-    colorsChanged();
+    ret["background"] = m_widgetColors["background"];
+    ret["regular"] = tagColor;
+    ret["focused-complete"] = lightenColor(tagColor, 50);
+    ret["focused-incomplete"] = fadeColor(tagColor, 0.9);
+
+    return ret;
 }
 
 } // namespace tagberry::models

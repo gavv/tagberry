@@ -33,7 +33,7 @@ public:
 
     void setFocused(bool);
 
-    void setHeaderColor(QColor header);
+    void setColors(QColor headBackground, QColor bodyBackground, QColor border);
 
 signals:
     void clicked();
@@ -48,9 +48,9 @@ private:
     QFrame* m_headFrame;
     QFrame* m_bodyFrame;
 
-    QColor m_bgColor;
+    QColor m_headColor;
+    QColor m_bodyColor;
     QColor m_borderColor;
-    QColor m_headerColor;
 
     bool m_isFocused;
 };

@@ -13,8 +13,7 @@
 #include <QList>
 #include <QObject>
 #include <QString>
-
-#include <tuple>
+#include <QHash>
 
 namespace tagberry::models {
 
@@ -24,14 +23,15 @@ class ColorScheme : public QObject {
 public:
     ColorScheme();
 
-    std::tuple<QColor, QColor, QColor> tagColors(const QString& name) const;
-
-    void setTagColors(QList<QColor>);
+    QHash<QString, QColor> widgetColors() const;
+    QHash<QString, QColor> tagColors(const QString& name) const;
 
 signals:
-    void colorsChanged();
+    void widgetColorsChanged(QHash<QString, QColor>);
+    void tagColorsChanged();
 
 private:
+    QHash<QString, QColor> m_widgetColors;
     QList<QColor> m_tagColors;
 };
 

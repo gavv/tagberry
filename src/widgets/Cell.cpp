@@ -19,11 +19,10 @@ Cell::Cell(QWidget* parent)
     : QWidget(parent)
     , m_headFrame(new QFrame)
     , m_bodyFrame(new QFrame)
-    , m_bgColor("#ffffff")
-    , m_borderColor("#767C82")
-    , m_headerColor(m_bgColor)
     , m_isFocused(false)
 {
+    setColors("#ffffff", "#ffffff", "#000000");
+
     m_layout.setContentsMargins(QMargins(0, 0, 0, 0));
     m_layout.setSpacing(0);
 
@@ -72,12 +71,17 @@ void Cell::setFocused(bool focused)
     }
 }
 
-void Cell::setHeaderColor(QColor header)
+void Cell::setColors(QColor headBackground, QColor bodyBackground, QColor border)
 {
-    if (m_headerColor == header) {
+    if (m_headColor == headBackground && m_bodyColor == bodyBackground
+        && m_borderColor == border) {
         return;
     }
-    m_headerColor = header;
+
+    m_headColor = headBackground;
+    m_bodyColor = bodyBackground;
+    m_borderColor = border;
+
     repaint();
 }
 
@@ -95,12 +99,12 @@ void Cell::paintEvent(QPaintEvent* event)
     const int f2 = f1 + 1;
     const int hf = m_headFrame->height();
 
-    pt.setPen(m_headerColor);
-    pt.setBrush(m_headerColor);
+    pt.setPen(m_headColor);
+    pt.setBrush(m_headColor);
     pt.drawRoundedRect(QRect(1, 1, width() - 1, height() - 1), f2, f2);
 
-    pt.setPen(m_bgColor);
-    pt.setBrush(m_bgColor);
+    pt.setPen(m_bodyColor);
+    pt.setBrush(m_bodyColor);
     pt.drawRoundedRect(QRect(1, hf + 1, width() - 1, height() - 1), f2, f2);
 
     pt.setPen(QPen(m_borderColor, f2));

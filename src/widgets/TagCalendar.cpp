@@ -86,6 +86,11 @@ void TagCalendar::clearTags()
     }
 }
 
+void TagCalendar::setColors(QHash<QString, QColor> colors)
+{
+    m_calendar->setColors(colors);
+}
+
 void TagCalendar::changePage()
 {
     pageChanged();

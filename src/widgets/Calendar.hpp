@@ -43,9 +43,6 @@ public:
 
     void setWeekStart(Qt::DayOfWeek);
 
-    void setNormalColor(const QColor&);
-    void setTodayColor(const QColor&);
-
     int headerHeight();
 
 signals:
@@ -53,7 +50,8 @@ signals:
     void focusChanged(CalendarCell*);
 
 public slots:
-    virtual void setFocus(CalendarCell*);
+    void setColors(QHash<QString, QColor>);
+    void setFocus(CalendarCell*);
 
     void setToday();
 
@@ -78,9 +76,6 @@ private:
 
     QList<CalendarCell*> m_focused;
     QLabel* m_days[NumDays];
-
-    QColor m_normalColor;
-    QColor m_todayColor;
 
     int m_year;
     int m_month;

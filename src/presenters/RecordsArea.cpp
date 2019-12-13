@@ -161,6 +161,11 @@ void RecordsArea::bindRecord(widgets::RecordCell* cell, models::RecordPtr record
 
     connect(cell, &widgets::RecordCell::removing, record.get(),
         [=] { removeRecord(record); });
+
+    connect(&m_root.colorScheme(), &models::ColorScheme::widgetColorsChanged, cell,
+        &widgets::RecordCell::setColors);
+
+    cell->setColors(m_root.colorScheme().widgetColors());
 }
 
 void RecordsArea::bindTag(widgets::TagLabel* label, models::TagPtr tag)

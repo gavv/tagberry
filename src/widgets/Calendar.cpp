@@ -16,8 +16,6 @@ namespace tagberry::widgets {
 Calendar::Calendar(QWidget* parent)
     : QWidget(parent)
     , m_switch(new CalendarSwitch)
-    , m_normalColor("#ffffff")
-    , m_todayColor("#e4f5d7")
     , m_year(-1)
     , m_month(-1)
     , m_offset(-1)
@@ -145,18 +143,6 @@ void Calendar::setToday()
     setDate(QDate::currentDate());
 }
 
-void Calendar::setNormalColor(const QColor& color)
-{
-    m_normalColor = color;
-    updateCells();
-}
-
-void Calendar::setTodayColor(const QColor& color)
-{
-    m_todayColor = color;
-    updateCells();
-}
-
 void Calendar::setFocus(CalendarCell* newCell)
 {
     for (auto cell : m_focused) {
@@ -173,6 +159,16 @@ void Calendar::setFocus(CalendarCell* newCell)
     }
 
     focusChanged(newCell);
+}
+
+void Calendar::setColors(QHash<QString, QColor> colors)
+{
+    for (int col = 0; col < columnCount(); col++) {
+        for (int row = 0; row < rowCount(); row++) {
+            auto cell = getCell(row, col);
+            cell->setColors(colors);
+        }
+    }
 }
 
 QDate Calendar::getDate(int row, int col) const
@@ -219,9 +215,7 @@ void Calendar::updateCells()
             cell->setMonth(date.day() == 1 ? date.month() : -1);
             cell->setDay(date.day());
             cell->setDimmed(date.month() != m_month);
-
-            cell->setHeaderColor(
-                date == QDate::currentDate() ? m_todayColor : m_normalColor);
+            cell->setToday(date == QDate::currentDate());
         }
     }
 }

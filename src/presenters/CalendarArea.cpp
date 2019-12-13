@@ -37,6 +37,10 @@ CalendarArea::CalendarArea(storage::LocalStorage& storage, models::Root& root)
     connect(
         m_calendar, &widgets::TagCalendar::focusTaken, this, &CalendarArea::focusTaken);
 
+    connect(&m_root.colorScheme(), &models::ColorScheme::widgetColorsChanged, m_calendar,
+        &widgets::TagCalendar::setColors);
+
+    m_calendar->setColors(m_root.colorScheme().widgetColors());
     m_calendar->setToday();
 }
 

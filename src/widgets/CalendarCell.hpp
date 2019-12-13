@@ -34,14 +34,16 @@ public:
 
     void setFocused(bool);
     void setDimmed(bool);
+    void setToday(bool);
 
-    void setHeaderColor(QColor color);
+    void setColors(QHash<QString, QColor>);
 
 signals:
     void clicked(CalendarCell*);
 
 private:
-    void updateTextColor();
+    void updateCellColors();
+    void updateTextColors();
 
     const int m_row;
     const int m_col;
@@ -53,10 +55,16 @@ private:
     QLabel m_month;
     QLabel m_day;
 
-    QColor m_normalTextColor;
-    QColor m_dimmedTextColor;
+    QColor m_normalTextColor { "#000000" };
+    QColor m_dimmedTextColor { "#000000" };
+
+    QColor m_normalBackgroundColor { "#ffffff" };
+    QColor m_todayBackgroundColor { "#00ff00" };
+
+    QColor m_borderColor { "#000000" };
 
     bool m_isDimmed;
+    bool m_isToday;
 };
 
 } // namespace tagberry::widgets

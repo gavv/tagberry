@@ -15,8 +15,7 @@
 #include <QString>
 #include <QVBoxLayout>
 #include <QWidget>
-
-#include <tuple>
+#include <QHash>
 
 namespace tagberry::widgets {
 
@@ -49,7 +48,7 @@ public slots:
     void setFocused(bool);
     void setComplete(bool);
 
-    void setColors(std::tuple<QColor, QColor, QColor> colors);
+    void setColors(QHash<QString, QColor> colors);
 
 signals:
     void textChanged(QString);

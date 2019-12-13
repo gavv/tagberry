@@ -58,6 +58,7 @@ signals:
 public slots:
     void setComplete(bool);
     void setTitle(QString);
+    void setColors(QHash<QString, QColor>);
 
 private slots:
     void cellClicked();
@@ -69,6 +70,8 @@ protected:
     void paintEvent(QPaintEvent* event) override;
 
 private:
+    void updateStyleSheet(QColor bg, QColor border);
+
     QHBoxLayout m_layout;
     Cell m_cell;
 
