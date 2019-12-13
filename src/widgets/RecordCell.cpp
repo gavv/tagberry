@@ -17,7 +17,7 @@ namespace tagberry::widgets {
 RecordCell::RecordCell(QWidget* parent)
     : QWidget(parent)
 {
-    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
+    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
 
     m_layout.setContentsMargins(QMargins(0, 0, 0, 0));
     m_layout.addWidget(&m_cell);

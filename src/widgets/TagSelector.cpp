@@ -17,7 +17,7 @@ namespace tagberry::widgets {
 TagSelector::TagSelector(QWidget* parent)
     : QWidget(parent)
 {
-    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
+    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
 
     m_layout.addWidget(&m_addTagButton);
 

@@ -116,7 +116,7 @@ Qt::Orientations FlowLayout::expandingDirections() const
 
 bool FlowLayout::hasHeightForWidth() const
 {
-    return false;
+    return true;
 }
 
 int FlowLayout::heightForWidth(int width) const
