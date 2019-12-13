@@ -107,6 +107,11 @@ void RecordCell::setTitle(QString str)
 void RecordCell::setFocused(bool focused)
 {
     m_cell.setFocused(focused);
+    if (!focused) {
+        auto cursor = m_title.textCursor();
+        cursor.clearSelection();
+        m_title.setTextCursor(cursor);
+    }
 }
 
 void RecordCell::startEditing()
@@ -174,6 +179,9 @@ void RecordCell::catchFocus(QWidget* old, QWidget* now)
             m_lastTitle = curTitle;
             titleEditingFinished(curTitle);
         }
+        auto cursor = m_title.textCursor();
+        cursor.clearSelection();
+        m_title.setTextCursor(cursor);
     }
 }
 
