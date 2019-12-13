@@ -36,6 +36,10 @@ std::unique_ptr<QLockFile> lockDB(QString path)
 
 bool backupDB(QString path)
 {
+    if (!QFile::exists(path)) {
+        return true;
+    }
+
     auto bakPath = path + ".bak";
 
     qDebug() << "copying" << path << "to" << bakPath;
