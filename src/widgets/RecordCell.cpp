@@ -40,7 +40,7 @@ RecordCell::RecordCell(QWidget* parent)
       }
       QCheckBox::indicator:checked {
         image: url(:/icons/mark.png);
-        background-color: #f2f5f0;
+        background-color: #f2f2f2;
       }
 )");
 
