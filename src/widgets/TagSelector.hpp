@@ -40,13 +40,11 @@ signals:
     void tagFocusCleared();
 
 private slots:
-    void addTag();
-    void removeTag();
-
-    void updateTag(QString oldText, QString newText);
-
-    void catchTagClick();
-    void catchFocus(QWidget* old, QWidget* now);
+    void handleTagAdd();
+    void handleTagRemove();
+    void handleTagUpdate(QString oldText, QString newText);
+    void handleTagClick();
+    void handleFocusChange(QWidget* old, QWidget* now);
 
 private:
     void attachTag(TagLabel*);

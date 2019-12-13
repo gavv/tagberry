@@ -26,9 +26,9 @@ TagSelector::TagSelector(QWidget* parent)
     m_addTagButton.setFixedSize(28, 28);
     m_addTagButton.setIcon(QIcon(":/icons/plus.png"));
 
-    connect(&m_addTagButton, &QPushButton::clicked, this, &TagSelector::addTag);
+    connect(&m_addTagButton, &QPushButton::clicked, this, &TagSelector::handleTagAdd);
 
-    connect(qApp, &QApplication::focusChanged, this, &TagSelector::catchFocus);
+    connect(qApp, &QApplication::focusChanged, this, &TagSelector::handleFocusChange);
 }
 
 QList<TagLabel*> TagSelector::tags() const
@@ -58,10 +58,10 @@ void TagSelector::attachTag(TagLabel* tag)
     m_layout.addWidget(tag);
     m_layout.addWidget(&m_addTagButton);
 
-    connect(tag, &TagLabel::closeClicked, this, &TagSelector::removeTag);
-    connect(tag, &TagLabel::clicked, this, &TagSelector::catchTagClick);
+    connect(tag, &TagLabel::closeClicked, this, &TagSelector::handleTagRemove);
+    connect(tag, &TagLabel::clicked, this, &TagSelector::handleTagClick);
     connect(tag, &TagLabel::editingStarted, this, &TagSelector::tagFocusCleared);
-    connect(tag, &TagLabel::editingFinished, this, &TagSelector::updateTag);
+    connect(tag, &TagLabel::editingFinished, this, &TagSelector::handleTagUpdate);
 
     m_tags.append(tag);
 }
@@ -74,7 +74,7 @@ void TagSelector::detachTag(TagLabel* tag)
     tag->deleteLater();
 }
 
-void TagSelector::addTag()
+void TagSelector::handleTagAdd()
 {
     auto tag = new TagLabel;
 
@@ -84,7 +84,7 @@ void TagSelector::addTag()
     tag->startEditing();
 }
 
-void TagSelector::removeTag()
+void TagSelector::handleTagRemove()
 {
     auto tag = qobject_cast<TagLabel*>(sender());
 
@@ -94,7 +94,7 @@ void TagSelector::removeTag()
     clicked();
 }
 
-void TagSelector::updateTag(QString oldText, QString)
+void TagSelector::handleTagUpdate(QString oldText, QString)
 {
     auto editedTag = qobject_cast<TagLabel*>(sender());
 
@@ -118,7 +118,7 @@ void TagSelector::updateTag(QString oldText, QString)
     tagsChanged();
 }
 
-void TagSelector::catchTagClick()
+void TagSelector::handleTagClick()
 {
     auto tag = qobject_cast<TagLabel*>(sender());
 
@@ -126,7 +126,7 @@ void TagSelector::catchTagClick()
     clicked();
 }
 
-void TagSelector::catchFocus(QWidget*, QWidget* now)
+void TagSelector::handleFocusChange(QWidget*, QWidget* now)
 {
     if (now == &m_addTagButton) {
         clicked();
