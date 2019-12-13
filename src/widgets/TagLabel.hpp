@@ -40,6 +40,8 @@ public:
 
     void startEditing();
 
+    bool editingNow() const;
+
 public slots:
     void setText(QString text);
     void setCustomIndicator(QString indicator);

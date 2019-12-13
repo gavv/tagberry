@@ -43,6 +43,11 @@ TagLabel::TagLabel(QWidget* parent)
     setLayout(&m_layout);
 }
 
+bool TagLabel::editingNow() const
+{
+    return m_edit;
+}
+
 const QString& TagLabel::text() const
 {
     return m_text;

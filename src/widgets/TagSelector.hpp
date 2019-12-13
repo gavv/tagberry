@@ -39,6 +39,9 @@ signals:
     void tagFocusChanged(TagLabel*);
     void tagFocusCleared();
 
+protected:
+    bool eventFilter(QObject *obj, QEvent *event) override;
+
 private slots:
     void handleTagAdd();
     void handleTagRemove();
@@ -49,6 +52,8 @@ private slots:
 private:
     void attachTag(TagLabel*);
     void detachTag(TagLabel*);
+
+    void removeEmptyTags();
 
     FlowLayout m_layout;
     QList<TagLabel*> m_tags;
