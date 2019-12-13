@@ -14,6 +14,7 @@
 #include <QObject>
 #include <QString>
 #include <QHash>
+#include <QCache>
 
 namespace tagberry::models {
 
@@ -31,8 +32,12 @@ signals:
     void tagColorsChanged();
 
 private:
+    QHash<QString, QColor>* builtinTagColors(const QString& name) const;
+    QHash<QString, QColor>* makeTagColors(QColor baseColor) const;
+
     QHash<QString, QColor> m_widgetColors;
-    QList<QColor> m_tagColors;
+    QList<QColor> m_builtinTagColors;
+    mutable QCache<QString, QHash<QString, QColor>> m_tagsCache;
 };
 
 } // namespace tagberry::models

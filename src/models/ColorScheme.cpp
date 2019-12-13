@@ -19,17 +19,6 @@ namespace tagberry::models {
 
 namespace {
 
-int tagIndex(const QString& name, int size)
-{
-    auto str
-        = QCryptographicHash::hash(name.toUtf8(), QCryptographicHash::Md5).toStdString();
-
-    const size_t hash = std::hash<std::string>()(str);
-    const int index = int(hash % size_t(size));
-
-    return index;
-}
-
 QColor lightenColor(const QColor c, int shift)
 {
     const int r = std::min(255, shift + c.red());
@@ -48,6 +37,17 @@ QColor fadeColor(const QColor c, float fade)
     return QColor(r, g, b);
 }
 
+int tagIndex(const QString& name, int size)
+{
+    auto str
+        = QCryptographicHash::hash(name.toUtf8(), QCryptographicHash::Md5).toStdString();
+
+    const size_t hash = std::hash<std::string>()(str);
+    const int index = int(hash % size_t(size));
+
+    return index;
+}
+
 } // namespace
 
 ColorScheme::ColorScheme()
@@ -62,9 +62,9 @@ ColorScheme::ColorScheme()
 
     m_widgetColors["border"] = "#767C82";
 
-    m_tagColors = {
+    m_builtinTagColors = {
         "#ab6730",
-        "#8A2F62",
+        "#8a2f62",
         "#46573f",
         "#b02405",
         "#414f6b",
@@ -84,25 +84,45 @@ QHash<QString, QColor> ColorScheme::widgetColors() const
     return m_widgetColors;
 }
 
-QHash<QString, QColor> ColorScheme::tagColors(
-    const QString& name) const
+QHash<QString, QColor> ColorScheme::tagColors(const QString& name) const
 {
-    if (!m_tagColors.size()) {
-        return {};
+    auto colors = m_tagsCache.object(name);
+    if (colors) {
+        return *colors;
     }
 
-    int index = tagIndex(name, m_tagColors.size());
+    colors = builtinTagColors(name);
+    if (colors) {
+        m_tagsCache.insert(name, colors);
+        return *colors;
+    }
 
-    auto tagColor = m_tagColors[index];
+    return {};
+}
 
-    QHash<QString, QColor> ret;
+QHash<QString, QColor>* ColorScheme::builtinTagColors(const QString& name) const
+{
+    if (!m_builtinTagColors.size()) {
+        return nullptr;
+    }
 
-    ret["background"] = m_widgetColors["background"];
-    ret["regular"] = tagColor;
-    ret["focused-complete"] = lightenColor(tagColor, 50);
-    ret["focused-incomplete"] = fadeColor(tagColor, 0.9);
+    int index = tagIndex(name, m_builtinTagColors.size());
 
-    return ret;
+    auto color = m_builtinTagColors[index];
+
+    return makeTagColors(color);
+}
+
+QHash<QString, QColor>* ColorScheme::makeTagColors(QColor baseColor) const
+{
+    auto colors = new QHash<QString, QColor>;
+
+    (*colors)["background"] = m_widgetColors["background"];
+    (*colors)["regular"] = baseColor;
+    (*colors)["focused-complete"] = lightenColor(baseColor, 50);
+    (*colors)["focused-incomplete"] = fadeColor(baseColor, 0.9);
+
+    return colors;
 }
 
 } // namespace tagberry::models
