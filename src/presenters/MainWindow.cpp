@@ -33,6 +33,8 @@ MainWindow::MainWindow(storage::LocalStorage& storage)
 
     connect(m_calendarArea, &CalendarArea::focusTaken, m_recordsArea,
         &RecordsArea::clearFocus);
+
+    m_calendarArea->setFocus();
 }
 
 void MainWindow::resizeEvent(QResizeEvent* event)
