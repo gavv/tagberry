@@ -35,6 +35,9 @@ Cell::Cell(QWidget* parent)
     m_bodyFrame->setContentsMargins(QMargins(0, 0, 0, 0));
 
     m_headFrame->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+    m_headFrame->setStyleSheet("QFrame { background-color: transparent; }");
+    m_bodyFrame->setStyleSheet("QFrame { background-color: transparent; }");
 }
 
 QLayout* Cell::headLayout()
