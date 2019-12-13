@@ -164,7 +164,7 @@ void TagSelector::handleFocusChange(QWidget*, QWidget* now)
     }
 }
 
-bool TagSelector::eventFilter(QObject *obj, QEvent *event)
+bool TagSelector::eventFilter(QObject* obj, QEvent* event)
 {
     if (obj == &m_addTagButton) {
         switch ((int)event->type()) {
