@@ -177,13 +177,13 @@ void RecordCell::catchFocus(QWidget* old, QWidget* now)
     }
 }
 
-void RecordCell::showEvent(QShowEvent* event)
+void RecordCell::paintEvent(QPaintEvent* event)
 {
-    if (m_firstShow) {
-        m_firstShow = false;
+    if (m_firstPaint) {
+        m_firstPaint = false;
         updateTitle();
     }
-    QWidget::showEvent(event);
+    QWidget::paintEvent(event);
 }
 
 } // namespace tagberry::widgets

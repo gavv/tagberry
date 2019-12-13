@@ -66,7 +66,7 @@ private slots:
     void catchFocus(QWidget* old, QWidget* now);
 
 protected:
-    void showEvent(QShowEvent* event) override;
+    void paintEvent(QPaintEvent* event) override;
 
 private:
     QHBoxLayout m_layout;
@@ -79,7 +79,7 @@ private:
     QVBoxLayout m_bodyLayout;
     TagSelector m_tagSelector;
 
-    bool m_firstShow { true };
+    bool m_firstPaint { true };
 
     QString m_lastTitle;
 };
