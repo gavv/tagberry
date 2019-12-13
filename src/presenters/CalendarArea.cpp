@@ -97,6 +97,7 @@ void CalendarArea::rebuildCell(QDate date)
     for (auto tag : recSet->getAllTags()) {
         auto label = new widgets::TagLabel;
 
+        label->setFocused(tag->isFocused());
         label->setText(tag->name());
         label->setComplete(recSet->checkAllRecordsWithTagComplete(tag));
         label->setCustomIndicator(QString("%1").arg(recSet->numRecordsWithTag(tag)));
