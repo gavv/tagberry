@@ -34,10 +34,10 @@ public:
 signals:
     void recordAdded(RecordCell*);
 
-    void focusCleared();
+    void tagFocusCleared();
 
 public slots:
-    void clearFocus();
+    void clearCellFocus();
 
 private slots:
     void cellChanged(RecordCell*);

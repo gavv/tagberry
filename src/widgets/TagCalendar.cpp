@@ -95,7 +95,6 @@ void TagCalendar::changePage()
         currentDateChanged(dates[0]);
     }
 
-    tagFocusCleared();
     focusTaken();
 }
 

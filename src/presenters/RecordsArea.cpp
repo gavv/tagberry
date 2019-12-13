@@ -29,7 +29,7 @@ RecordsArea::RecordsArea(storage::LocalStorage& storage, models::Root& root)
     connect(&m_recordList, &widgets::RecordList::recordAdded, this,
         &RecordsArea::recordAdded);
 
-    connect(&m_recordList, &widgets::RecordList::focusCleared, this,
+    connect(&m_recordList, &widgets::RecordList::tagFocusCleared, this,
         [=] { m_root.tags().focusTag(nullptr); });
 
     setHeaderHeight(0);
@@ -87,7 +87,7 @@ void RecordsArea::unsubscribeRecords()
 
 void RecordsArea::clearFocus()
 {
-    m_recordList.clearFocus();
+    m_recordList.clearCellFocus();
 }
 
 void RecordsArea::recordAdded(widgets::RecordCell* cell)

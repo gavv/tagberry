@@ -61,10 +61,9 @@ void RecordList::alignHeader(int hs)
     m_layout.setContentsMargins(QMargins(0, top, 0, bottom));
 }
 
-void RecordList::clearFocus()
+void RecordList::clearCellFocus()
 {
     cellChanged(nullptr);
-    focusCleared();
 }
 
 void RecordList::cellChanged(RecordCell* focusedCell)
@@ -139,7 +138,8 @@ void RecordList::handleRemoveRecord()
 void RecordList::mousePressEvent(QMouseEvent* event)
 {
     if (clickedOutsideRecords(event)) {
-        clearFocus();
+        cellChanged(nullptr);
+        tagFocusCleared();
     }
 }
 
