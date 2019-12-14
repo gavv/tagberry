@@ -8,7 +8,9 @@
 
 *Work in progress!*
 
-A minimum feature set is implemented:
+Tagberry is a Qt5 desktop calendar, task manager, and todo list.
+
+A minimum feature set is implemented so far:
 
 * create and edit records and record tags
 * display record tags on the calendar
@@ -28,7 +30,8 @@ The code is written in a cross-platform manner, but only Linux was tested so far
 * CMake >= 3.0
 * qmake from Qt5 (for dependencies)
 * Qt5 >= 5.9
-* SQLite
+* SQLite3
+* QSqlMigrator (shipped as a submodule)
 
 ## Instructions
 
