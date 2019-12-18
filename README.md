@@ -8,7 +8,7 @@
 
 *Work in progress!*
 
-Tagberry is a Qt5 desktop calendar, task manager, and todo list.
+Tagberry is a tag-oriented Qt5 desktop calendar, task manager, and todo list.
 
 A minimum feature set is implemented so far:
 
