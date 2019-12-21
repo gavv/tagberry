@@ -8,22 +8,42 @@ include(ProcessorCount)
 ProcessorCount(CPU_COUNT)
 
 ExternalProject_Add(qsqlmigrator
-  SOURCE_DIR ${PROJECT_SOURCE_DIR}/3rdparty/QSqlMigrator
-  BUILD_IN_SOURCE ON
+  SOURCE_DIR "${PROJECT_SOURCE_DIR}/3rdparty/QSqlMigrator"
+  BINARY_DIR "${CMAKE_CURRENT_BINARY_DIR}/qsqlmigrator-build"
   LOG_BUILD ON
   CONFIGURE_COMMAND qmake -r
+    "${PROJECT_SOURCE_DIR}/3rdparty/QSqlMigrator/QSqlMigrator.pro"
     "CONFIG+=static staticlib NO_QSM_TESTS NO_QSM_MYSQL NO_QSM_POSTGRES NO_QSM_FIREBIRD"
   BUILD_COMMAND make "-j${CPU_COUNT}"
   INSTALL_COMMAND ""
 )
 
 include_directories(
-  ${PROJECT_SOURCE_DIR}/3rdparty/QSqlMigrator/src
-  ${PROJECT_SOURCE_DIR}/3rdparty/QSqlMigrator/plugins
+  "${PROJECT_SOURCE_DIR}/3rdparty/QSqlMigrator/src"
+  "${PROJECT_SOURCE_DIR}/3rdparty/QSqlMigrator/plugins"
 )
 
 link_directories(
-  ${PROJECT_SOURCE_DIR}/3rdparty/QSqlMigrator/bin
+  "${PROJECT_SOURCE_DIR}/3rdparty/QSqlMigrator/bin"
+)
+
+ExternalProject_Add(qmarkdowntextedit
+  SOURCE_DIR "${PROJECT_SOURCE_DIR}/3rdparty/QMarkdownTextEdit"
+  BINARY_DIR "${CMAKE_CURRENT_BINARY_DIR}/qmarkdowntextedit-build"
+  LOG_BUILD ON
+  CONFIGURE_COMMAND qmake -r
+    "${PROJECT_SOURCE_DIR}/3rdparty/QMarkdownTextEdit/qmarkdowntextedit.pro"
+    "CONFIG+=static staticlib"
+  BUILD_COMMAND make "-j${CPU_COUNT}"
+  INSTALL_COMMAND ""
+)
+
+include_directories(
+  "${PROJECT_SOURCE_DIR}/3rdparty/QMarkdownTextEdit"
+)
+
+link_directories(
+  "${CMAKE_CURRENT_BINARY_DIR}/qmarkdowntextedit-build"
 )
 
 set(CMAKE_CXX_STANDARD 17)
@@ -51,6 +71,7 @@ if(${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang")
 endif()
 
 set(SOURCES
+ 3rdparty/QMarkdownTextEdit/media.qrc
  resources/icons.qrc
  src/main.cpp
  src/models/ColorScheme.cpp
@@ -67,10 +88,10 @@ set(SOURCES
  src/storage/Migrator.cpp
  src/storage/migrations/01_CreateTables.cpp
  src/storage/migrations/02_AddRecordState.cpp
- src/widgets/Cell.cpp
  src/widgets/Calendar.cpp
  src/widgets/CalendarCell.cpp
  src/widgets/CalendarSwitch.cpp
+ src/widgets/Cell.cpp
  src/widgets/FlowLayout.cpp
  src/widgets/RecordCell.cpp
  src/widgets/RecordList.cpp
@@ -112,12 +133,15 @@ qt5_wrap_cpp(MOC_SOURCES ${MOC_HEADERS})
 add_executable(tagberry-qt
   ${SOURCES} ${MOC_SOURCES})
 
-add_dependencies(tagberry-qt qsqlmigrator)
+add_dependencies(tagberry-qt
+  qsqlmigrator
+  qmarkdowntextedit)
 
 target_link_libraries(tagberry-qt
   Qt5::Core
   Qt5::Widgets
   Qt5::Sql
+  QMarkdownTextedit
   SqliteMigrator
   QSqlMigrator)
 

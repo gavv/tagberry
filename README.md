@@ -31,7 +31,8 @@ The code is written in a cross-platform manner, but only Linux was tested so far
 * qmake from Qt5 (for dependencies)
 * Qt5 >= 5.9
 * SQLite3
-* QSqlMigrator (shipped as a submodule)
+* [QMarkdownTextEdit](https://github.com/pbek/qmarkdowntextedit) (shipped as a submodule)
+* [QSqlMigrator](https://github.com/hicknhack-software/QSqlMigrator) (shipped as a submodule)
 
 ## Instructions
 

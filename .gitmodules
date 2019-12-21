@@ -1,3 +1,6 @@
 [submodule "3rdparty/QSqlMigrator"]
 	path = 3rdparty/QSqlMigrator
 	url = https://github.com/hicknhack-software/QSqlMigrator.git
+[submodule "3rdparty/QMarkdownTextEdit"]
+	path = 3rdparty/QMarkdownTextEdit
+	url = https://github.com/pbek/qmarkdowntextedit.git
