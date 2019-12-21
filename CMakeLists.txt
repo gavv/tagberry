@@ -97,7 +97,7 @@ set(SOURCES
  src/widgets/RecordList.cpp
  src/widgets/TagCalendar.cpp
  src/widgets/TagLabel.cpp
- src/widgets/TagSelector.cpp
+ src/widgets/TagListEdit.cpp
 )
 
 set(MOC_HEADERS
@@ -111,15 +111,15 @@ set(MOC_HEADERS
  src/presenters/CalendarArea.hpp
  src/presenters/MainWindow.hpp
  src/presenters/RecordsArea.hpp
- src/widgets/Cell.hpp
  src/widgets/Calendar.hpp
  src/widgets/CalendarCell.hpp
  src/widgets/CalendarSwitch.hpp
+ src/widgets/Cell.hpp
  src/widgets/RecordCell.hpp
  src/widgets/RecordList.hpp
  src/widgets/TagCalendar.hpp
  src/widgets/TagLabel.hpp
- src/widgets/TagSelector.hpp
+ src/widgets/TagListEdit.hpp
 )
 
 include_directories(src)

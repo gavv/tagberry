@@ -34,7 +34,7 @@ RecordCell::RecordCell(QWidget* parent)
     m_headerLayout.setAlignment(&m_complete, Qt::AlignTop);
 
     m_bodyLayout.setContentsMargins(QMargins(0, 0, 0, 0));
-    m_bodyLayout.addWidget(&m_tagSelector);
+    m_bodyLayout.addWidget(&m_tagListEdit);
 
 
     m_cell.setHeaderLayout(&m_headerLayout);
@@ -58,13 +58,13 @@ RecordCell::RecordCell(QWidget* parent)
 
     connect(&m_title, &QTextEdit::textChanged, this, &RecordCell::updateTitle);
 
-    connect(&m_tagSelector, &TagSelector::clicked, this, [=] { clicked(this); });
+    connect(&m_tagListEdit, &TagListEdit::clicked, this, [=] { clicked(this); });
 
-    connect(&m_tagSelector, &TagSelector::tagsChanged, this, &RecordCell::tagsChanged);
-    connect(&m_tagSelector, &TagSelector::tagAdded, this, &RecordCell::tagAdded);
-    connect(&m_tagSelector, &TagSelector::tagFocusChanged, this,
+    connect(&m_tagListEdit, &TagListEdit::tagsChanged, this, &RecordCell::tagsChanged);
+    connect(&m_tagListEdit, &TagListEdit::tagAdded, this, &RecordCell::tagAdded);
+    connect(&m_tagListEdit, &TagListEdit::tagFocusChanged, this,
         &RecordCell::tagFocusChanged);
-    connect(&m_tagSelector, &TagSelector::tagFocusCleared, this,
+    connect(&m_tagListEdit, &TagListEdit::tagFocusCleared, this,
         &RecordCell::tagFocusCleared);
 
     connect(qApp, &QApplication::focusChanged, this, &RecordCell::catchFocus);
@@ -72,7 +72,7 @@ RecordCell::RecordCell(QWidget* parent)
 
 void RecordCell::setTags(QList<TagLabel*> tags)
 {
-    m_tagSelector.setTags(tags);
+    m_tagListEdit.setTags(tags);
 }
 
 void RecordCell::setComplete(bool complete)
@@ -115,7 +115,7 @@ QString RecordCell::title() const
 
 QList<TagLabel*> RecordCell::tags() const
 {
-    return m_tagSelector.tags();
+    return m_tagListEdit.tags();
 }
 
 void RecordCell::notifyRemoving()

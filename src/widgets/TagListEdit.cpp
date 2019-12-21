@@ -7,14 +7,14 @@
  * of the License, or (at your option) any later version.
  */
 
-#include "widgets/TagSelector.hpp"
+#include "widgets/TagListEdit.hpp"
 
 #include <QApplication>
 #include <QCommonStyle>
 
 namespace tagberry::widgets {
 
-TagSelector::TagSelector(QWidget* parent)
+TagListEdit::TagListEdit(QWidget* parent)
     : QWidget(parent)
 {
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
@@ -27,17 +27,17 @@ TagSelector::TagSelector(QWidget* parent)
     m_addTagButton.setFixedSize(28, 28);
     m_addTagButton.setIcon(QIcon(":/icons/plus.png"));
 
-    connect(&m_addTagButton, &QPushButton::clicked, this, &TagSelector::handleTagAdd);
+    connect(&m_addTagButton, &QPushButton::clicked, this, &TagListEdit::handleTagAdd);
 
-    connect(qApp, &QApplication::focusChanged, this, &TagSelector::handleFocusChange);
+    connect(qApp, &QApplication::focusChanged, this, &TagListEdit::handleFocusChange);
 }
 
-QList<TagLabel*> TagSelector::tags() const
+QList<TagLabel*> TagListEdit::tags() const
 {
     return m_tags;
 }
 
-void TagSelector::setTags(QList<TagLabel*> tags)
+void TagListEdit::setTags(QList<TagLabel*> tags)
 {
     while (m_tags.count() != 0) {
         detachTag(m_tags[0]);
@@ -48,7 +48,7 @@ void TagSelector::setTags(QList<TagLabel*> tags)
     }
 }
 
-void TagSelector::attachTag(TagLabel* tag)
+void TagListEdit::attachTag(TagLabel* tag)
 {
     tag->setMargin(1, 2);
     tag->setClosable(true);
@@ -59,15 +59,15 @@ void TagSelector::attachTag(TagLabel* tag)
     m_layout.addWidget(tag);
     m_layout.addWidget(&m_addTagButton);
 
-    connect(tag, &TagLabel::closeClicked, this, &TagSelector::handleTagRemove);
-    connect(tag, &TagLabel::clicked, this, &TagSelector::handleTagClick);
-    connect(tag, &TagLabel::editingStarted, this, &TagSelector::tagFocusCleared);
-    connect(tag, &TagLabel::editingFinished, this, &TagSelector::handleTagUpdate);
+    connect(tag, &TagLabel::closeClicked, this, &TagListEdit::handleTagRemove);
+    connect(tag, &TagLabel::clicked, this, &TagListEdit::handleTagClick);
+    connect(tag, &TagLabel::editingStarted, this, &TagListEdit::tagFocusCleared);
+    connect(tag, &TagLabel::editingFinished, this, &TagListEdit::handleTagUpdate);
 
     m_tags.append(tag);
 }
 
-void TagSelector::detachTag(TagLabel* tag)
+void TagListEdit::detachTag(TagLabel* tag)
 {
     m_layout.removeWidget(tag);
 
@@ -75,7 +75,7 @@ void TagSelector::detachTag(TagLabel* tag)
     tag->deleteLater();
 }
 
-void TagSelector::removeEmptyTags()
+void TagListEdit::removeEmptyTags()
 {
     bool removed = false;
 
@@ -96,7 +96,7 @@ void TagSelector::removeEmptyTags()
     }
 }
 
-void TagSelector::handleTagAdd()
+void TagListEdit::handleTagAdd()
 {
     removeEmptyTags();
 
@@ -108,7 +108,7 @@ void TagSelector::handleTagAdd()
     tag->startEditing();
 }
 
-void TagSelector::handleTagRemove()
+void TagListEdit::handleTagRemove()
 {
     auto tag = qobject_cast<TagLabel*>(sender());
 
@@ -118,7 +118,7 @@ void TagSelector::handleTagRemove()
     clicked();
 }
 
-void TagSelector::handleTagUpdate(QString oldText, QString)
+void TagListEdit::handleTagUpdate(QString oldText, QString)
 {
     auto editedTag = qobject_cast<TagLabel*>(sender());
 
@@ -148,7 +148,7 @@ void TagSelector::handleTagUpdate(QString oldText, QString)
     tagsChanged();
 }
 
-void TagSelector::handleTagClick()
+void TagListEdit::handleTagClick()
 {
     auto tag = qobject_cast<TagLabel*>(sender());
 
@@ -156,7 +156,7 @@ void TagSelector::handleTagClick()
     clicked();
 }
 
-void TagSelector::handleFocusChange(QWidget*, QWidget* now)
+void TagListEdit::handleFocusChange(QWidget*, QWidget* now)
 {
     if (now == &m_addTagButton) {
         clicked();
@@ -164,7 +164,7 @@ void TagSelector::handleFocusChange(QWidget*, QWidget* now)
     }
 }
 
-bool TagSelector::eventFilter(QObject* obj, QEvent* event)
+bool TagListEdit::eventFilter(QObject* obj, QEvent* event)
 {
     if (obj == &m_addTagButton) {
         switch ((int)event->type()) {

@@ -20,11 +20,11 @@
 
 namespace tagberry::widgets {
 
-class TagSelector : public QWidget {
+class TagListEdit : public QWidget {
     Q_OBJECT
 
 public:
-    explicit TagSelector(QWidget* parent = nullptr);
+    explicit TagListEdit(QWidget* parent = nullptr);
 
     QList<TagLabel*> tags() const;
 

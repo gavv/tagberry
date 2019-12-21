@@ -12,7 +12,7 @@
 #include "widgets/Cell.hpp"
 #include "widgets/FlowLayout.hpp"
 #include "widgets/TagLabel.hpp"
-#include "widgets/TagSelector.hpp"
+#include "widgets/TagListEdit.hpp"
 
 #include <QCheckBox>
 #include <QHBoxLayout>
@@ -80,7 +80,7 @@ private:
     QTextEdit m_title;
 
     QVBoxLayout m_bodyLayout;
-    TagSelector m_tagSelector;
+    TagListEdit m_tagListEdit;
 
     bool m_firstPaint { true };
 
