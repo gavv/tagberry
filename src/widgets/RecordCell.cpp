@@ -27,16 +27,17 @@ RecordCell::RecordCell(QWidget* parent)
     m_complete.setFixedWidth(24);
     updateStyleSheet("#ffffff", "#000000");
 
-    m_headLayout.setContentsMargins(QMargins(3, 3, 3, 3));
-    m_headLayout.setSpacing(4);
-    m_headLayout.addWidget(&m_complete);
-    m_headLayout.addWidget(&m_title);
-    m_headLayout.setAlignment(&m_complete, Qt::AlignTop);
+    m_headerLayout.setContentsMargins(QMargins(3, 3, 3, 3));
+    m_headerLayout.setSpacing(4);
+    m_headerLayout.addWidget(&m_complete);
+    m_headerLayout.addWidget(&m_title);
+    m_headerLayout.setAlignment(&m_complete, Qt::AlignTop);
 
     m_bodyLayout.setContentsMargins(QMargins(0, 0, 0, 0));
     m_bodyLayout.addWidget(&m_tagSelector);
 
-    m_cell.setHeadLayout(&m_headLayout);
+
+    m_cell.setHeaderLayout(&m_headerLayout);
     m_cell.setBodyLayout(&m_bodyLayout);
 
     connect(&m_cell, &Cell::clicked, this, &RecordCell::cellClicked);

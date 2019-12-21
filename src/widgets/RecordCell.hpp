@@ -75,7 +75,7 @@ private:
     QHBoxLayout m_layout;
     Cell m_cell;
 
-    QHBoxLayout m_headLayout;
+    QHBoxLayout m_headerLayout;
     QCheckBox m_complete;
     QTextEdit m_title;
 

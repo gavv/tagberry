@@ -25,15 +25,18 @@ class Cell : public QWidget {
 public:
     explicit Cell(QWidget* parent = nullptr);
 
-    QLayout* headLayout();
-    void setHeadLayout(QLayout*);
+    QLayout* headerLayout();
+    void setHeaderLayout(QLayout*);
 
     QLayout* bodyLayout();
     void setBodyLayout(QLayout*);
 
+    QLayout* footerLayout();
+    void setFooterLayout(QLayout*);
+
     void setFocused(bool);
 
-    void setColors(QColor headBackground, QColor bodyBackground, QColor border);
+    void setColors(QColor headerBackground, QColor bodyBackground, QColor border);
 
 signals:
     void clicked();
@@ -45,11 +48,13 @@ protected:
 private:
     QVBoxLayout m_layout;
 
-    QFrame* m_headFrame;
+    QFrame* m_headerFrame;
     QFrame* m_bodyFrame;
+    QFrame* m_footerFrame;
 
-    QColor m_headColor;
+    QColor m_headerColor;
     QColor m_bodyColor;
+    QColor m_footerColor;
     QColor m_borderColor;
 
     bool m_isFocused;

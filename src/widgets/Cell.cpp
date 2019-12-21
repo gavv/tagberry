@@ -17,8 +17,9 @@ namespace tagberry::widgets {
 
 Cell::Cell(QWidget* parent)
     : QWidget(parent)
-    , m_headFrame(new QFrame)
+    , m_headerFrame(new QFrame)
     , m_bodyFrame(new QFrame)
+    , m_footerFrame(new QFrame)
     , m_isFocused(false)
 {
     setColors("#ffffff", "#ffffff", "#000000");
@@ -26,28 +27,32 @@ Cell::Cell(QWidget* parent)
     m_layout.setContentsMargins(QMargins(0, 0, 0, 0));
     m_layout.setSpacing(0);
 
-    m_layout.addWidget(m_headFrame, 0);
+    m_layout.addWidget(m_headerFrame, 0);
     m_layout.addWidget(m_bodyFrame, 1);
+    m_layout.addWidget(m_footerFrame, 0);
 
     setLayout(&m_layout);
 
-    m_headFrame->setContentsMargins(QMargins(0, 0, 0, 0));
+    m_headerFrame->setContentsMargins(QMargins(0, 0, 0, 0));
     m_bodyFrame->setContentsMargins(QMargins(0, 0, 0, 0));
+    m_footerFrame->setContentsMargins(QMargins(0, 0, 0, 0));
 
-    m_headFrame->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
+    m_headerFrame->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
+    m_footerFrame->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
 
-    m_headFrame->setStyleSheet("QFrame { background-color: transparent; }");
+    m_headerFrame->setStyleSheet("QFrame { background-color: transparent; }");
     m_bodyFrame->setStyleSheet("QFrame { background-color: transparent; }");
+    m_footerFrame->setStyleSheet("QFrame { background-color: transparent; }");
 }
 
-QLayout* Cell::headLayout()
+QLayout* Cell::headerLayout()
 {
-    return m_headFrame->layout();
+    return m_headerFrame->layout();
 }
 
-void Cell::setHeadLayout(QLayout* layout)
+void Cell::setHeaderLayout(QLayout* layout)
 {
-    m_headFrame->setLayout(layout);
+    m_headerFrame->setLayout(layout);
 }
 
 QLayout* Cell::bodyLayout()
@@ -58,6 +63,16 @@ QLayout* Cell::bodyLayout()
 void Cell::setBodyLayout(QLayout* layout)
 {
     m_bodyFrame->setLayout(layout);
+}
+
+QLayout* Cell::footerLayout()
+{
+    return m_footerFrame->layout();
+}
+
+void Cell::setFooterLayout(QLayout* layout)
+{
+    m_footerFrame->setLayout(layout);
 }
 
 void Cell::setFocused(bool focused)
@@ -74,14 +89,14 @@ void Cell::setFocused(bool focused)
     }
 }
 
-void Cell::setColors(QColor headBackground, QColor bodyBackground, QColor border)
+void Cell::setColors(QColor headerBackground, QColor bodyBackground, QColor border)
 {
-    if (m_headColor == headBackground && m_bodyColor == bodyBackground
+    if (m_headerColor == headerBackground && m_bodyColor == bodyBackground
         && m_borderColor == border) {
         return;
     }
 
-    m_headColor = headBackground;
+    m_headerColor = headerBackground;
     m_bodyColor = bodyBackground;
     m_borderColor = border;
 
@@ -98,28 +113,32 @@ void Cell::paintEvent(QPaintEvent* event)
         pt.setRenderHint(QPainter::Antialiasing, true);
     }
 
-    const int f1 = m_isFocused ? 1 : 0;
-    const int f2 = f1 + 1;
-    const int hf = m_headFrame->height();
+    const int border1 = m_isFocused ? 1 : 0;
+    const int border2 = border1 + 1;
 
-    pt.setPen(m_headColor);
-    pt.setBrush(m_headColor);
-    pt.drawRoundedRect(QRect(1, 1, width() - 1, height() - 1), f2, f2);
+    const int headerOff = m_headerFrame->height();
+    const int footerOff = height() - m_footerFrame->height();
+
+    pt.setPen(m_headerColor);
+    pt.setBrush(m_headerColor);
+    pt.drawRoundedRect(QRect(1, 1, width() - 1, height() - 1), border2, border2);
 
     pt.setPen(m_bodyColor);
     pt.setBrush(m_bodyColor);
-    pt.drawRoundedRect(QRect(1, hf + 1, width() - 1, height() - 1), f2, f2);
+    pt.drawRoundedRect(QRect(1, headerOff + 1, width() - 1, height() - 1), border2, border2);
 
-    pt.setPen(QPen(m_borderColor, f2));
+    pt.setPen(QPen(m_borderColor, border2));
     pt.setBrush(QBrush());
-    pt.drawRoundedRect(QRect(f1, f1, width() - f2, height() - f2), f2, f2);
+    pt.drawRoundedRect(
+        QRect(border1, border1, width() - border2, height() - border2), border2, border2);
 
     if (m_isFocused) {
         pt.setRenderHint(QPainter::Antialiasing, false);
     }
 
     pt.setPen(QPen(m_borderColor, 1));
-    pt.drawLine(QLine(0, hf, width(), hf));
+    pt.drawLine(QLine(0, headerOff, width(), headerOff));
+    pt.drawLine(QLine(0, footerOff, width(), footerOff));
 
     QWidget::paintEvent(event);
 }
