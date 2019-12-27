@@ -10,15 +10,22 @@
 
 Tagberry is a tag-oriented Qt5 desktop calendar, task manager, and todo list.
 
-A minimum feature set is implemented so far:
+Available features:
 
-* create and edit records and record tags
-* display record tags on the calendar
-* store records and tags in the SQLite database
+* create and edit tasks with tags on the calendar
+* markdown highlighting
+* SQLite3 database
+
+Planned features:
+
+* create and edit subtasks
+* organize tasks in lists
+* manage tag properties
+* various UI improvements
 
 ## Screenshot
 
-![Screenshot](./images/screenshot.png)
+[![Screenshot](./images/screenshot_scaled.png)](https://raw.githubusercontent.com/tagberry/tagberry-qt/master/images/screenshot.png)
 
 ## Supported platforms
 
