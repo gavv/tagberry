@@ -12,6 +12,7 @@
 #include <QApplication>
 #include <QDate>
 #include <QPainter>
+#include <QLocale>
 
 namespace tagberry::widgets {
 
@@ -73,7 +74,7 @@ void CalendarCell::setContentLayout(QLayout* layout)
 
 void CalendarCell::setMonth(int month)
 {
-    m_month.setText(month >= 1 ? QDate::shortMonthName(month) : "");
+    m_month.setText(month >= 1 ? QLocale().monthName(month) : "");
 }
 
 void CalendarCell::setDay(int day)

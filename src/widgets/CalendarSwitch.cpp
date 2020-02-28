@@ -13,12 +13,25 @@
 #include <QDate>
 #include <QFontMetrics>
 #include <QIcon>
+#include <QLocale>
 #include <QRegExpValidator>
 #include <QStringList>
 
 namespace tagberry::widgets {
 
 namespace {
+
+#if QT_VERSION >= QT_VERSION_CHECK(5, 11, 0)
+int horizontalAdvance(const QFontMetrics& m, const QString& s)
+{
+    return m.horizontalAdvance(s);
+}
+#else
+int horizontalAdvance(const QFontMetrics& m, const QString& s)
+{
+    return m.width(s);
+}
+#endif
 
 int editWidth(int numChars)
 {
@@ -27,7 +40,7 @@ int editWidth(int numChars)
     for (int n = 0; n < numChars + 2; n++) {
         s += "0";
     }
-    return metrics.width(s);
+    return horizontalAdvance(metrics, s);
 }
 
 QValidator* makeValidator(const QString& regexStr)
@@ -47,9 +60,10 @@ QCompleter* makeCompleter(const QStringList& words)
 
 QStringList monthNames()
 {
+    QLocale locale;
     QStringList ret;
     for (int month = 1; month <= 12; month++) {
-        ret.append(QDate::longMonthName(month));
+        ret.append(locale.monthName(month, QLocale::LongFormat));
     }
     return ret;
 }

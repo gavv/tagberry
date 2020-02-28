@@ -10,6 +10,7 @@
 #include "widgets/Calendar.hpp"
 
 #include <QDebug>
+#include <QLocale>
 
 namespace tagberry::widgets {
 
@@ -94,8 +95,10 @@ int Calendar::headerHeight()
 
 void Calendar::setWeekStart(Qt::DayOfWeek day)
 {
+    QLocale locale;
     for (int col = 0; col < columnCount(); col++) {
-        m_days[col]->setText(QDate::shortDayName((day + col - 1) % NumDays + 1));
+        m_days[col]->setText(
+            locale.dayName((day + col - 1) % NumDays + 1, QLocale::ShortFormat));
     }
     m_weekStart = day;
 }

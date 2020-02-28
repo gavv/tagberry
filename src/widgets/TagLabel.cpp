@@ -15,6 +15,22 @@
 
 namespace tagberry::widgets {
 
+namespace {
+
+#if QT_VERSION >= QT_VERSION_CHECK(5, 11, 0)
+int horizontalAdvance(const QFontMetrics& m, const QString& s)
+{
+    return m.horizontalAdvance(s);
+}
+#else
+int horizontalAdvance(const QFontMetrics& m, const QString& s)
+{
+    return m.width(s);
+}
+#endif
+
+} // namespace
+
 TagLabel::TagLabel(QWidget* parent)
     : QWidget(parent)
     , m_edit(nullptr)
@@ -187,9 +203,10 @@ void TagLabel::updateSizes()
         s = " ";
     }
 
-    m_indicatorWidth = metrics.width(s);
+    m_indicatorWidth = horizontalAdvance(metrics, s);
 
-    const int lw = metrics.width(m_text) + 2 * m_hPad + m_hMargin + m_cursorWidth;
+    const int lw
+        = horizontalAdvance(metrics, m_text) + 2 * m_hPad + m_hMargin + m_cursorWidth;
     const int rw = m_indicatorWidth + 2 * m_hPad + m_hMargin;
 
     const int w = lw + rw;
