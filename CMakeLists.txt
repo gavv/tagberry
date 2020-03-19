@@ -18,7 +18,7 @@ ExternalProject_Add(qsqlmigrator
   INSTALL_COMMAND ""
 )
 
-include_directories(
+include_directories(SYSTEM
   "${PROJECT_SOURCE_DIR}/3rdparty/QSqlMigrator/src"
   "${PROJECT_SOURCE_DIR}/3rdparty/QSqlMigrator/plugins"
 )
@@ -38,7 +38,7 @@ ExternalProject_Add(qmarkdowntextedit
   INSTALL_COMMAND ""
 )
 
-include_directories(
+include_directories(SYSTEM
   "${PROJECT_SOURCE_DIR}/3rdparty/QMarkdownTextEdit"
 )
 
@@ -55,19 +55,49 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 if(NOT CMAKE_BUILD_TYPE)
-  set(CMAKE_BUILD_TYPE "Debug")
+  set(CMAKE_BUILD_TYPE "Release")
 endif()
 
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 
 if(${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU")
   set(CMAKE_CXX_FLAGS
-    "${CMAKE_CXX_FLAGS} -Wall -Wextra")
+    "${CMAKE_CXX_FLAGS} \
+    -Wall \
+    -Wextra")
 endif()
 
 if(${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang")
   set(CMAKE_CXX_FLAGS
-    "${CMAKE_CXX_FLAGS} -Weverything")
+    "${CMAKE_CXX_FLAGS} \
+    -Weverything \
+    -Wno-system-headers \
+    -Wno-padded \
+    -Wno-covered-switch-default \
+    -Wno-global-constructors \
+    -Wno-exit-time-destructors \
+    -Wno-c++98-compat \
+    -Wno-c++98-compat-pedantic \
+    -Wno-c++98-c++11-c++14-compat")
+endif()
+
+if(${CMAKE_BUILD_TYPE} STREQUAL "Debug")
+  if(${CMAKE_CXX_COMPILER_ID} MATCHES "GNU|Clang")
+    set(CMAKE_CXX_FLAGS
+      "${CMAKE_CXX_FLAGS} \
+      -Werror \
+      -ggdb \
+      -fno-omit-frame-pointer")
+  endif()
+  if(${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang")
+    set(SANITIZE_FLAGS
+      "-fsanitize=undefined \
+      -fsanitize=address")
+    set(CMAKE_CXX_FLAGS
+      "${CMAKE_CXX_FLAGS} ${SANITIZE_FLAGS}")
+    set(CMAKE_EXE_LINKER_FLAGS
+      "${CMAKE_EXE_LINKER_FLAGS} ${SANITIZE_FLAGS}")
+  endif()
 endif()
 
 set(SOURCES
@@ -84,6 +114,7 @@ set(SOURCES
  src/presenters/CalendarArea.cpp
  src/presenters/MainWindow.cpp
  src/presenters/RecordsArea.cpp
+ src/sanitizers.cpp
  src/storage/LocalStorage.cpp
  src/storage/Migrator.cpp
  src/storage/migrations/01_CreateTables.cpp
@@ -129,6 +160,11 @@ find_package(Qt5Widgets REQUIRED)
 find_package(Qt5Sql REQUIRED)
 
 qt5_wrap_cpp(MOC_SOURCES ${MOC_HEADERS})
+
+if(${CMAKE_CXX_COMPILER_ID} MATCHES "GNU|Clang")
+  set_source_files_properties(
+    ${MOC_SOURCES} PROPERTIES COMPILE_FLAGS "-w")
+endif()
 
 add_executable(tagberry-qt
   ${SOURCES} ${MOC_SOURCES})
