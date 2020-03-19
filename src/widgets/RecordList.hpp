@@ -15,6 +15,7 @@
 #include <QList>
 #include <QPushButton>
 #include <QScrollArea>
+#include <QTimer>
 #include <QVBoxLayout>
 #include <QWidget>
 
@@ -33,7 +34,6 @@ public:
 
 signals:
     void recordAdded(RecordCell*);
-
     void tagFocusCleared();
 
 public slots:
@@ -49,6 +49,9 @@ protected:
     void mousePressEvent(QMouseEvent* event) override;
 
 private:
+    void startScrollTimer(RecordCell*);
+    void stopScrollTimer();
+
     bool clickedOutsideRecords(QMouseEvent* event);
 
     QVBoxLayout m_layout;
@@ -63,6 +66,8 @@ private:
 
     QList<RecordCell*> m_recordCells;
     RecordCell* m_focusedCell {};
+
+    QTimer m_scrollTimer;
 };
 
 } // namespace tagberry::widgets
