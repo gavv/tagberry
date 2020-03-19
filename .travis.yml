@@ -1,6 +1,13 @@
 language: cpp
-compiler: gcc
 dist: bionic
+
+compiler:
+  - gcc
+  - clang
+
+env:
+  - BUILD_TYPE=Debug
+  - BUILD_TYPE=Release
 
 install:
   - sudo apt-get install -y qt5-default cmake
@@ -8,7 +15,7 @@ install:
 script:
   - mkdir build
   - cd build
-  - cmake ..
+  - cmake -DCMAKE_BUILD_TYPE:STRING=${BUILD_TYPE} ..
   - make -j2
 
 after_failure:
