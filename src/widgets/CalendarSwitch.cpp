@@ -43,16 +43,16 @@ int editWidth(int numChars)
     return horizontalAdvance(metrics, s);
 }
 
-QValidator* makeValidator(const QString& regexStr)
+QValidator* makeValidator(const QString& regexStr, QObject *parent)
 {
     QRegExp regex { regexStr };
     regex.setCaseSensitivity(Qt::CaseInsensitive);
-    return new QRegExpValidator(regex);
+    return new QRegExpValidator(regex, parent);
 }
 
-QCompleter* makeCompleter(const QStringList& words)
+QCompleter* makeCompleter(const QStringList& words, QObject *parent)
 {
-    auto completer = new QCompleter(words);
+    auto completer = new QCompleter(words, parent);
     completer->setCaseSensitivity(Qt::CaseInsensitive);
     completer->setCompletionMode(QCompleter::InlineCompletion);
     return completer;
@@ -115,14 +115,14 @@ CalendarSwitch::CalendarSwitch(QWidget* parent)
     m_nextMonth->setFixedWidth(35);
     m_editMonth->setFixedWidth(editWidth(13));
     m_editMonth->setAlignment(Qt::AlignCenter);
-    m_editMonth->setValidator(makeValidator("^(" + m_monthNames.join("|") + ")$"));
-    m_editMonth->setCompleter(makeCompleter(m_monthNames));
+    m_editMonth->setValidator(makeValidator("^(" + m_monthNames.join("|") + ")$", this));
+    m_editMonth->setCompleter(makeCompleter(m_monthNames, this));
 
     m_prevYear->setFixedWidth(35);
     m_nextYear->setFixedWidth(35);
     m_editYear->setFixedWidth(editWidth(8));
     m_editYear->setAlignment(Qt::AlignCenter);
-    m_editYear->setValidator(makeValidator("^[1-9][0-9]{3}$"));
+    m_editYear->setValidator(makeValidator("^[1-9][0-9]{3}$", this));
 
     QFont font;
     font.setPointSize(10);

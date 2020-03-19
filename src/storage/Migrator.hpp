@@ -18,6 +18,7 @@ namespace tagberry::storage {
 class Migrator {
 public:
     Migrator(QSqlDatabase&);
+    ~Migrator();
 
     bool migrate();
     bool validate();
