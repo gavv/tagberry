@@ -74,7 +74,7 @@ QHash<QString, QColor> Tag::getColors() const
 {
     if (!m_colorScheme) {
         return {};
-    };
+    }
 
     return m_colorScheme->tagColors(m_name);
 }

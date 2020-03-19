@@ -167,7 +167,7 @@ void TagListEdit::handleFocusChange(QWidget*, QWidget* now)
 bool TagListEdit::eventFilter(QObject* obj, QEvent* event)
 {
     if (obj == &m_addTagButton) {
-        switch ((int)event->type()) {
+        switch (int(event->type())) {
         case QEvent::MouseButtonRelease:
         case QEvent::Leave:
         case QEvent::HoverLeave:

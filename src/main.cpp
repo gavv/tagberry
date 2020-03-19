@@ -54,6 +54,7 @@ void stderrOutput(QtMsgType type, const QMessageLogContext& context, const QStri
     case QtInfoMsg:
         level = "info";
         break;
+    case QtDebugMsg:
     default:
         level = "debug";
         break;

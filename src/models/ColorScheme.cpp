@@ -120,7 +120,7 @@ QHash<QString, QColor>* ColorScheme::makeTagColors(QColor baseColor) const
     (*colors)["background"] = m_widgetColors["background"];
     (*colors)["regular"] = baseColor;
     (*colors)["focused-complete"] = lightenColor(baseColor, 50);
-    (*colors)["focused-incomplete"] = fadeColor(baseColor, 0.9);
+    (*colors)["focused-incomplete"] = fadeColor(baseColor, 0.9f);
 
     return colors;
 }

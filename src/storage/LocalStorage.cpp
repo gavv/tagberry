@@ -294,7 +294,7 @@ bool LocalStorage::readPage(const QPair<QDate, QDate> range,
         rec->setComplete(recQuery.value(indexRecState).toInt() == 1);
 
         QDateTime dt;
-        dt.setTime_t(recQuery.value(indexRecDate).toInt());
+        dt.setTime_t(uint(recQuery.value(indexRecDate).toInt()));
         rec->setDate(dt.date());
 
         QSqlQuery tagQuery;
