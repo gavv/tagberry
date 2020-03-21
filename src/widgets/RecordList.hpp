@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "widgets/RecordCell.hpp"
+#include "widgets/RecordEdit.hpp"
 
 #include <QHBoxLayout>
 #include <QList>
@@ -29,18 +29,18 @@ public:
 
     void alignHeader(int);
 
-    void addRecord(RecordCell*);
+    void addRecord(RecordEdit*);
     void clearRecords();
 
 signals:
-    void recordAdded(RecordCell*);
+    void recordAdded(RecordEdit*);
     void tagFocusCleared();
 
 public slots:
     void clearCellFocus();
 
 private slots:
-    void cellChanged(RecordCell*);
+    void cellChanged(RecordEdit*);
 
     void handleAddRecord();
     void handleRemoveRecord();
@@ -49,7 +49,7 @@ protected:
     void mousePressEvent(QMouseEvent* event) override;
 
 private:
-    void startScrollTimer(RecordCell*);
+    void startScrollTimer(RecordEdit*);
     void stopScrollTimer();
 
     bool clickedOutsideRecords(QMouseEvent* event);
@@ -64,8 +64,8 @@ private:
     QPushButton m_addRecordButton;
     QPushButton m_removeRecordButton;
 
-    QList<RecordCell*> m_recordCells;
-    RecordCell* m_focusedCell {};
+    QList<RecordEdit*> m_recordCells;
+    RecordEdit* m_focusedCell {};
 
     QTimer m_scrollTimer;
 };

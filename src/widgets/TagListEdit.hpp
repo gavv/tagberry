@@ -9,7 +9,6 @@
 
 #pragma once
 
-#include "widgets/Cell.hpp"
 #include "widgets/FlowLayout.hpp"
 #include "widgets/TagLabel.hpp"
 

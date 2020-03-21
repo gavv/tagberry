@@ -11,11 +11,11 @@
 
 #include <QColor>
 #include <QFont>
+#include <QHash>
 #include <QLineEdit>
 #include <QString>
 #include <QVBoxLayout>
 #include <QWidget>
-#include <QHash>
 
 namespace tagberry::widgets {
 

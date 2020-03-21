@@ -68,7 +68,7 @@ void RecordList::clearCellFocus()
     cellChanged(nullptr);
 }
 
-void RecordList::cellChanged(RecordCell* focusedCell)
+void RecordList::cellChanged(RecordEdit* focusedCell)
 {
     stopScrollTimer();
 
@@ -79,9 +79,9 @@ void RecordList::cellChanged(RecordCell* focusedCell)
     }
 }
 
-void RecordList::addRecord(RecordCell* record)
+void RecordList::addRecord(RecordEdit* record)
 {
-    connect(record, &RecordCell::clicked, this, &RecordList::cellChanged);
+    connect(record, &RecordEdit::clicked, this, &RecordList::cellChanged);
 
     m_scrollLayout.insertWidget(m_scrollLayout.count() - 1, record);
     m_recordCells.append(record);
@@ -106,7 +106,7 @@ void RecordList::clearRecords()
 
 void RecordList::handleAddRecord()
 {
-    auto record = new RecordCell;
+    auto record = new RecordEdit;
 
     addRecord(record);
 
@@ -163,7 +163,7 @@ bool RecordList::clickedOutsideRecords(QMouseEvent* event)
     return emptySpace->geometry().contains(event->pos());
 }
 
-void RecordList::startScrollTimer(RecordCell* record)
+void RecordList::startScrollTimer(RecordEdit* record)
 {
     stopScrollTimer();
 

@@ -11,8 +11,8 @@
 
 #include <QApplication>
 #include <QDate>
-#include <QPainter>
 #include <QLocale>
+#include <QPainter>
 
 namespace tagberry::widgets {
 
@@ -20,8 +20,6 @@ CalendarCell::CalendarCell(QWidget* parent, int row, int col)
     : QWidget(parent)
     , m_row(row)
     , m_col(col)
-    , m_isDimmed(false)
-    , m_isToday(false)
 {
     m_layout.addWidget(&m_cell);
     m_layout.setContentsMargins(QMargins(0, 0, 0, 0));
@@ -47,7 +45,7 @@ CalendarCell::CalendarCell(QWidget* parent, int row, int col)
     m_month.setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
     m_day.setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
 
-    connect(&m_cell, &Cell::clicked, [=] { clicked(this); });
+    connect(&m_cell, &MultirowCell::clicked, [=] { clicked(this); });
 
     updateTextColors();
 }

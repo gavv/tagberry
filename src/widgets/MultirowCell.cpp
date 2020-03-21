@@ -7,16 +7,16 @@
  * of the License, or (at your option) any later version.
  */
 
-#include "widgets/Cell.hpp"
+#include "widgets/MultirowCell.hpp"
 
 #include <QApplication>
 #include <QDate>
-#include <QPainter>
 #include <QDebug>
+#include <QPainter>
 
 namespace tagberry::widgets {
 
-Cell::Cell(QWidget* parent)
+MultirowCell::MultirowCell(QWidget* parent)
     : QWidget(parent)
 {
     m_layout.setContentsMargins(QMargins(0, 0, 0, 0));
@@ -25,7 +25,7 @@ Cell::Cell(QWidget* parent)
     setLayout(&m_layout);
 }
 
-QLayout* Cell::getRowLayout(int index)
+QLayout* MultirowCell::getRowLayout(int index)
 {
     if (index >= m_rowFrames.size()) {
         return nullptr;
@@ -33,7 +33,7 @@ QLayout* Cell::getRowLayout(int index)
     return m_rowFrames[index]->layout();
 }
 
-void Cell::setRowLayout(int index, QLayout* layout, int stretch)
+void MultirowCell::setRowLayout(int index, QLayout* layout, int stretch)
 {
     auto frame = new QFrame;
 
@@ -54,7 +54,7 @@ void Cell::setRowLayout(int index, QLayout* layout, int stretch)
     m_layout.insertWidget(index, frame, stretch);
 }
 
-void Cell::setFocused(bool focused)
+void MultirowCell::setFocused(bool focused)
 {
     if (focused == m_isFocused) {
         return;
@@ -68,7 +68,7 @@ void Cell::setFocused(bool focused)
     }
 }
 
-void Cell::setRowColor(int index, QColor color)
+void MultirowCell::setRowColor(int index, QColor color)
 {
     if (index >= m_rowColors.size()) {
         qCritical() << "row index out of range";
@@ -81,7 +81,7 @@ void Cell::setRowColor(int index, QColor color)
     repaint();
 }
 
-void Cell::setBorderColor(QColor color)
+void MultirowCell::setBorderColor(QColor color)
 {
     if (m_borderColor == color) {
         return;
@@ -90,7 +90,7 @@ void Cell::setBorderColor(QColor color)
     repaint();
 }
 
-void Cell::paintEvent(QPaintEvent* event)
+void MultirowCell::paintEvent(QPaintEvent* event)
 {
     QPainter pt(this);
 
@@ -132,7 +132,7 @@ void Cell::paintEvent(QPaintEvent* event)
     QWidget::paintEvent(event);
 }
 
-void Cell::mousePressEvent(QMouseEvent*)
+void MultirowCell::mousePressEvent(QMouseEvent*)
 {
     clicked();
 }

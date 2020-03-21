@@ -34,7 +34,7 @@ public slots:
     void clearFocus();
 
 private slots:
-    void recordAdded(widgets::RecordCell*);
+    void recordAdded(widgets::RecordEdit*);
     void tagAdded(widgets::TagLabel*);
     void tagEdited(QString oldText, QString newText);
 
@@ -42,11 +42,11 @@ private:
     void resubscribeRecords();
     void unsubscribeRecords();
 
-    void bindRecord(widgets::RecordCell* cell, models::RecordPtr record);
+    void bindRecord(widgets::RecordEdit* cell, models::RecordPtr record);
     void bindTag(widgets::TagLabel* label, models::TagPtr tag);
 
-    void tagsFromModel(widgets::RecordCell* cell, models::RecordPtr record);
-    void tagsToModel(widgets::RecordCell* cell, models::RecordPtr record);
+    void tagsFromModel(widgets::RecordEdit* cell, models::RecordPtr record);
+    void tagsToModel(widgets::RecordEdit* cell, models::RecordPtr record);
 
     void removeRecord(models::RecordPtr);
 

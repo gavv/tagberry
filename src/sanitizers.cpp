@@ -9,14 +9,15 @@
 
 #ifdef __clang__
 
-#define SANITIZER_HOOK                                      \
-    extern "C"                                              \
-    __attribute__((no_sanitize("undefined", "address")))    \
-    __attribute__((visibility("default")))                  \
-    __attribute__((used))
+#define SANITIZER_HOOK                                                                   \
+    extern "C" /**/                                                                      \
+        __attribute__((no_sanitize("undefined", "address"))) /**/                        \
+        __attribute__((visibility("default"))) /**/                                      \
+        __attribute__((used))
 
-SANITIZER_HOOK const char *__lsan_default_options();
-SANITIZER_HOOK const char *__lsan_default_options() {
+SANITIZER_HOOK const char* __lsan_default_options();
+SANITIZER_HOOK const char* __lsan_default_options()
+{
     return "print_suppressions=0";
 }
 

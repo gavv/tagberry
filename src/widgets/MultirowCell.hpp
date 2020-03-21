@@ -11,17 +11,17 @@
 
 #include <QColor>
 #include <QFrame>
-#include <QVector>
 #include <QVBoxLayout>
+#include <QVector>
 #include <QWidget>
 
 namespace tagberry::widgets {
 
-class Cell : public QWidget {
+class MultirowCell : public QWidget {
     Q_OBJECT
 
 public:
-    explicit Cell(QWidget* parent = nullptr);
+    explicit MultirowCell(QWidget* parent = nullptr);
 
     QLayout* getRowLayout(int index);
     void setRowLayout(int index, QLayout* layout, int stretch = 0);

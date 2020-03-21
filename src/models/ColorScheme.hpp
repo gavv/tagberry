@@ -9,12 +9,12 @@
 
 #pragma once
 
+#include <QCache>
 #include <QColor>
+#include <QHash>
 #include <QList>
 #include <QObject>
 #include <QString>
-#include <QHash>
-#include <QCache>
 
 namespace tagberry::models {
 

@@ -7,14 +7,14 @@
  * of the License, or (at your option) any later version.
  */
 
-#include "widgets/RecordCell.hpp"
+#include "widgets/RecordEdit.hpp"
 
 #include <QApplication>
 #include <QCommonStyle>
 
 namespace tagberry::widgets {
 
-RecordCell::RecordCell(QWidget* parent)
+RecordEdit::RecordEdit(QWidget* parent)
     : QWidget(parent)
 {
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
@@ -39,7 +39,7 @@ RecordCell::RecordCell(QWidget* parent)
     m_cell.setRowLayout(Row_Title, &m_headerLayout, 0);
     m_cell.setRowLayout(Row_Tags, &m_bodyLayout, 1);
 
-    connect(&m_cell, &Cell::clicked, this, &RecordCell::cellClicked);
+    connect(&m_cell, &MultirowCell::clicked, this, &RecordEdit::cellClicked);
 
     m_title.setPlaceholderText("enter title");
     m_title.setAcceptRichText(false);
@@ -55,31 +55,31 @@ RecordCell::RecordCell(QWidget* parent)
     connect(&m_complete, &QCheckBox::stateChanged, this,
         [=] { completeChanged(complete()); });
 
-    connect(&m_title, &QTextEdit::textChanged, this, &RecordCell::updateTitle);
+    connect(&m_title, &QTextEdit::textChanged, this, &RecordEdit::updateTitle);
 
     connect(&m_tagListEdit, &TagListEdit::clicked, this, [=] { clicked(this); });
 
-    connect(&m_tagListEdit, &TagListEdit::tagsChanged, this, &RecordCell::tagsChanged);
-    connect(&m_tagListEdit, &TagListEdit::tagAdded, this, &RecordCell::tagAdded);
+    connect(&m_tagListEdit, &TagListEdit::tagsChanged, this, &RecordEdit::tagsChanged);
+    connect(&m_tagListEdit, &TagListEdit::tagAdded, this, &RecordEdit::tagAdded);
     connect(&m_tagListEdit, &TagListEdit::tagFocusChanged, this,
-        &RecordCell::tagFocusChanged);
+        &RecordEdit::tagFocusChanged);
     connect(&m_tagListEdit, &TagListEdit::tagFocusCleared, this,
-        &RecordCell::tagFocusCleared);
+        &RecordEdit::tagFocusCleared);
 
-    connect(qApp, &QApplication::focusChanged, this, &RecordCell::catchFocus);
+    connect(qApp, &QApplication::focusChanged, this, &RecordEdit::catchFocus);
 }
 
-void RecordCell::setTags(QList<TagLabel*> tags)
+void RecordEdit::setTags(QList<TagLabel*> tags)
 {
     m_tagListEdit.setTags(tags);
 }
 
-void RecordCell::setComplete(bool complete)
+void RecordEdit::setComplete(bool complete)
 {
     m_complete.setChecked(complete);
 }
 
-void RecordCell::setTitle(QString str)
+void RecordEdit::setTitle(QString str)
 {
     if (title() == str) {
         return;
@@ -87,7 +87,7 @@ void RecordCell::setTitle(QString str)
     m_title.setText(str);
 }
 
-void RecordCell::setFocused(bool focused)
+void RecordEdit::setFocused(bool focused)
 {
     m_cell.setFocused(focused);
     if (!focused) {
@@ -97,38 +97,38 @@ void RecordCell::setFocused(bool focused)
     }
 }
 
-void RecordCell::startEditing()
+void RecordEdit::startEditing()
 {
     m_title.setFocus(Qt::MouseFocusReason);
 }
 
-bool RecordCell::complete() const
+bool RecordEdit::complete() const
 {
     return m_complete.isChecked();
 }
 
-QString RecordCell::title() const
+QString RecordEdit::title() const
 {
     return m_title.toPlainText();
 }
 
-QList<TagLabel*> RecordCell::tags() const
+QList<TagLabel*> RecordEdit::tags() const
 {
     return m_tagListEdit.tags();
 }
 
-void RecordCell::notifyRemoving()
+void RecordEdit::notifyRemoving()
 {
     removing();
 }
 
-void RecordCell::cellClicked()
+void RecordEdit::cellClicked()
 {
     tagFocusCleared();
     clicked(this);
 }
 
-void RecordCell::updateTitle()
+void RecordEdit::updateTitle()
 {
     auto str = title();
 
@@ -148,7 +148,7 @@ void RecordCell::updateTitle()
     titleChanged(title());
 }
 
-void RecordCell::catchFocus(QWidget* old, QWidget* now)
+void RecordEdit::catchFocus(QWidget* old, QWidget* now)
 {
     if (now == &m_complete || now == &m_title) {
         clicked(this);
@@ -168,7 +168,7 @@ void RecordCell::catchFocus(QWidget* old, QWidget* now)
     }
 }
 
-void RecordCell::paintEvent(QPaintEvent* event)
+void RecordEdit::paintEvent(QPaintEvent* event)
 {
     if (m_firstPaint) {
         m_firstPaint = false;
@@ -177,7 +177,7 @@ void RecordCell::paintEvent(QPaintEvent* event)
     QWidget::paintEvent(event);
 }
 
-void RecordCell::setColors(QHash<QString, QColor> colors)
+void RecordEdit::setColors(QHash<QString, QColor> colors)
 {
     m_cell.setBorderColor(colors["border"]);
     m_cell.setRowColor(Row_Title, colors["background"]);
@@ -185,7 +185,7 @@ void RecordCell::setColors(QHash<QString, QColor> colors)
     updateStyleSheet(colors["background-dimmed"], colors["border"]);
 }
 
-void RecordCell::updateStyleSheet(QColor bg, QColor border)
+void RecordEdit::updateStyleSheet(QColor bg, QColor border)
 {
     auto style = R"(
       QCheckBox::indicator {

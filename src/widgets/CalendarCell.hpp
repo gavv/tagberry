@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "widgets/Cell.hpp"
+#include "widgets/MultirowCell.hpp"
 
 #include <QHBoxLayout>
 #include <QLabel>
@@ -51,7 +51,7 @@ private:
     const int m_col;
 
     QHBoxLayout m_layout;
-    Cell m_cell;
+    MultirowCell m_cell;
 
     QHBoxLayout m_headLayout;
     QLabel m_month;
@@ -65,8 +65,8 @@ private:
 
     QColor m_borderColor { "#000000" };
 
-    bool m_isDimmed;
-    bool m_isToday;
+    bool m_isDimmed { false };
+    bool m_isToday { false };
 };
 
 } // namespace tagberry::widgets

@@ -33,8 +33,9 @@ Migrator::Migrator(QSqlDatabase& db)
     m_migrations.insert("M02_AddRecordState", new M02_AddRecordState());
 }
 
-Migrator::~Migrator() {
-    for (auto m: m_migrations) {
+Migrator::~Migrator()
+{
+    for (auto m : m_migrations) {
         delete m;
     }
 }

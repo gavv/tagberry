@@ -9,8 +9,7 @@
 
 #pragma once
 
-#include "widgets/Cell.hpp"
-#include "widgets/FlowLayout.hpp"
+#include "widgets/MultirowCell.hpp"
 #include "widgets/TagLabel.hpp"
 #include "widgets/TagListEdit.hpp"
 
@@ -22,11 +21,11 @@
 
 namespace tagberry::widgets {
 
-class RecordCell : public QWidget {
+class RecordEdit : public QWidget {
     Q_OBJECT
 
 public:
-    explicit RecordCell(QWidget* parent = nullptr);
+    explicit RecordEdit(QWidget* parent = nullptr);
 
     bool complete() const;
     QString title() const;
@@ -40,7 +39,7 @@ public:
     void notifyRemoving();
 
 signals:
-    void clicked(RecordCell*);
+    void clicked(RecordEdit*);
 
     void removing();
 
@@ -75,7 +74,7 @@ private:
     enum { Row_Title = 0, Row_Tags = 1 };
 
     QHBoxLayout m_layout;
-    Cell m_cell;
+    MultirowCell m_cell;
 
     QHBoxLayout m_headerLayout;
     QCheckBox m_complete;

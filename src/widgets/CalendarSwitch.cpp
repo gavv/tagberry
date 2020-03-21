@@ -43,14 +43,14 @@ int editWidth(int numChars)
     return horizontalAdvance(metrics, s);
 }
 
-QValidator* makeValidator(const QString& regexStr, QObject *parent)
+QValidator* makeValidator(const QString& regexStr, QObject* parent)
 {
     QRegExp regex { regexStr };
     regex.setCaseSensitivity(Qt::CaseInsensitive);
     return new QRegExpValidator(regex, parent);
 }
 
-QCompleter* makeCompleter(const QStringList& words, QObject *parent)
+QCompleter* makeCompleter(const QStringList& words, QObject* parent)
 {
     auto completer = new QCompleter(words, parent);
     completer->setCaseSensitivity(Qt::CaseInsensitive);
