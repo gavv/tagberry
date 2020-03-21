@@ -16,10 +16,10 @@
 #include <QDate>
 #include <QGridLayout>
 #include <QHBoxLayout>
-#include <QList>
 #include <QPair>
 #include <QTimer>
 #include <QVBoxLayout>
+#include <QVector>
 #include <QWidget>
 
 namespace tagberry::widgets {
@@ -30,7 +30,7 @@ class Calendar : public QWidget {
 public:
     explicit Calendar(QWidget* parent = nullptr);
 
-    QList<QDate> getSelectedDates() const;
+    QVector<QDate> getSelectedDates() const;
     QPair<QDate, QDate> getVisibleRange() const;
 
     int rowCount() const;
@@ -74,7 +74,7 @@ private:
     QHBoxLayout m_head;
     QGridLayout m_grid;
 
-    QList<CalendarCell*> m_focused;
+    QVector<CalendarCell*> m_focused;
     QLabel* m_days[NumDays];
 
     int m_year;

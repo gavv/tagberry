@@ -60,9 +60,9 @@ Calendar::Calendar(QWidget* parent)
     scheduleTimer();
 }
 
-QList<QDate> Calendar::getSelectedDates() const
+QVector<QDate> Calendar::getSelectedDates() const
 {
-    QList<QDate> ret;
+    QVector<QDate> ret;
 
     for (auto cell : m_focused) {
         if (cell) {
