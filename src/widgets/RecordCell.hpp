@@ -72,6 +72,8 @@ protected:
 private:
     void updateStyleSheet(QColor bg, QColor border);
 
+    enum { Row_Title = 0, Row_Tags = 1 };
+
     QHBoxLayout m_layout;
     Cell m_cell;
 

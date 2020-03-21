@@ -36,9 +36,8 @@ RecordCell::RecordCell(QWidget* parent)
     m_bodyLayout.setContentsMargins(QMargins(0, 0, 0, 0));
     m_bodyLayout.addWidget(&m_tagListEdit);
 
-
-    m_cell.setHeaderLayout(&m_headerLayout);
-    m_cell.setBodyLayout(&m_bodyLayout);
+    m_cell.setRowLayout(Row_Title, &m_headerLayout, 0);
+    m_cell.setRowLayout(Row_Tags, &m_bodyLayout, 1);
 
     connect(&m_cell, &Cell::clicked, this, &RecordCell::cellClicked);
 
@@ -180,7 +179,9 @@ void RecordCell::paintEvent(QPaintEvent* event)
 
 void RecordCell::setColors(QHash<QString, QColor> colors)
 {
-    m_cell.setColors(colors["background"], colors["background"], colors["border"]);
+    m_cell.setBorderColor(colors["border"]);
+    m_cell.setRowColor(Row_Title, colors["background"]);
+    m_cell.setRowColor(Row_Tags, colors["background"]);
     updateStyleSheet(colors["background-dimmed"], colors["border"]);
 }
 

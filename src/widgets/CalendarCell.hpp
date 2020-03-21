@@ -45,6 +45,8 @@ private:
     void updateCellColors();
     void updateTextColors();
 
+    enum { Row_Header = 0, Row_Body = 1 };
+
     const int m_row;
     const int m_col;
 

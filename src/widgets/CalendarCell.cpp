@@ -32,7 +32,7 @@ CalendarCell::CalendarCell(QWidget* parent, int row, int col)
     m_headLayout.addWidget(&m_day);
     m_headLayout.setContentsMargins(QMargins(5, 3, 5, 3));
 
-    m_cell.setHeaderLayout(&m_headLayout);
+    m_cell.setRowLayout(Row_Header, &m_headLayout, 0);
 
     QFont font;
     font.setPointSize(10);
@@ -64,12 +64,12 @@ int CalendarCell::column() const
 
 QLayout* CalendarCell::contentLayout()
 {
-    return m_cell.bodyLayout();
+    return m_cell.getRowLayout(Row_Body);
 }
 
 void CalendarCell::setContentLayout(QLayout* layout)
 {
-    m_cell.setBodyLayout(layout);
+    m_cell.setRowLayout(Row_Body, layout, 1);
 }
 
 void CalendarCell::setMonth(int month)
@@ -121,11 +121,10 @@ void CalendarCell::setColors(QHash<QString, QColor> colors)
 
 void CalendarCell::updateCellColors()
 {
-    if (m_isToday) {
-        m_cell.setColors(m_todayBackgroundColor, m_normalBackgroundColor, m_borderColor);
-    } else {
-        m_cell.setColors(m_normalBackgroundColor, m_normalBackgroundColor, m_borderColor);
-    }
+    m_cell.setBorderColor(m_borderColor);
+    m_cell.setRowColor(
+        Row_Header, m_isToday ? m_todayBackgroundColor : m_normalBackgroundColor);
+    m_cell.setRowColor(Row_Body, m_normalBackgroundColor);
 }
 
 void CalendarCell::updateTextColors()

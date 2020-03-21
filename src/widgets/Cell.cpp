@@ -12,67 +12,46 @@
 #include <QApplication>
 #include <QDate>
 #include <QPainter>
+#include <QDebug>
 
 namespace tagberry::widgets {
 
 Cell::Cell(QWidget* parent)
     : QWidget(parent)
-    , m_headerFrame(new QFrame)
-    , m_bodyFrame(new QFrame)
-    , m_footerFrame(new QFrame)
-    , m_isFocused(false)
 {
-    setColors("#ffffff", "#ffffff", "#000000");
-
     m_layout.setContentsMargins(QMargins(0, 0, 0, 0));
     m_layout.setSpacing(0);
 
-    m_layout.addWidget(m_headerFrame, 0);
-    m_layout.addWidget(m_bodyFrame, 1);
-    m_layout.addWidget(m_footerFrame, 0);
-
     setLayout(&m_layout);
-
-    m_headerFrame->setContentsMargins(QMargins(0, 0, 0, 0));
-    m_bodyFrame->setContentsMargins(QMargins(0, 0, 0, 0));
-    m_footerFrame->setContentsMargins(QMargins(0, 0, 0, 0));
-
-    m_headerFrame->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
-    m_footerFrame->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
-
-    m_headerFrame->setStyleSheet("QFrame { background-color: transparent; }");
-    m_bodyFrame->setStyleSheet("QFrame { background-color: transparent; }");
-    m_footerFrame->setStyleSheet("QFrame { background-color: transparent; }");
 }
 
-QLayout* Cell::headerLayout()
+QLayout* Cell::getRowLayout(int index)
 {
-    return m_headerFrame->layout();
+    if (index >= m_rowFrames.size()) {
+        return nullptr;
+    }
+    return m_rowFrames[index]->layout();
 }
 
-void Cell::setHeaderLayout(QLayout* layout)
+void Cell::setRowLayout(int index, QLayout* layout, int stretch)
 {
-    m_headerFrame->setLayout(layout);
-}
+    auto frame = new QFrame;
 
-QLayout* Cell::bodyLayout()
-{
-    return m_bodyFrame->layout();
-}
+    frame->setLayout(layout);
+    frame->setContentsMargins(QMargins(0, 0, 0, 0));
+    frame->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
+    frame->setStyleSheet("QFrame { background-color: transparent; }");
 
-void Cell::setBodyLayout(QLayout* layout)
-{
-    m_bodyFrame->setLayout(layout);
-}
+    if (m_rowFrames.size() <= index) {
+        m_rowFrames.resize(index + 1);
+        m_rowColors.resize(index + 1);
+    } else {
+        m_layout.removeItem(m_layout.itemAt(index));
+    }
 
-QLayout* Cell::footerLayout()
-{
-    return m_footerFrame->layout();
-}
-
-void Cell::setFooterLayout(QLayout* layout)
-{
-    m_footerFrame->setLayout(layout);
+    m_rowFrames[index] = frame;
+    m_rowColors[index] = "#ffffff";
+    m_layout.insertWidget(index, frame, stretch);
 }
 
 void Cell::setFocused(bool focused)
@@ -89,17 +68,25 @@ void Cell::setFocused(bool focused)
     }
 }
 
-void Cell::setColors(QColor headerBackground, QColor bodyBackground, QColor border)
+void Cell::setRowColor(int index, QColor color)
 {
-    if (m_headerColor == headerBackground && m_bodyColor == bodyBackground
-        && m_borderColor == border) {
+    if (index >= m_rowColors.size()) {
+        qCritical() << "row index out of range";
         return;
     }
+    if (m_rowColors[index] == color) {
+        return;
+    }
+    m_rowColors[index] = color;
+    repaint();
+}
 
-    m_headerColor = headerBackground;
-    m_bodyColor = bodyBackground;
-    m_borderColor = border;
-
+void Cell::setBorderColor(QColor color)
+{
+    if (m_borderColor == color) {
+        return;
+    }
+    m_borderColor = color;
     repaint();
 }
 
@@ -109,36 +96,38 @@ void Cell::paintEvent(QPaintEvent* event)
 
     pt.setRenderHint(QPainter::Qt4CompatiblePainting, true);
 
-    if (m_isFocused) {
-        pt.setRenderHint(QPainter::Antialiasing, true);
-    }
+    const int borderWidth1 = m_isFocused ? 1 : 0;
+    const int borderWidth2 = borderWidth1 + 1;
 
-    const int border1 = m_isFocused ? 1 : 0;
-    const int border2 = border1 + 1;
+    int off = 0;
 
-    const int headerOff = m_headerFrame->height();
-    const int footerOff = height() - m_footerFrame->height();
+    for (int n = 0; n < m_rowFrames.size(); n++) {
+        if (!m_rowFrames[n]) {
+            continue;
+        }
 
-    pt.setPen(m_headerColor);
-    pt.setBrush(m_headerColor);
-    pt.drawRoundedRect(QRect(1, 1, width() - 1, height() - 1), border2, border2);
+        pt.setRenderHint(QPainter::Antialiasing, m_isFocused);
+        pt.setPen(m_rowColors[n]);
+        pt.setBrush(m_rowColors[n]);
+        pt.drawRoundedRect(
+            QRect(1, off + 1, width() - 1, height() - 1), borderWidth2, borderWidth2);
 
-    pt.setPen(m_bodyColor);
-    pt.setBrush(m_bodyColor);
-    pt.drawRoundedRect(QRect(1, headerOff + 1, width() - 1, height() - 1), border2, border2);
+        off += m_rowFrames[n]->height();
 
-    pt.setPen(QPen(m_borderColor, border2));
-    pt.setBrush(QBrush());
-    pt.drawRoundedRect(
-        QRect(border1, border1, width() - border2, height() - border2), border2, border2);
-
-    if (m_isFocused) {
         pt.setRenderHint(QPainter::Antialiasing, false);
+        pt.setPen(QPen(m_borderColor, 1));
+        pt.setBrush(QBrush());
+        pt.drawLine(QLine(0, off, width(), off));
+
+        off += 1;
     }
 
-    pt.setPen(QPen(m_borderColor, 1));
-    pt.drawLine(QLine(0, headerOff, width(), headerOff));
-    pt.drawLine(QLine(0, footerOff, width(), footerOff));
+    pt.setRenderHint(QPainter::Antialiasing, m_isFocused);
+    pt.setPen(QPen(m_borderColor, borderWidth2));
+    pt.setBrush(QBrush());
+    pt.drawRoundedRect(QRect(borderWidth1, borderWidth1, width() - borderWidth2,
+                           height() - borderWidth2),
+        borderWidth2, borderWidth2);
 
     QWidget::paintEvent(event);
 }

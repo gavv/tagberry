@@ -10,10 +10,8 @@
 #pragma once
 
 #include <QColor>
-#include <QFont>
 #include <QFrame>
-#include <QHBoxLayout>
-#include <QLabel>
+#include <QVector>
 #include <QVBoxLayout>
 #include <QWidget>
 
@@ -25,18 +23,13 @@ class Cell : public QWidget {
 public:
     explicit Cell(QWidget* parent = nullptr);
 
-    QLayout* headerLayout();
-    void setHeaderLayout(QLayout*);
-
-    QLayout* bodyLayout();
-    void setBodyLayout(QLayout*);
-
-    QLayout* footerLayout();
-    void setFooterLayout(QLayout*);
+    QLayout* getRowLayout(int index);
+    void setRowLayout(int index, QLayout* layout, int stretch = 0);
 
     void setFocused(bool);
 
-    void setColors(QColor headerBackground, QColor bodyBackground, QColor border);
+    void setRowColor(int index, QColor color);
+    void setBorderColor(QColor color);
 
 signals:
     void clicked();
@@ -48,16 +41,12 @@ protected:
 private:
     QVBoxLayout m_layout;
 
-    QFrame* m_headerFrame;
-    QFrame* m_bodyFrame;
-    QFrame* m_footerFrame;
+    QVector<QFrame*> m_rowFrames;
+    QVector<QColor> m_rowColors;
 
-    QColor m_headerColor;
-    QColor m_bodyColor;
-    QColor m_footerColor;
-    QColor m_borderColor;
+    QColor m_borderColor { "#000000" };
 
-    bool m_isFocused;
+    bool m_isFocused { false };
 };
 
 } // namespace tagberry::widgets
