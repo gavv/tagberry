@@ -31,6 +31,7 @@ public:
     bool complete() const;
     QString title() const;
     QList<TagLabel*> tags() const;
+    QString description() const;
 
     void setTags(QList<TagLabel*>);
 
@@ -54,29 +55,33 @@ signals:
     void tagFocusChanged(TagLabel*);
     void tagFocusCleared();
 
+    void descriptionChanged(QString);
+    void descriptionEditingFinished(QString);
+
 public slots:
     void setComplete(bool);
     void setTitle(QString);
+    void setDescription(QString);
     void setColors(QHash<QString, QColor>);
 
 private slots:
     void cellClicked();
 
 private:
-    enum { Row_Title = 0, Row_Tags = 1, Row_Text = 2 };
+    enum { Row_Title = 0, Row_Tags = 1, Row_Desc = 2 };
 
     QHBoxLayout m_layout;
     MultirowCell m_cell;
 
     QHBoxLayout m_titleRowLayout;
-    CheckBox m_complete;
-    LineEdit m_title;
+    CheckBox m_completeCheckbox;
+    LineEdit m_titleEdit;
 
     QVBoxLayout m_tagsRowLayout;
     TagListEdit m_tagListEdit;
 
-    QVBoxLayout m_textRowLayout;
-    MarkdownEdit m_textEdit;
+    QVBoxLayout m_descRowLayout;
+    MarkdownEdit m_descEdit;
 };
 
 } // namespace tagberry::widgets

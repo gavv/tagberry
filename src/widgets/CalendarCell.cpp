@@ -30,7 +30,7 @@ CalendarCell::CalendarCell(QWidget* parent, int row, int col)
     m_headLayout.addWidget(&m_day);
     m_headLayout.setContentsMargins(QMargins(5, 3, 5, 3));
 
-    m_cell.setRowLayout(Row_Header, &m_headLayout, 0);
+    m_cell.setRowLayout(Row_Header, &m_headLayout);
 
     QFont font;
     font.setPointSize(10);

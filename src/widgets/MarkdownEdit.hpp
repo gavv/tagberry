@@ -23,9 +23,32 @@ class MarkdownEdit : public QWidget {
 public:
     explicit MarkdownEdit(QWidget* parent = nullptr);
 
+    QString text() const;
+    void setText(const QString& str);
+
+    void setColors(const QHash<QString, QColor>& colors);
+
+signals:
+    void clicked();
+
+    void textChanged(QString);
+    void editingFinished(QString);
+
+protected:
+    bool eventFilter(QObject* obj, QEvent* event) override;
+
+private slots:
+    void updateText();
+    void catchFocus(QWidget* old, QWidget* now);
+
 private:
     QVBoxLayout m_layout;
-    QPlainTextEdit* m_edit;
+    QMarkdownTextEdit* m_edit;
+    QString m_lastText;
+
+    int m_hMargin { 6 };
+    int m_vMargin { 4 };
+    int m_fontSize { 11 };
 };
 
 } // namespace tagberry::widgets

@@ -19,6 +19,11 @@ namespace tagberry::models {
 
 namespace {
 
+QColor fromHsl(int h, double s, double l)
+{
+    return QColor::fromHslF(h / 360.0, s, l);
+}
+
 QColor lightenColor(const QColor c, int shift)
 {
     const int r = std::min(255, shift + c.red());
@@ -59,6 +64,18 @@ ColorScheme::ColorScheme()
 
     m_widgetColors["text"] = "#000000";
     m_widgetColors["text-dimmed"] = "#999999";
+    m_widgetColors["text-light"] = "#383838";
+    m_widgetColors["text-extra-light"] = "#6e6e6e";
+    m_widgetColors["text-url"] = "#3f7fa6";
+
+    m_widgetColors["code-background"] = "#f5f5f5";
+    m_widgetColors["code-keyword"] = fromHsl(301, 0.63, 0.40);
+    m_widgetColors["code-type"] = fromHsl(41, 0.99, 0.38);
+    m_widgetColors["code-builtin"] = fromHsl(221, 0.87, 0.60);
+    m_widgetColors["code-string"] = fromHsl(119, 0.34, 0.47);
+    m_widgetColors["code-number"] = fromHsl(41, 0.99, 0.30);
+    m_widgetColors["code-comment"] = fromHsl(230, 0.99, 0.37);
+    m_widgetColors["code-other"] = fromHsl(41, 0.99, 0.30);
 
     m_widgetColors["border"] = "#767C82";
 
