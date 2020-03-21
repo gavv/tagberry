@@ -9,23 +9,34 @@
 
 #pragma once
 
-#include <QPlainTextEdit>
+#include <QCheckBox>
 #include <QVBoxLayout>
 #include <QWidget>
 
-class QMarkdownTextEdit;
-
 namespace tagberry::widgets {
 
-class MarkdownEdit : public QWidget {
+class CheckBox : public QWidget {
     Q_OBJECT
 
 public:
-    explicit MarkdownEdit(QWidget* parent = nullptr);
+    explicit CheckBox(QWidget* parent = nullptr);
+
+    bool isChecked() const;
+    void setChecked(bool);
+
+    void setSize(int);
+    void setColors(QColor background, QColor border);
+
+signals:
+    void clicked();
+    void stateChanged(bool);
+
+private slots:
+    void catchFocus(QWidget* old, QWidget* now);
 
 private:
     QVBoxLayout m_layout;
-    QPlainTextEdit* m_edit;
+    QCheckBox m_checkbox;
 };
 
 } // namespace tagberry::widgets

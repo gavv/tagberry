@@ -9,14 +9,14 @@
 
 #pragma once
 
+#include "widgets/CheckBox.hpp"
+#include "widgets/LineEdit.hpp"
 #include "widgets/MarkdownEdit.hpp"
 #include "widgets/MultirowCell.hpp"
 #include "widgets/TagLabel.hpp"
 #include "widgets/TagListEdit.hpp"
 
-#include <QCheckBox>
 #include <QHBoxLayout>
-#include <QTextEdit>
 #include <QVBoxLayout>
 #include <QWidget>
 
@@ -41,7 +41,6 @@ public:
 
 signals:
     void clicked(RecordEdit*);
-
     void removing();
 
     void completeChanged(bool);
@@ -63,33 +62,21 @@ public slots:
 private slots:
     void cellClicked();
 
-    void updateTitle();
-    void catchFocus(QWidget* old, QWidget* now);
-
-protected:
-    void paintEvent(QPaintEvent* event) override;
-
 private:
-    void updateStyleSheet(QColor bg, QColor border);
-
     enum { Row_Title = 0, Row_Tags = 1, Row_Text = 2 };
 
     QHBoxLayout m_layout;
     MultirowCell m_cell;
 
     QHBoxLayout m_titleRowLayout;
-    QCheckBox m_complete;
-    QTextEdit m_title;
+    CheckBox m_complete;
+    LineEdit m_title;
 
     QVBoxLayout m_tagsRowLayout;
     TagListEdit m_tagListEdit;
 
     QVBoxLayout m_textRowLayout;
     MarkdownEdit m_textEdit;
-
-    bool m_firstPaint { true };
-
-    QString m_lastTitle;
 };
 
 } // namespace tagberry::widgets
