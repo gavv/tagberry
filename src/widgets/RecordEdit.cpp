@@ -27,17 +27,21 @@ RecordEdit::RecordEdit(QWidget* parent)
     m_complete.setFixedWidth(24);
     updateStyleSheet("#ffffff", "#000000");
 
-    m_headerLayout.setContentsMargins(QMargins(3, 3, 3, 3));
-    m_headerLayout.setSpacing(4);
-    m_headerLayout.addWidget(&m_complete);
-    m_headerLayout.addWidget(&m_title);
-    m_headerLayout.setAlignment(&m_complete, Qt::AlignTop);
+    m_titleRowLayout.setContentsMargins(QMargins(3, 3, 3, 3));
+    m_titleRowLayout.setSpacing(4);
+    m_titleRowLayout.addWidget(&m_complete);
+    m_titleRowLayout.addWidget(&m_title);
+    m_titleRowLayout.setAlignment(&m_complete, Qt::AlignTop);
 
-    m_bodyLayout.setContentsMargins(QMargins(0, 0, 0, 0));
-    m_bodyLayout.addWidget(&m_tagListEdit);
+    m_tagsRowLayout.setContentsMargins(QMargins(0, 0, 0, 0));
+    m_tagsRowLayout.addWidget(&m_tagListEdit);
 
-    m_cell.setRowLayout(Row_Title, &m_headerLayout, 0);
-    m_cell.setRowLayout(Row_Tags, &m_bodyLayout, 1);
+    m_textRowLayout.setContentsMargins(QMargins(0, 0, 0, 0));
+    m_textRowLayout.addWidget(&m_textEdit);
+
+    m_cell.setRowLayout(Row_Title, &m_titleRowLayout, 0);
+    m_cell.setRowLayout(Row_Tags, &m_tagsRowLayout, 0);
+    m_cell.setRowLayout(Row_Text, &m_textRowLayout, 0);
 
     connect(&m_cell, &MultirowCell::clicked, this, &RecordEdit::cellClicked);
 
@@ -182,6 +186,7 @@ void RecordEdit::setColors(QHash<QString, QColor> colors)
     m_cell.setBorderColor(colors["border"]);
     m_cell.setRowColor(Row_Title, colors["background"]);
     m_cell.setRowColor(Row_Tags, colors["background"]);
+    m_cell.setRowColor(Row_Text, colors["background"]);
     updateStyleSheet(colors["background-dimmed"], colors["border"]);
 }
 

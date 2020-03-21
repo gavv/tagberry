@@ -122,9 +122,15 @@ int main(int argc, char** argv)
         return 1;
     }
 
+    qDebug() << "initialization complete";
+
     tagberry::presenters::MainWindow window(storage);
 
     window.show();
 
-    return app.exec();
+    int code = app.exec();
+
+    qDebug() << "exiting with code" << code;
+
+    return code;
 }

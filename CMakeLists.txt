@@ -123,6 +123,7 @@ set(SOURCES
  src/widgets/CalendarCell.cpp
  src/widgets/CalendarSwitch.cpp
  src/widgets/FlowLayout.cpp
+ src/widgets/MarkdownEdit.cpp
  src/widgets/MultirowCell.cpp
  src/widgets/RecordEdit.cpp
  src/widgets/RecordList.cpp
@@ -145,6 +146,7 @@ set(MOC_HEADERS
  src/widgets/Calendar.hpp
  src/widgets/CalendarCell.hpp
  src/widgets/CalendarSwitch.hpp
+ src/widgets/MarkdownEdit.hpp
  src/widgets/MultirowCell.hpp
  src/widgets/RecordEdit.hpp
  src/widgets/RecordList.hpp

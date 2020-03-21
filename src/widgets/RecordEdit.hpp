@@ -9,6 +9,7 @@
 
 #pragma once
 
+#include "widgets/MarkdownEdit.hpp"
 #include "widgets/MultirowCell.hpp"
 #include "widgets/TagLabel.hpp"
 #include "widgets/TagListEdit.hpp"
@@ -71,17 +72,20 @@ protected:
 private:
     void updateStyleSheet(QColor bg, QColor border);
 
-    enum { Row_Title = 0, Row_Tags = 1 };
+    enum { Row_Title = 0, Row_Tags = 1, Row_Text = 2 };
 
     QHBoxLayout m_layout;
     MultirowCell m_cell;
 
-    QHBoxLayout m_headerLayout;
+    QHBoxLayout m_titleRowLayout;
     QCheckBox m_complete;
     QTextEdit m_title;
 
-    QVBoxLayout m_bodyLayout;
+    QVBoxLayout m_tagsRowLayout;
     TagListEdit m_tagListEdit;
+
+    QVBoxLayout m_textRowLayout;
+    MarkdownEdit m_textEdit;
 
     bool m_firstPaint { true };
 
