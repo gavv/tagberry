@@ -93,7 +93,7 @@ void Record::setTitle(QString text)
     }
     m_title = text;
     m_isDirty = true;
-    textChanged(text);
+    titleChanged(text);
 }
 
 QList<TagPtr> Record::tags() const
@@ -135,6 +135,21 @@ void Record::setTags(QList<TagPtr> tags)
     m_isDirty = true;
     m_tags = tags;
     tagsChanged();
+}
+
+QString Record::description() const
+{
+    return m_description;
+}
+
+void Record::setDescription(QString text)
+{
+    if (text == m_description) {
+        return;
+    }
+    m_description = text;
+    m_isDirty = true;
+    descriptionChanged(text);
 }
 
 } // namespace tagberry::models

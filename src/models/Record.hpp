@@ -34,6 +34,7 @@ public:
     QDate date() const;
     bool complete() const;
     QString title() const;
+    QString description() const;
 
     QList<TagPtr> tags() const;
 
@@ -46,13 +47,15 @@ public slots:
     void setDate(QDate);
     void setComplete(bool);
     void setTitle(QString);
+    void setDescription(QString);
 
 signals:
     void idChanged(QString);
     void dateChanged(QDate oldDate, QDate newDate);
     void completeChanged(bool);
-    void textChanged(QString);
+    void titleChanged(QString);
     void tagsChanged();
+    void descriptionChanged(QString);
 
 private:
     bool m_isDirty { true };
@@ -61,6 +64,7 @@ private:
     bool m_complete {};
     QString m_title;
     QList<TagPtr> m_tags;
+    QString m_description;
 };
 
 using RecordPtr = std::shared_ptr<Record>;

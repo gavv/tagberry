@@ -48,15 +48,16 @@ void RecordsArea::rebuildRecords()
     auto recordSet = m_root.currentPage().recordsByDate(m_root.currentDate());
 
     for (auto record : recordSet->getRecords()) {
-        auto cell = new widgets::RecordEdit;
+        auto recEdit = new widgets::RecordEdit;
 
-        cell->setComplete(record->complete());
-        cell->setTitle(record->title());
+        recEdit->setComplete(record->complete());
+        recEdit->setTitle(record->title());
+        recEdit->setDescription(record->description());
 
-        tagsFromModel(cell, record);
-        bindRecord(cell, record);
+        tagsFromModel(recEdit, record);
+        bindRecord(recEdit, record);
 
-        m_recordList.addRecord(cell);
+        m_recordList.addRecord(recEdit);
     }
 
     resubscribeRecords();
@@ -90,7 +91,7 @@ void RecordsArea::clearFocus()
     m_recordList.clearCellFocus();
 }
 
-void RecordsArea::recordAdded(widgets::RecordEdit* cell)
+void RecordsArea::recordAdded(widgets::RecordEdit* recEdit)
 {
     unsubscribeRecords();
 
@@ -98,7 +99,7 @@ void RecordsArea::recordAdded(widgets::RecordEdit* cell)
 
     record->setDate(m_root.currentDate());
 
-    bindRecord(cell, record);
+    bindRecord(recEdit, record);
 
     resubscribeRecords();
 }
@@ -130,42 +131,50 @@ void RecordsArea::tagEdited(QString oldText, QString newText)
     bindTag(label, newTag);
 }
 
-void RecordsArea::bindRecord(widgets::RecordEdit* cell, models::RecordPtr record)
+void RecordsArea::bindRecord(widgets::RecordEdit* recEdit, models::RecordPtr record)
 {
-    connect(record.get(), &models::Record::completeChanged, cell,
+    connect(record.get(), &models::Record::completeChanged, recEdit,
         &widgets::RecordEdit::setComplete);
 
-    connect(
-        record.get(), &models::Record::textChanged, cell, &widgets::RecordEdit::setTitle);
+    connect(record.get(), &models::Record::titleChanged, recEdit,
+        &widgets::RecordEdit::setTitle);
 
-    connect(record.get(), &models::Record::tagsChanged, cell,
-        [=] { tagsFromModel(cell, record); });
+    connect(record.get(), &models::Record::descriptionChanged, recEdit,
+        &widgets::RecordEdit::setDescription);
 
-    connect(cell, &widgets::RecordEdit::completeChanged, record.get(), [=] {
-        record->setComplete(cell->complete());
+    connect(record.get(), &models::Record::tagsChanged, recEdit,
+        [=] { tagsFromModel(recEdit, record); });
+
+    connect(recEdit, &widgets::RecordEdit::completeChanged, record.get(), [=] {
+        record->setComplete(recEdit->complete());
         m_storage.saveRecord(record);
     });
 
-    connect(cell, &widgets::RecordEdit::titleEditingFinished, record.get(), [=] {
-        record->setTitle(cell->title());
+    connect(recEdit, &widgets::RecordEdit::titleEditingFinished, record.get(), [=] {
+        record->setTitle(recEdit->title());
         m_storage.saveRecord(record);
     });
 
-    connect(cell, &widgets::RecordEdit::tagAdded, this, &RecordsArea::tagAdded);
+    connect(recEdit, &widgets::RecordEdit::descriptionEditingFinished, record.get(), [=] {
+        record->setDescription(recEdit->description());
+        m_storage.saveRecord(record);
+    });
 
-    connect(cell, &widgets::RecordEdit::tagFocusCleared,
+    connect(recEdit, &widgets::RecordEdit::tagAdded, this, &RecordsArea::tagAdded);
+
+    connect(recEdit, &widgets::RecordEdit::tagFocusCleared,
         [=] { m_root.tags().focusTag(nullptr); });
 
-    connect(cell, &widgets::RecordEdit::tagsChanged, record.get(),
-        [=] { tagsToModel(cell, record); });
+    connect(recEdit, &widgets::RecordEdit::tagsChanged, record.get(),
+        [=] { tagsToModel(recEdit, record); });
 
-    connect(cell, &widgets::RecordEdit::removing, record.get(),
+    connect(recEdit, &widgets::RecordEdit::removing, record.get(),
         [=] { removeRecord(record); });
 
-    connect(&m_root.colorScheme(), &models::ColorScheme::widgetColorsChanged, cell,
+    connect(&m_root.colorScheme(), &models::ColorScheme::widgetColorsChanged, recEdit,
         &widgets::RecordEdit::setColors);
 
-    cell->setColors(m_root.colorScheme().widgetColors());
+    recEdit->setColors(m_root.colorScheme().widgetColors());
 }
 
 void RecordsArea::bindTag(widgets::TagLabel* label, models::TagPtr tag)
@@ -184,7 +193,7 @@ void RecordsArea::bindTag(widgets::TagLabel* label, models::TagPtr tag)
         [=] { m_root.tags().focusTag(tag); });
 }
 
-void RecordsArea::tagsFromModel(widgets::RecordEdit* cell, models::RecordPtr record)
+void RecordsArea::tagsFromModel(widgets::RecordEdit* recEdit, models::RecordPtr record)
 {
     QList<widgets::TagLabel*> labelList;
 
@@ -198,14 +207,14 @@ void RecordsArea::tagsFromModel(widgets::RecordEdit* cell, models::RecordPtr rec
         labelList.append(label);
     }
 
-    cell->setTags(labelList);
+    recEdit->setTags(labelList);
 }
 
-void RecordsArea::tagsToModel(widgets::RecordEdit* cell, models::RecordPtr record)
+void RecordsArea::tagsToModel(widgets::RecordEdit* recEdit, models::RecordPtr record)
 {
     QList<models::TagPtr> tagList;
 
-    for (auto label : cell->tags()) {
+    for (auto label : recEdit->tags()) {
         auto tag = m_root.tags().getTagByName(label->text());
         if (!tag) {
             tag = m_root.tags().createTag();

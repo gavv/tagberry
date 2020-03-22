@@ -119,6 +119,7 @@ set(SOURCES
  src/storage/Migrator.cpp
  src/storage/migrations/01_CreateTables.cpp
  src/storage/migrations/02_AddRecordState.cpp
+ src/storage/migrations/03_AddRecordDescription.cpp
  src/widgets/Calendar.cpp
  src/widgets/CalendarCell.cpp
  src/widgets/CalendarSwitch.cpp
