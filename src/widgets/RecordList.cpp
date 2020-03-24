@@ -85,10 +85,6 @@ void RecordList::addRecord(RecordEdit* record)
 
     m_scrollLayout.insertWidget(m_scrollLayout.count() - 1, record);
     m_recordCells.append(record);
-
-    cellChanged(record);
-
-    startScrollTimer(record);
 }
 
 void RecordList::clearRecords()
@@ -109,6 +105,8 @@ void RecordList::handleAddRecord()
     auto record = new RecordEdit;
 
     addRecord(record);
+    cellChanged(record);
+    startScrollTimer(record);
 
     recordAdded(record);
 

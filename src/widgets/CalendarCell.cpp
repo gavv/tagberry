@@ -120,6 +120,7 @@ void CalendarCell::setColors(QHash<QString, QColor> colors)
 void CalendarCell::updateCellColors()
 {
     m_cell.setBorderColor(m_borderColor);
+    m_cell.setSeparatorColor(m_borderColor);
     m_cell.setRowColor(
         Row_Header, m_isToday ? m_todayBackgroundColor : m_normalBackgroundColor);
     m_cell.setRowColor(Row_Body, m_normalBackgroundColor);

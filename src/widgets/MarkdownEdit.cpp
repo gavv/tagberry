@@ -272,10 +272,20 @@ void MarkdownEdit::setText(const QString& str)
     m_edit->setText(str);
 }
 
+void MarkdownEdit::setPlaceholderText(const QString& str)
+{
+    m_edit->setPlaceholderText(str);
+}
+
 void MarkdownEdit::setColors(const QHash<QString, QColor>& colors)
 {
     m_edit->highlighter()->setTextFormats(createFormatMap(colors, m_fontSize));
     m_edit->setText(text());
+}
+
+void MarkdownEdit::startEditing()
+{
+    m_edit->setFocus(Qt::MouseFocusReason);
 }
 
 bool MarkdownEdit::eventFilter(QObject* obj, QEvent* event)

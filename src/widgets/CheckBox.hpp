@@ -28,11 +28,7 @@ public:
     void setColors(QColor background, QColor border);
 
 signals:
-    void clicked();
     void stateChanged(bool);
-
-private slots:
-    void catchFocus(QWidget* old, QWidget* now);
 
 private:
     QVBoxLayout m_layout;

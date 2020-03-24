@@ -78,6 +78,7 @@ ColorScheme::ColorScheme()
     m_widgetColors["code-other"] = fromHsl(41, 0.99, 0.30);
 
     m_widgetColors["border"] = "#767C82";
+    m_widgetColors["separator"] = "#99a0a3";
 
     m_builtinTagColors = {
         "#ab6730",

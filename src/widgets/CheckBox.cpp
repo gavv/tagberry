@@ -9,8 +9,6 @@
 
 #include "widgets/CheckBox.hpp"
 
-#include <QApplication>
-
 namespace tagberry::widgets {
 
 CheckBox::CheckBox(QWidget* parent)
@@ -23,8 +21,6 @@ CheckBox::CheckBox(QWidget* parent)
 
     connect(
         &m_checkbox, &QCheckBox::stateChanged, this, [=] { stateChanged(isChecked()); });
-
-    connect(qApp, &QApplication::focusChanged, this, &CheckBox::catchFocus);
 
     setColors("#ffffff", "#000000");
 }
@@ -65,13 +61,6 @@ void CheckBox::setColors(QColor background, QColor border)
       }
 )";
     m_checkbox.setStyleSheet(QString(style).arg(border.name(), background.name()));
-}
-
-void CheckBox::catchFocus(QWidget*, QWidget* now)
-{
-    if (now == &m_checkbox) {
-        clicked();
-    }
 }
 
 } // namespace tagberry::widgets

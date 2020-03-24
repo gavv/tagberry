@@ -28,8 +28,11 @@ public:
 
     void setFocused(bool);
 
+    void setRowVisible(int index, bool visible);
+
     void setRowColor(int index, QColor color);
     void setBorderColor(QColor color);
+    void setSeparatorColor(QColor color);
 
 signals:
     void clicked();
@@ -45,6 +48,7 @@ private:
     QVector<QColor> m_rowColors;
 
     QColor m_borderColor { "#000000" };
+    QColor m_separatorColor { "#000000" };
 
     bool m_isFocused { false };
 };

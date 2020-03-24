@@ -70,6 +70,8 @@ private slots:
 private:
     enum { Row_Title = 0, Row_Tags = 1, Row_Desc = 2 };
 
+    void updateVisibility();
+
     QHBoxLayout m_layout;
     MultirowCell m_cell;
 
@@ -82,6 +84,8 @@ private:
 
     QVBoxLayout m_descRowLayout;
     MarkdownEdit m_descEdit;
+
+    bool m_focused { false };
 };
 
 } // namespace tagberry::widgets

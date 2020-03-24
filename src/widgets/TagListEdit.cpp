@@ -98,6 +98,8 @@ void TagListEdit::removeEmptyTags()
 
 void TagListEdit::handleTagAdd()
 {
+    clicked();
+
     removeEmptyTags();
 
     auto tag = new TagLabel;
@@ -159,7 +161,6 @@ void TagListEdit::handleTagClick()
 void TagListEdit::handleFocusChange(QWidget*, QWidget* now)
 {
     if (now == &m_addTagButton) {
-        clicked();
         now->setFocus(Qt::MouseFocusReason);
     }
 }

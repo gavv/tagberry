@@ -48,7 +48,7 @@ void LineEdit::setText(const QString& str)
     m_edit.setText(str);
 }
 
-void LineEdit::setPlaceholderText(QString str)
+void LineEdit::setPlaceholderText(const QString& str)
 {
     m_edit.setPlaceholderText(str);
 }

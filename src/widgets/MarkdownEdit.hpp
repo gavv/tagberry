@@ -26,7 +26,10 @@ public:
     QString text() const;
     void setText(const QString& str);
 
+    void setPlaceholderText(const QString&);
     void setColors(const QHash<QString, QColor>& colors);
+
+    void startEditing();
 
 signals:
     void clicked();

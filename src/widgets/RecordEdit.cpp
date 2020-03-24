@@ -26,6 +26,8 @@ RecordEdit::RecordEdit(QWidget* parent)
     m_titleEdit.setPlaceholderText("enter title");
     m_titleEdit.setFontWeight(QFont::Bold);
 
+    m_descEdit.setPlaceholderText("enter description (markdown)");
+
     m_titleRowLayout.setContentsMargins(QMargins(3, 3, 3, 3));
     m_titleRowLayout.setSpacing(4);
     m_titleRowLayout.addWidget(&m_completeCheckbox);
@@ -44,7 +46,6 @@ RecordEdit::RecordEdit(QWidget* parent)
 
     connect(&m_cell, &MultirowCell::clicked, this, &RecordEdit::cellClicked);
 
-    connect(&m_completeCheckbox, &CheckBox::clicked, this, [=] { clicked(this); });
     connect(
         &m_completeCheckbox, &CheckBox::stateChanged, this, &RecordEdit::completeChanged);
 
@@ -66,6 +67,8 @@ RecordEdit::RecordEdit(QWidget* parent)
         &m_descEdit, &MarkdownEdit::textChanged, this, &RecordEdit::descriptionChanged);
     connect(&m_descEdit, &MarkdownEdit::editingFinished, this,
         &RecordEdit::descriptionEditingFinished);
+
+    updateVisibility();
 }
 
 void RecordEdit::setTags(QList<TagLabel*> tags)
@@ -86,12 +89,20 @@ void RecordEdit::setTitle(QString str)
 void RecordEdit::setDescription(QString str)
 {
     m_descEdit.setText(str);
+    updateVisibility();
 }
 
 void RecordEdit::setFocused(bool focused)
 {
+    if (m_focused == focused) {
+        return;
+    }
+    m_focused = focused;
+
     m_cell.setFocused(focused);
     m_titleEdit.setFocused(focused);
+
+    updateVisibility();
 }
 
 void RecordEdit::startEditing()
@@ -127,18 +138,33 @@ void RecordEdit::notifyRemoving()
 void RecordEdit::cellClicked()
 {
     tagFocusCleared();
+
+    const auto wasFocused = m_focused;
+    setFocused(true);
+
+    if (!wasFocused && description().isEmpty()) {
+        m_descEdit.startEditing();
+    }
+
     clicked(this);
 }
 
 void RecordEdit::setColors(QHash<QString, QColor> colors)
 {
     m_cell.setBorderColor(colors["border"]);
+    m_cell.setSeparatorColor(colors["separator"]);
+
     m_cell.setRowColor(Row_Title, colors["background"]);
     m_cell.setRowColor(Row_Tags, colors["background"]);
     m_cell.setRowColor(Row_Desc, colors["background"]);
 
     m_completeCheckbox.setColors(colors["background-dimmed"], colors["border"]);
     m_descEdit.setColors(colors);
+}
+
+void RecordEdit::updateVisibility()
+{
+    m_cell.setRowVisible(Row_Desc, m_focused || !description().isEmpty());
 }
 
 } // namespace tagberry::widgets

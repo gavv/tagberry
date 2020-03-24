@@ -24,7 +24,7 @@ public:
     QString text() const;
     void setText(const QString& str);
 
-    void setPlaceholderText(QString);
+    void setPlaceholderText(const QString&);
     void setFontWeight(QFont::Weight);
     void setFocused(bool);
 

@@ -68,6 +68,15 @@ void MultirowCell::setFocused(bool focused)
     }
 }
 
+void MultirowCell::setRowVisible(int index, bool visible)
+{
+    if (index >= m_rowFrames.size()) {
+        qCritical() << "row index out of range";
+        return;
+    }
+    m_rowFrames[index]->setVisible(visible);
+}
+
 void MultirowCell::setRowColor(int index, QColor color)
 {
     if (index >= m_rowColors.size()) {
@@ -90,14 +99,20 @@ void MultirowCell::setBorderColor(QColor color)
     repaint();
 }
 
+void MultirowCell::setSeparatorColor(QColor color)
+{
+    if (m_separatorColor == color) {
+        return;
+    }
+    m_separatorColor = color;
+    repaint();
+}
+
 void MultirowCell::paintEvent(QPaintEvent* event)
 {
     QPainter pt(this);
 
     pt.setRenderHint(QPainter::Qt4CompatiblePainting, true);
-
-    const int borderWidth1 = m_isFocused ? 1 : 0;
-    const int borderWidth2 = borderWidth1 + 1;
 
     int off = 0;
 
@@ -109,18 +124,28 @@ void MultirowCell::paintEvent(QPaintEvent* event)
         pt.setRenderHint(QPainter::Antialiasing, m_isFocused);
         pt.setPen(m_rowColors[n]);
         pt.setBrush(m_rowColors[n]);
-        pt.drawRoundedRect(
-            QRect(1, off + 1, width() - 1, height() - 1), borderWidth2, borderWidth2);
+        pt.drawRoundedRect(QRect(1, off + 1, width() - 1, height() - 1), 1, 1);
+
+        off += m_rowFrames[n]->height();
+    }
+
+    off = 0;
+
+    for (int n = 0; n < m_rowFrames.size(); n++) {
+        if (!m_rowFrames[n]) {
+            continue;
+        }
 
         off += m_rowFrames[n]->height();
 
         pt.setRenderHint(QPainter::Antialiasing, false);
-        pt.setPen(QPen(m_borderColor, 1));
+        pt.setPen(QPen(m_separatorColor, 1));
         pt.setBrush(QBrush());
         pt.drawLine(QLine(0, off, width(), off));
-
-        off += 1;
     }
+
+    const int borderWidth1 = m_isFocused ? 1 : 0;
+    const int borderWidth2 = borderWidth1 + 1;
 
     pt.setRenderHint(QPainter::Antialiasing, m_isFocused);
     pt.setPen(QPen(m_borderColor, borderWidth2));
