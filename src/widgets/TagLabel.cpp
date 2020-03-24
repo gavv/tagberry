@@ -53,6 +53,7 @@ TagLabel::TagLabel(QWidget* parent)
     , m_isComplete(false)
     , m_isClosePressed(false)
     , m_closePressStarted(false)
+    , m_cacheValid(false)
 {
     m_layout.setContentsMargins(QMargins(0, 0, 0, 0));
 
@@ -80,13 +81,20 @@ void TagLabel::setClosable(bool v)
         return;
     }
     m_closeButton = v;
+    m_cacheValid = false;
     updateSizes();
-    repaint();
+    update();
 }
 
 void TagLabel::setEditable(bool v)
 {
+    if (m_isEditable == v) {
+        return;
+    }
     m_isEditable = v;
+    m_cacheValid = false;
+    updateSizes();
+    update();
 }
 
 void TagLabel::setText(QString text)
@@ -95,8 +103,9 @@ void TagLabel::setText(QString text)
         return;
     }
     m_text = text;
+    m_cacheValid = false;
     updateSizes();
-    repaint();
+    update();
     textChanged(text);
 }
 
@@ -106,8 +115,9 @@ void TagLabel::setCustomIndicator(QString indicator)
         return;
     }
     m_customIndicator = indicator;
+    m_cacheValid = false;
     updateSizes();
-    repaint();
+    update();
 }
 
 void TagLabel::setFocused(bool focused)
@@ -116,8 +126,9 @@ void TagLabel::setFocused(bool focused)
         return;
     }
     m_isFocused = focused;
+    m_cacheValid = false;
     updateColors();
-    repaint();
+    update();
 }
 
 void TagLabel::setComplete(bool checked)
@@ -126,7 +137,8 @@ void TagLabel::setComplete(bool checked)
         return;
     }
     m_isComplete = checked;
-    repaint();
+    m_cacheValid = false;
+    update();
 }
 
 void TagLabel::setColors(QHash<QString, QColor> colors)
@@ -145,9 +157,10 @@ void TagLabel::setColors(QHash<QString, QColor> colors)
     m_fgRegular = regular;
     m_fgFocusedComplete = focusedComplete;
     m_fgFocusedIncomplete = focusedIncomplete;
+    m_cacheValid = false;
 
     updateColors();
-    repaint();
+    update();
 }
 
 void TagLabel::setFont(const QFont& font)
@@ -156,11 +169,12 @@ void TagLabel::setFont(const QFont& font)
         return;
     }
     m_font = font;
+    m_cacheValid = false;
     if (m_edit) {
         m_edit->setFont(font);
     }
     updateSizes();
-    repaint();
+    update();
 }
 
 void TagLabel::setPadding(int h, int v)
@@ -170,8 +184,9 @@ void TagLabel::setPadding(int h, int v)
     }
     m_hPad = h;
     m_vPad = v;
+    m_cacheValid = false;
     updateSizes();
-    repaint();
+    update();
 }
 
 void TagLabel::setMargin(int h, int v)
@@ -181,8 +196,9 @@ void TagLabel::setMargin(int h, int v)
     }
     m_hMargin = h;
     m_vMargin = v;
+    m_cacheValid = false;
     updateSizes();
-    repaint();
+    update();
 }
 
 void TagLabel::setRounding(int r)
@@ -191,7 +207,8 @@ void TagLabel::setRounding(int r)
         return;
     }
     m_rounding = r;
-    repaint();
+    m_cacheValid = false;
+    update();
 }
 
 void TagLabel::updateSizes()
@@ -244,9 +261,31 @@ void TagLabel::updateColors()
 
 void TagLabel::paintEvent(QPaintEvent*)
 {
-    QPainter pt(this);
+    if (m_edit) {
+        QPainter pt(this);
+        doPaint(pt);
+        return;
+    }
 
+    if (!m_cacheValid) {
+        m_cache = QPixmap(size());
+        m_cacheValid = true;
+
+        QPainter pt(&m_cache);
+        doPaint(pt);
+    }
+
+    QPainter pt(this);
+    pt.drawPixmap(0, 0, m_cache);
+}
+
+void TagLabel::doPaint(QPainter& pt)
+{
     pt.setRenderHint(QPainter::Qt4CompatiblePainting, true);
+
+    pt.setPen(QPen(m_bg, 1));
+    pt.setBrush(QBrush(m_bg));
+    pt.drawRect(QRect(QPoint(0, 0), size()));
 
     if (m_isFocused && m_isComplete) {
         pt.setPen(QPen(m_fgFocusedComplete, 1));
@@ -339,7 +378,8 @@ void TagLabel::mousePressEvent(QMouseEvent* event)
         if (m_isClosePressed != closePressed) {
             m_closePressStarted = closePressed;
             m_isClosePressed = closePressed;
-            repaint();
+            m_cacheValid = false;
+            update();
         }
 
         if (!closePressed && !m_edit) {
@@ -361,8 +401,9 @@ void TagLabel::mouseReleaseEvent(QMouseEvent* event)
 
         m_closePressStarted = false;
         m_isClosePressed = false;
+        m_cacheValid = false;
 
-        repaint();
+        update();
 
         if (wasClosePressed && m_closeRect.contains(event->pos())) {
             closeClicked();
@@ -377,7 +418,8 @@ void TagLabel::mouseMoveEvent(QMouseEvent* event)
 
         if (m_isClosePressed != closePressed) {
             m_isClosePressed = closePressed;
-            repaint();
+            m_cacheValid = false;
+            update();
         }
     }
 }

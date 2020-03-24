@@ -10,8 +10,8 @@
 #include "widgets/MarkdownEdit.hpp"
 
 #include <QApplication>
-#include <QFontMetrics>
 #include <QDebug>
+#include <QFontMetrics>
 
 #include <qmarkdowntextedit.h>
 

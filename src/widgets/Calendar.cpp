@@ -40,7 +40,13 @@ Calendar::Calendar(QWidget* parent)
         font.setPointSize(10);
         m_days[col]->setFont(font);
 
+        m_grid.setColumnStretch(col, 1);
+
         for (int row = 0; row < rowCount(); row++) {
+            if (col == 0) {
+                m_grid.setRowStretch(row, 1);
+            }
+
             auto cell = new CalendarCell(nullptr, row, col);
 
             connect(cell, &CalendarCell::clicked, this, &Calendar::setFocus);

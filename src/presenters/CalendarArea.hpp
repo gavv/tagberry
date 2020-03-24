@@ -39,6 +39,7 @@ private slots:
 
 private:
     void rebuildCell(QDate);
+    void updateCellStates(QDate);
 
 private:
     QHBoxLayout* m_layout;

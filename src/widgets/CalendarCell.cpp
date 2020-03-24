@@ -21,6 +21,8 @@ CalendarCell::CalendarCell(QWidget* parent, int row, int col)
     , m_row(row)
     , m_col(col)
 {
+    setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
+
     m_layout.addWidget(&m_cell);
     m_layout.setContentsMargins(QMargins(0, 0, 0, 0));
 

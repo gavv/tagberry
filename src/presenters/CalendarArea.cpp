@@ -86,7 +86,7 @@ void CalendarArea::refreshPage()
             [=] { rebuildCell(date); });
 
         connect(recSet.get(), &models::RecordSet::recordStatesChanged,
-            [=] { rebuildCell(date); });
+            [=] { updateCellStates(date); });
     }
 
     m_storage.readPage(range, m_root.currentPage(), m_root.tags());
@@ -117,6 +117,16 @@ void CalendarArea::rebuildCell(QDate date)
         label->setColors(tag->getColors());
 
         m_calendar->addTag(date, label);
+    }
+}
+
+void CalendarArea::updateCellStates(QDate date)
+{
+    auto recSet = m_root.currentPage().recordsByDate(date);
+
+    for (auto label : m_calendar->getTags(date)) {
+        auto tag = m_root.tags().getTagByName(label->text());
+        label->setComplete(recSet->checkAllRecordsWithTagComplete(tag));
     }
 }
 

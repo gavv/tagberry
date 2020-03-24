@@ -60,7 +60,7 @@ void MultirowCell::setFocused(bool focused)
         return;
     }
     m_isFocused = focused;
-    repaint();
+    update();
     if (m_isFocused) {
         if (auto widget = qApp->focusWidget()) {
             widget->clearFocus();
@@ -87,7 +87,7 @@ void MultirowCell::setRowColor(int index, QColor color)
         return;
     }
     m_rowColors[index] = color;
-    repaint();
+    update();
 }
 
 void MultirowCell::setBorderColor(QColor color)
@@ -96,7 +96,7 @@ void MultirowCell::setBorderColor(QColor color)
         return;
     }
     m_borderColor = color;
-    repaint();
+    update();
 }
 
 void MultirowCell::setSeparatorColor(QColor color)
@@ -105,7 +105,7 @@ void MultirowCell::setSeparatorColor(QColor color)
         return;
     }
     m_separatorColor = color;
-    repaint();
+    update();
 }
 
 void MultirowCell::paintEvent(QPaintEvent* event)

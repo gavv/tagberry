@@ -74,6 +74,8 @@ private:
     void updateSizes();
     void updateColors();
 
+    void doPaint(QPainter& pt);
+
     QVBoxLayout m_layout;
     QLineEdit* m_edit;
 
@@ -105,6 +107,9 @@ private:
     bool m_isComplete;
     bool m_isClosePressed;
     bool m_closePressStarted;
+
+    QPixmap m_cache;
+    bool m_cacheValid;
 };
 
 } // namespace tagberry::widgets

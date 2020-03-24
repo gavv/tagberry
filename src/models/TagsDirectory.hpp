@@ -53,6 +53,8 @@ private:
     QHash<QString, TagPtr> m_tagByID;
 
     ColorScheme* m_colorScheme {};
+
+    TagPtr m_focusedTag;
 };
 
 } // namespace tagberry::models

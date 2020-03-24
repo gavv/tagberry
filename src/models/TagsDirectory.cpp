@@ -63,12 +63,23 @@ void TagsDirectory::removeTag(TagPtr tag)
     if (!tag->name().isEmpty()) {
         m_tagByName.remove(tag->name());
     }
+
+    if (m_focusedTag == tag) {
+        m_focusedTag.reset();
+    }
 }
 
 void TagsDirectory::focusTag(TagPtr focusedTag)
 {
-    for (auto tag : m_tags) {
-        tag->setFocused(tag == focusedTag);
+    if (m_focusedTag == focusedTag) {
+        return;
+    }
+    if (m_focusedTag) {
+        m_focusedTag->setFocused(false);
+    }
+    m_focusedTag = focusedTag;
+    if (m_focusedTag) {
+        m_focusedTag->setFocused(true);
     }
 }
 
@@ -82,6 +93,8 @@ void TagsDirectory::clearTags()
     m_tagByID.clear();
 
     m_tags.clear();
+
+    m_focusedTag.reset();
 }
 
 void TagsDirectory::setColorScheme(ColorScheme* colorScheme)

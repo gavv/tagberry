@@ -13,6 +13,8 @@
 #include "widgets/TagLabel.hpp"
 
 #include <QHBoxLayout>
+#include <QHash>
+#include <QList>
 #include <QWidget>
 
 namespace tagberry::widgets {
@@ -25,8 +27,8 @@ public:
 
     QPair<QDate, QDate> getVisibleRange() const;
 
+    QList<TagLabel*> getTags(const QDate& date) const;
     void addTag(const QDate& date, TagLabel* tag);
-
     void clearTags(const QDate& date);
     void clearTags();
 
@@ -56,6 +58,8 @@ private:
 
     QHBoxLayout* m_layout;
     Calendar* m_calendar;
+
+    QHash<QDate, QList<TagLabel*>> m_tags;
 };
 
 } // namespace tagberry::widgets

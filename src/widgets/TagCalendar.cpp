@@ -50,6 +50,11 @@ QPair<QDate, QDate> TagCalendar::getVisibleRange() const
     return m_calendar->getVisibleRange();
 }
 
+QList<TagLabel*> TagCalendar::getTags(const QDate& date) const
+{
+    return m_tags[date];
+}
+
 void TagCalendar::addTag(const QDate& date, TagLabel* tag)
 {
     auto cell = m_calendar->getCell(date);
@@ -65,6 +70,8 @@ void TagCalendar::addTag(const QDate& date, TagLabel* tag)
         m_calendar->setFocus(cell);
         tagFocusChanged(tag);
     });
+
+    m_tags[date].push_back(tag);
 }
 
 void TagCalendar::clearTags(const QDate& date)
@@ -75,6 +82,8 @@ void TagCalendar::clearTags(const QDate& date)
     }
 
     removeCellTags(cell);
+
+    m_tags[date].clear();
 }
 
 void TagCalendar::clearTags()
@@ -84,6 +93,8 @@ void TagCalendar::clearTags()
             removeCellTags(m_calendar->getCell(row, col));
         }
     }
+
+    m_tags.clear();
 }
 
 void TagCalendar::setColors(QHash<QString, QColor> colors)
