@@ -49,7 +49,7 @@ protected:
     void mousePressEvent(QMouseEvent* event) override;
 
 private:
-    void startScrollTimer(RecordEdit*);
+    void startScrollTimer(RecordEdit* record, bool retry);
     void stopScrollTimer();
 
     bool clickedOutsideRecords(QMouseEvent* event);

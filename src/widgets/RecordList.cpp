@@ -106,11 +106,11 @@ void RecordList::handleAddRecord()
 
     addRecord(record);
     cellChanged(record);
-    startScrollTimer(record);
 
     recordAdded(record);
-
     record->startEditing();
+
+    startScrollTimer(record, true);
 }
 
 void RecordList::handleRemoveRecord()
@@ -161,13 +161,17 @@ bool RecordList::clickedOutsideRecords(QMouseEvent* event)
     return emptySpace->geometry().contains(event->pos());
 }
 
-void RecordList::startScrollTimer(RecordEdit* record)
+void RecordList::startScrollTimer(RecordEdit* record, bool retry)
 {
     stopScrollTimer();
 
     connect(&m_scrollTimer, &QTimer::timeout, this, [=] {
         stopScrollTimer();
         m_scrollArea.ensureWidgetVisible(record);
+        if (retry) {
+            // for some reason we need to do it twice :/
+            startScrollTimer(record, false);
+        }
     });
 
     m_scrollTimer.start();

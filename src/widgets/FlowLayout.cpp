@@ -121,8 +121,10 @@ bool FlowLayout::hasHeightForWidth() const
 
 int FlowLayout::heightForWidth(int width) const
 {
-    int height = doLayout(QRect(0, 0, width, 0), true);
-    return height;
+    if (m_preferredWidth) {
+        width = m_preferredWidth;
+    }
+    return doLayout(QRect(0, 0, width, 0), true);
 }
 
 void FlowLayout::setGeometry(const QRect& rect)
@@ -146,6 +148,12 @@ QSize FlowLayout::minimumSize() const
 
     size += QSize(2 * margin(), 2 * margin());
     return size;
+}
+
+void FlowLayout::setPreferredWidth(int w)
+{
+    m_preferredWidth = w;
+    invalidate();
 }
 
 int FlowLayout::doLayout(const QRect& rect, bool testOnly) const

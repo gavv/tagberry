@@ -11,6 +11,7 @@
 
 #include <QApplication>
 #include <QCommonStyle>
+#include <QResizeEvent>
 
 namespace tagberry::widgets {
 
@@ -163,6 +164,11 @@ void TagListEdit::handleFocusChange(QWidget*, QWidget* now)
     if (now == &m_addTagButton) {
         now->setFocus(Qt::MouseFocusReason);
     }
+}
+
+void TagListEdit::resizeEvent(QResizeEvent* event)
+{
+    m_layout.setPreferredWidth(event->size().width());
 }
 
 bool TagListEdit::eventFilter(QObject* obj, QEvent* event)

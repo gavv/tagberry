@@ -68,6 +68,8 @@ public:
     QSize sizeHint() const Q_DECL_OVERRIDE;
     QLayoutItem* takeAt(int index) Q_DECL_OVERRIDE;
 
+    void setPreferredWidth(int);
+
 private:
     int doLayout(const QRect& rect, bool testOnly) const;
     int smartSpacing(QStyle::PixelMetric pm) const;
@@ -75,6 +77,7 @@ private:
     QList<QLayoutItem*> m_itemList;
     int m_hSpace;
     int m_vSpace;
+    int m_preferredWidth { 0 };
 };
 
 } // namespace tagberry::widgets
