@@ -78,7 +78,7 @@ CalendarSwitch::CalendarSwitch(QWidget* parent)
     , m_prevYear(new QPushButton)
     , m_nextYear(new QPushButton)
     , m_editYear(new QLineEdit)
-    , m_today(new QPushButton("Today"))
+    , m_today(new QPushButton("TODAY"))
     , m_monthNames(monthNames())
     , m_year(-1)
     , m_month(-1)
@@ -129,8 +129,15 @@ CalendarSwitch::CalendarSwitch(QWidget* parent)
     m_editMonth->setFont(font);
     m_editYear->setFont(font);
 
-    font.setBold(true);
+    font.setPointSize(8);
+    font.setWeight(QFont::Bold);
     m_today->setFont(font);
+
+    m_prevMonth->setFixedHeight(26);
+    m_nextMonth->setFixedHeight(26);
+    m_prevYear->setFixedHeight(26);
+    m_nextYear->setFixedHeight(26);
+    m_today->setFixedHeight(26);
 
     connect(m_today, &QPushButton::clicked, this, &CalendarSwitch::today);
 
@@ -158,14 +165,12 @@ CalendarSwitch::CalendarSwitch(QWidget* parent)
 
     connect(m_editMonth, &QLineEdit::editingFinished, [=] {
         int month = 1;
-        for (QString& name : m_monthNames) {
-            if (m_editMonth->text() == name) {
-                break;
+        for (auto name : m_monthNames) {
+            if (m_editMonth->text().compare(name, Qt::CaseInsensitive) == 0) {
+                setYearMonth(m_year, month);
+                return;
             }
             month++;
-        }
-        if (month < 12) {
-            setYearMonth(m_year, month);
         }
     });
 
