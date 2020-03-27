@@ -39,6 +39,7 @@ signals:
 
 protected:
     bool eventFilter(QObject* obj, QEvent* event) override;
+    void paintEvent(QPaintEvent* event) override;
 
 private slots:
     void updateText();
@@ -52,6 +53,8 @@ private:
     int m_hMargin { 6 };
     int m_vMargin { 4 };
     int m_fontSize { 11 };
+
+    bool m_firstPaint { true };
 };
 
 } // namespace tagberry::widgets

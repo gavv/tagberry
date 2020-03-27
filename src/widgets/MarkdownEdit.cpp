@@ -308,6 +308,15 @@ bool MarkdownEdit::eventFilter(QObject* obj, QEvent* event)
     return false;
 }
 
+void MarkdownEdit::paintEvent(QPaintEvent* event)
+{
+    if (m_firstPaint) {
+        m_firstPaint = false;
+        updateText();
+    }
+    QWidget::paintEvent(event);
+}
+
 void MarkdownEdit::catchFocus(QWidget* old, QWidget* now)
 {
     if (now == m_edit) {
