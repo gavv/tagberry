@@ -26,6 +26,7 @@ LineEdit::LineEdit(QWidget* parent)
     m_edit.setFrameStyle(QFrame::NoFrame);
     m_edit.setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_edit.setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    m_edit.installEventFilter(this);
 
     auto f = m_edit.font();
     f.setPointSize(10);
@@ -111,6 +112,16 @@ void LineEdit::catchFocus(QWidget* old, QWidget* now)
         cursor.clearSelection();
         m_edit.setTextCursor(cursor);
     }
+}
+
+bool LineEdit::eventFilter(QObject* obj, QEvent* event)
+{
+    if (obj == &m_edit) {
+        if (event->type() == QEvent::Resize) {
+            m_firstPaint = true;
+        }
+    }
+    return false;
 }
 
 void LineEdit::paintEvent(QPaintEvent* event)

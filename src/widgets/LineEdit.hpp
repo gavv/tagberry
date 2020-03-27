@@ -41,6 +41,7 @@ private slots:
     void catchFocus(QWidget* old, QWidget* now);
 
 protected:
+    bool eventFilter(QObject* obj, QEvent* event) override;
     void paintEvent(QPaintEvent* event) override;
 
 private:

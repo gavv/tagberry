@@ -303,6 +303,8 @@ bool MarkdownEdit::eventFilter(QObject* obj, QEvent* event)
                 && keyEvent->modifiers().testFlag(Qt::ControlModifier)) {
                 return true;
             }
+        } else if (event->type() == QEvent::Resize) {
+            m_firstPaint = true;
         }
     }
     return false;
