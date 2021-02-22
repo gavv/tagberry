@@ -1,0 +1,35 @@
+name: build
+on: [pull_request, push]
+
+jobs:
+  ubuntu:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        variant: [Release, Debug]
+        compiler: [clang++, g++]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          submodules: true
+
+      - name: Install dependencies
+        run: sudo apt-get install -y qt5-default cmake
+
+      - name: Run cmake
+        run: |
+          mkdir build
+          cd build
+          cmake \
+            -DCMAKE_CXX_COMPILER:STRING=${{ matrix.compiler }} \
+            -DCMAKE_BUILD_TYPE:STRING=${{ matrix.variant }} \
+            ..
+
+      - name: Run make
+        run: |
+          cd build
+          make -j$(nproc --all)

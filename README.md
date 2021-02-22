@@ -2,7 +2,7 @@
 
 # Tagberry Qt5 desktop app
 
-[![Build Status](https://travis-ci.org/tagberry/tagberry-qt.svg?branch=master)](https://travis-ci.org/tagberry/tagberry-qt)
+[![](https://github.com/tagberry/tagberry-qt/workflows/build/badge.svg?branch=master)](https://github.com/tagberry/tagberry-qt/actions)
 
 ## Features
 
